@@ -11,7 +11,7 @@ namespace FastqAnalyzerCleaner
     {
         public static UserResponse uniqueInstance;
         public static Object syncLock = new object();
-
+		
         public UserResponse()
         {
 

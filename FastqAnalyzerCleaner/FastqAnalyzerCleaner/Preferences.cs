@@ -106,41 +106,73 @@ namespace FastqAnalyzerCleaner
             return LOWER_C_BOUNDARY;
         }
 
+		/// <summary>
+        /// Returns the lower misread nucleotides acceptability threshold
+        /// </summary>
+        /// <returns></returns>
         public int getNPref()
         {
             return N_MISREADS_THRESHOLD;
         }
-
+		
+		/// <summary>
+        /// Returns the assumption point for the sequencer decision tree algorithm
+        /// </summary>
+        /// <returns></returns>
         public int getAssumptionPref()
         {
             return ASSUMPTION_POINT;
         }
 
+		/// <summary>
+        /// Returns a boolean on whether to show sequences with statistics	
+        /// </summary>
+        /// <returns></returns>
         public Boolean getShowSeqPref()
         {
             return showSeqStats;
         }
 
+		/// <summary>
+        /// Returns a boolean representing whether or not to sort statistics by mean
+        /// </summary>
+        /// <returns></returns>
         public Boolean getSortMeanStatsPref()
         {
             return sortMeanStats;
         }
 
+		/// <summary>
+        /// Sets a boolean that represents whether to use the sequencer decision tree (true) or the clean sweep method
+        /// </summary>
+		///<param name="seqDec">The boolean to set sequencer determination means</param>
         public void setSeqDecisionMethod(Boolean seqDec)
         {
             this.sequencerDetermination = seqDec;
         }
 
+		/// <summary>
+        /// Returns the a boolean to decide sequencer determination algorithm
+        /// </summary>
+        /// <returns></returns>
         public Boolean getSeqDecisionMethod()
         {
             return sequencerDetermination;
         }
 
+		/// <summary>
+        /// Sets multi core (true) or single core processing logic
+        /// </summary>
+        /// <param name="multi">The boolean to decide the processing cores to use</param>
         public void setMultiCoreProcessing(Boolean multi)
         {
             this.multiCore = multi;
         }
 
+		/// <summary>
+        /// Returns the boolean that determines whether to use single or multi(true) core processing
+        /// </summary>
+        /// <returns></returns>
         public Boolean getMultiCoreProcessing()
         {
             return multiCore;

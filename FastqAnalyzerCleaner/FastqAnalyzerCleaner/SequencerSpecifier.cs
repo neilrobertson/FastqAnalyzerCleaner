@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
+	///<summary>
+	///SequencerSpecifier is an abstract class that is an interface and is inherited by each sequencer type class.
+	///This class contains the methods that are used by each sequencer type.
+	///</summary>
     abstract class SequencerSpecifier
     {
         abstract public string getStatement();

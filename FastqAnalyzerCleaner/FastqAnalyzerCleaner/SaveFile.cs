@@ -7,10 +7,19 @@ using System.IO;
 
 namespace FastqAnalyzerCleaner
 {
+	///<summary>
+	///Simple class allows the saving of simple string objects to be saved via a savefiledialogue COM object
+	///</summary>
     class SaveFile
     {
         private String output, message, filter;
 
+		///<summary>
+		///Default constructor for the SaveFile class, accepts string to save and parameters for the savefiledialogue window
+		///</summary>
+		///<param name="output">The string to be saved</param>
+		///<param name="message">Message to be displayed on the save file dialogue window</param>
+		///<param name="filter">String to filter access to file types in the savefiledialogue window</param>
         public SaveFile(String output, String message, String filter = "Text File|*.txt|FastqFile|*.fq")
         {
             this.output = output;
@@ -18,6 +27,9 @@ namespace FastqAnalyzerCleaner
             this.filter = filter;
         }
 
+		///<summary>
+		///Method creates the savefiledialogue and saves string to disk
+		///</summary>
         public void Save()
         {
             SaveFileDialog save = new SaveFileDialog();

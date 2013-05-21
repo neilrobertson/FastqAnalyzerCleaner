@@ -6,6 +6,10 @@ using System.Text;
 
 namespace FastqAnalyzerCleaner
 {
+	///<summary>
+	///This abstract class is an interface and inherited by both single core and multicore fastq file classes.
+	///This classes represents the abstract methods that the fastq file classes must inherit.
+	///</summary>
     abstract class FqFile
     {
         abstract public void addFastqSequence(FqSequence fqSeq);
