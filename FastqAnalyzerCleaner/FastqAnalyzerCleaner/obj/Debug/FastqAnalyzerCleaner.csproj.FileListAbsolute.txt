@@ -13,6 +13,6 @@ C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerClean
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.pdb
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Form1.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Properties.Resources.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csproj.GenerateResource.Cache
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Form1.resources

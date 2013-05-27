@@ -129,8 +129,6 @@ namespace FastqAnalyzerCleaner
                 EndCleanTask.register();
                 StartCleanTask.register();
                 TailCleanTask.register();
-                CreateFastaClass.register();
-                CreateFastqTask.register();
                 ReanalyzeTask.register();
                 RescanSequencerTask.register();
             }
@@ -239,49 +237,6 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class CreateFastaClass : ITaskStrategy
-        {
-            public static String statement = "Create Fasta File";
-            public static ITaskStrategy task = new CreateFastaClass();
-            public override TaskInputs perform(TaskInputs inputs)
-            {
-                taskWorker.ReportProgress(40, "[CREATING FASTA FORMAT]");
-                inputs.output = inputs.fqFile.createFastaFormat("");
-                taskWorker.ReportProgress(100, "[FASTA FORMAT CREATED]");
-                return inputs;
-            }
-            public override String getStatement()
-            {
-                return "Performing " + statement + " Task";
-            }
-            public static void register()
-            {
-                TaskDiscrimination.register(statement, task);
-            }
-        }
-
-        private class CreateFastqTask : ITaskStrategy
-        {
-            public static String statement = "Create Fastq File";
-            public static ITaskStrategy task = new CreateFastqTask();
-            public String output { get; set; }
-            public override TaskInputs perform(TaskInputs inputs)
-            {
-                taskWorker.ReportProgress(40, "[CREATING FASTQ FORMAT]");
-                inputs.output = inputs.fqFile.createFastqFormat();
-                taskWorker.ReportProgress(100, "[FASTQ FORMAT CREATED]");
-                Console.WriteLine(output);
-                return inputs;
-            }
-            public override String getStatement()
-            {
-                return "Performing " + statement + " Task";
-            }
-            public static void register()
-            {
-                TaskDiscrimination.register(statement, task);
-            }
-        }
 
         private class ReanalyzeTask : ITaskStrategy
         {

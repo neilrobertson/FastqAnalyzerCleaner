@@ -22,13 +22,6 @@ namespace FastqAnalyzerCleaner
             InitializeComponent();
         }
 
-        public void SaveOutputs(object sender, ProgressChangedEventArgs e)
-        {
-            String output = null;
-            SaveFile save = new SaveFile(output, "Save Fastq File", null);
-            save.Save();
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -97,13 +90,18 @@ namespace FastqAnalyzerCleaner
 
                     worker.ReportProgress(65, "[PERFORMING JOINT TESTS]");
                     fqFile.performJointTests();
-                    Console.Write("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides \n");
-                    Console.Write("Joint Test Results: " + fqFile.getGCount() + "G   " + Math.Round(fqFile.gContents(), 2) + "%   " + fqFile.getCCount() + "C " + Math.Round(fqFile.cContents(), 2) + " % \n");
+                    Console.WriteLine("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides");
+                    Console.WriteLine("Joint Test Results: " + fqFile.getGCount() + "G   " + Math.Round(fqFile.gContents(), 2) + "%   " + fqFile.getCCount() + "C " + Math.Round(fqFile.cContents(), 2) + " %");
                     Console.WriteLine("Misreads:  " + fqFile.getMisreadLocations().Count);
                     Console.WriteLine("Distribution:  " + fqFile.getDistribution().Count);
 
                     worker.ReportProgress(85, "[PERFORMING STATS]");
                     fqFile.performSequenceStatistics();
+                    for (int i = 0; i < 20; i++)
+                    {
+                        FqSequence fqSeq = fqFile.getFastqSequenceByPosition(i);
+                        Console.WriteLine("Stats for Sequence "+(i+1)+": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(),2) , fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
+                    }
                     Console.WriteLine("Stats Performed");
                     
                     worker.ReportProgress(100, "[FILE LOADED]");
@@ -139,13 +137,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Create Fastq File";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
-                task.RunTask();
-                fqFile = task.outputFqFile;
-                String output = task.taskTextOutput; 
-                SaveFile save = new SaveFile(output, "Save Fastq File", null);
+                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, "Save Fastq");
                 save.Save();
             }
         }
@@ -154,13 +146,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Create Fasta File";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
-                task.RunTask();
-                fqFile = task.outputFqFile;
-                String output = task.taskTextOutput;
-                SaveFile save = new SaveFile(output, "Save Fasta File", null);
+                SaveFile save = new SaveFile(fqFile, "Save Fasta File", this, "Save Fasta", "All files (*.*)|*.*|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq");
                 save.Save();
             }
         }

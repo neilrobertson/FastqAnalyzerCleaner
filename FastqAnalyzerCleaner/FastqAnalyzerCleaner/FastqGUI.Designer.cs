@@ -43,13 +43,13 @@
             this.cleanTailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.createFastaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aCTIONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reanalyzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSequenceStatisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pREFERENCESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hELPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.progressStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
@@ -75,9 +75,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.aCTIONToolStripMenuItem,
-            this.pREFERENCESToolStripMenuItem,
-            this.hELPToolStripMenuItem});
+            this.actionToolStripMenuItem,
+            this.preferencesToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(834, 24);
@@ -179,15 +179,15 @@
             this.createFastaToolStripMenuItem.Text = "Create Fasta...";
             this.createFastaToolStripMenuItem.Click += new System.EventHandler(this.createFastaToolStripMenuItem_Click);
             // 
-            // aCTIONToolStripMenuItem
+            // actionToolStripMenuItem
             // 
-            this.aCTIONToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.actionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rescanToolStripMenuItem,
             this.reanalyzeToolStripMenuItem,
             this.showSequenceStatisticsToolStripMenuItem});
-            this.aCTIONToolStripMenuItem.Name = "aCTIONToolStripMenuItem";
-            this.aCTIONToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.aCTIONToolStripMenuItem.Text = "ACTION";
+            this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.actionToolStripMenuItem.Text = "ACTION";
             // 
             // rescanToolStripMenuItem
             // 
@@ -210,13 +210,13 @@
             this.showSequenceStatisticsToolStripMenuItem.Text = "Show Sequence Statistics";
             this.showSequenceStatisticsToolStripMenuItem.Click += new System.EventHandler(this.showSequenceStatisticsToolStripMenuItem_Click);
             // 
-            // pREFERENCESToolStripMenuItem
+            // preferencesToolStripMenuItem
             // 
-            this.pREFERENCESToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.preferencesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changePreferencesToolStripMenuItem});
-            this.pREFERENCESToolStripMenuItem.Name = "pREFERENCESToolStripMenuItem";
-            this.pREFERENCESToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
-            this.pREFERENCESToolStripMenuItem.Text = "PREFERENCES";
+            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.preferencesToolStripMenuItem.Text = "PREFERENCES";
             // 
             // changePreferencesToolStripMenuItem
             // 
@@ -224,13 +224,13 @@
             this.changePreferencesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.changePreferencesToolStripMenuItem.Text = "Change Preferences...";
             // 
-            // hELPToolStripMenuItem
+            // helpToolStripMenuItem
             // 
-            this.hELPToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpToolStripMenuItem1});
-            this.hELPToolStripMenuItem.Name = "hELPToolStripMenuItem";
-            this.hELPToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.hELPToolStripMenuItem.Text = "HELP";
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.helpToolStripMenuItem.Text = "HELP";
             // 
             // helpToolStripMenuItem1
             // 
@@ -379,13 +379,13 @@
         private System.Windows.Forms.ToolStripMenuItem cleanTailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem createFastaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aCTIONToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem actionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rescanToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reanalyzeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSequenceStatisticsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pREFERENCESToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changePreferencesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hELPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
         private System.Windows.Forms.RadioButton Clean_Sweep_Radio;
         private System.Windows.Forms.RadioButton Decision_Tree_Radio;

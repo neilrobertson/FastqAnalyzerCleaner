@@ -67,11 +67,11 @@
     <Compile Include="SequencerSpecifier.cs" />
     <Compile Include="HashFastq.cs" />
     <Compile Include="IFqFile.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="FastqGUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="FastqGUI.Designer.cs">
+      <DependentUpon>FastqGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="FqNucleotideRead.cs" />
     <Compile Include="FqSequence.cs" />
@@ -80,8 +80,8 @@
     <Compile Include="SingleCore_FqFile.cs" />
     <Compile Include="TaskStrategy.cs" />
     <Compile Include="UserResponse.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="FastqGUI.resx">
+      <DependentUpon>FastqGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

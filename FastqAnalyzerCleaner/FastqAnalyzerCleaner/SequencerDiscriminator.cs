@@ -15,7 +15,7 @@ namespace FastqAnalyzerCleaner
 	    public static Dictionary<String, SequencerSpecifier> storage = new Dictionary<String, SequencerSpecifier> ();
 	    public static HashSet<String> checkExists = new HashSet<String>();
 		
-		private static boolean isSetUp = false;
+		private static Boolean isSetUp = false;
 		///<summary>
 		///Method allows the factory selection of a sequencer type class through the input of a string object that conforms to the class of that type
 		///</summary>
