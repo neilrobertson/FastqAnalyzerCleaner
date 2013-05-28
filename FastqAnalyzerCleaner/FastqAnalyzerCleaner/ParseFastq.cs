@@ -14,7 +14,7 @@ namespace FastqAnalyzerCleaner
 	
         private Stopwatch stopwatch = new Stopwatch();
 	
-	    private Boolean isFastqFile = true;
+	    private Boolean isFastqFile = false;
         private readonly int FQ_BLOCKS_TO_CHECK = 10;
         private String[] header, seq, info, qscore;
 
@@ -32,6 +32,8 @@ namespace FastqAnalyzerCleaner
 	    {
             this.fileName = fileName;
             this.fileReader = fileReader;
+
+            isFastqFile = checkFastqFile();
 	    }
 
         public void initByteParseFastq()
@@ -40,7 +42,7 @@ namespace FastqAnalyzerCleaner
 
             byteArray = new byte[_fileLength];
 
-            Console.WriteLine("FILE BYTES: " + _fileLength);
+            Console.WriteLine("File length bytes: " + _fileLength);
 
             sw = new Stopwatch();
             sw.Start();
@@ -78,7 +80,7 @@ namespace FastqAnalyzerCleaner
             }
             catch(IOException exception)
             {
-                Console.WriteLine(exception.StackTrace);
+                Console.WriteLine(exception.ToString());
                 UserResponse.ErrorResponse(exception.ToString());
             }
             finally
@@ -86,8 +88,7 @@ namespace FastqAnalyzerCleaner
                 fileReader.Close();
             }
 
-            Console.WriteLine("Time: {0} ms", sw.ElapsedMilliseconds);
-
+            Console.WriteLine("Read file to byte array. Time: {0} ms", sw.ElapsedMilliseconds);
         }
 
         public FqFile parse()
@@ -96,8 +97,6 @@ namespace FastqAnalyzerCleaner
             sw.Start();
             int seqIndex = 0;
 
-	        //isFastqFile = checkFastqFile();
-
             BufferedStream bs;
             StreamReader reader;
 
@@ -105,6 +104,7 @@ namespace FastqAnalyzerCleaner
             {
                 bs = new BufferedStream(fileReader);
                 reader = new StreamReader(bs);
+
                 if (isFastqFile == true)
                 {
 
@@ -169,14 +169,15 @@ namespace FastqAnalyzerCleaner
             return fastqFile;
 	    }
 
+
         public FqFile parseByteFastq()
         {
-            byte a = new byte();
-            Console.WriteLine("A:" + a);
             fastqFile = FqFileSpecifier.getInstance().getFqFile(Preferences.getInstance().getMultiCoreProcessing());
             fastqFile.setFastqFileName(fileName);
+
             FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
             FqSequence fqSeq;
+
             sw = new Stopwatch();
             sw.Start();
             try
@@ -243,9 +244,9 @@ namespace FastqAnalyzerCleaner
             
             try
             {
-
                 BufferedStream bs = new BufferedStream(fileReader);
                 StreamReader reader = new StreamReader(bs);
+
                 // Build sets of fastq blocks to check
                 for (int i = 0; i < FQ_BLOCKS_TO_CHECK; i++)
                 {
@@ -255,11 +256,11 @@ namespace FastqAnalyzerCleaner
                     qscore[i] = reader.ReadLine();
 
                 }
+
                 // Check sets
                 for (int i = 0; i < FQ_BLOCKS_TO_CHECK; i++)
                 {
-                    Console.WriteLine(header[0][i]);
-                    if ((char)header[0][i] != '@') return false;
+                    if ((char)header[i][0] != '@') return false;
                     if ((char)info[i][0] != '+') return false;
                     if (nucleotide.isDNA(seq[i]) != true) return false;
                     for (int j = 0; j < FQ_BLOCKS_TO_CHECK; j++)
@@ -270,9 +271,10 @@ namespace FastqAnalyzerCleaner
             {
                 Console.Write(exception.StackTrace);
                 UserResponse.ErrorResponse(exception.ToString());
-            }
-                
+            }   
             fileReader.Seek(0, SeekOrigin.Begin);
+            Console.WriteLine("FileReader Position: {0}", fileReader.Position);
+            Console.WriteLine("File is found to be a fastqFile");
 		    return true;
 	    }
 	

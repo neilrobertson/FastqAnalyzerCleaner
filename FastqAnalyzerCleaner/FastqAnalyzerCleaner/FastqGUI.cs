@@ -67,11 +67,8 @@ namespace FastqAnalyzerCleaner
 
                 worker.ReportProgress(3, "[PARSING FILE]");
                 ParseFastq parseFq = new ParseFastq(inStr, fileName);
-                //parseFq.initByteParseFastq();
-                //fqFile = parseFq.parseByteFastq();
-                //parseFq.checkFastqFile();
 
-                if (parseFq.getFastqFileCheck())
+                if (parseFq.getFastqFileCheck() == true)
                 {
                     fqFile = parseFq.parse();
 
@@ -109,7 +106,7 @@ namespace FastqAnalyzerCleaner
                 else
                 {
                     //Disable gui 
-                    //Warn its non fastqFile
+                    UserResponse.InformationResponse("File does not conform to standard format.", "File Error");
                 }
                 stopwatch.Stop();
                 Console.Write("Done: " + stopwatch.Elapsed + "\n");

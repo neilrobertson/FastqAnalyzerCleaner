@@ -110,9 +110,9 @@ namespace FastqAnalyzerCleaner
 		fastqFile.setSequencerType(sequencerType);
 		
 		stopwatch.Stop();
-		Console.Write("Time To Determine Sequencer:  " + stopwatch.Elapsed + "\n");
-        Console.Write("Sequencer Name: " + sequencer + "\n");
-        Console.Write("Array Size: " + fastqFile.getFastqArraySize() + "\n");
+		Console.WriteLine("Time To Determine Sequencer:  " + stopwatch.Elapsed);
+        Console.WriteLine("Sequencer Name: " + sequencer);
+        Console.WriteLine("File contains {0} sequences", fastqFile.getFastqArraySize());
 	}
 
         public String getSequencerType()
