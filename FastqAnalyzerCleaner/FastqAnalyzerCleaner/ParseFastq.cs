@@ -1,4 +1,16 @@
-﻿using System;
+﻿/// <copyright file="ParseFastq.cs" author="Neil Robertson">
+/// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
+///
+/// This code is the property of Neil Robertson.  Permission must be sought before reuse.
+/// It has been written explicitly for the MRes Bioinfomatics course at the University 
+/// of Glasgow, Scotland under the supervision of Derek Gatherer.
+///
+/// </copyright>
+/// <author>Neil Robertson</author>
+/// <email>neil.alistair.robertson@hotmail.co.uk</email>
+/// <date>2013-06-1</date>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +27,7 @@ namespace FastqAnalyzerCleaner
         private Stopwatch stopwatch = new Stopwatch();
 	
 	    private Boolean isFastqFile = true;
-        private readonly int FQ_BLOCKS_TO_CHECK = 10;
+        private readonly int FQ_BLOCKS_TO_CHECK = 50;
         private String[] header, seq, info, qscore;
 
 	    private FqFile fastqFile;
