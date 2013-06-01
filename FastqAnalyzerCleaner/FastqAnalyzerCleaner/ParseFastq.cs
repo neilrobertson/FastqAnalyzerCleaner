@@ -26,13 +26,10 @@ namespace FastqAnalyzerCleaner
 	
         private Stopwatch stopwatch = new Stopwatch();
 	
-<<<<<<< HEAD
+
 	    private Boolean isFastqFile = true;
         private readonly int FQ_BLOCKS_TO_CHECK = 50;
-=======
-	    private Boolean isFastqFile = false;
-        private readonly int FQ_BLOCKS_TO_CHECK = 10;
->>>>>>> 7b7c500d873fbf7fd8d6d917e37a4a5278081d29
+
         private String[] header, seq, info, qscore;
 
 	    private FqFile fastqFile;

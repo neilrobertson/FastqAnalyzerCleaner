@@ -1,4 +1,4 @@
-﻿/// <copyright file="DefaultSequencer.cs" author="Neil Robertson">
+﻿/// <copyright file="SequencerIllumina8.cs" author="Neil Robertson">
 /// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
 ///
 /// This code is the property of Neil Robertson.  Permission must be sought before reuse.
@@ -18,19 +18,19 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class DefaultSequencer : SequencerSpecifier
+    class Sequencer_Illumina8 : Sequencer
     {
-        public static SequencerSpecifier sequencer = new DefaultSequencer();
+        public static Sequencer sequencer = new Sequencer_Illumina8();
 
-        private readonly static String sequencerName = "Default";
+        private readonly static String sequencerName = "Illumina 1.8";
 
 	    private String machineName, multiplexIndex;
 	    private int flowCellLane, tileNo, xCoOrd, yCoOrd, pairMember;
 	
-	    private readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
-	    private readonly int qualityDistributionSpread = 40;
+	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 33;
+	    public static readonly int qualityDistributionSpread = 41;
 
-        private DefaultSequencer() { }
+        private Sequencer_Illumina8() { }
 
         public override String getStatement()
         {

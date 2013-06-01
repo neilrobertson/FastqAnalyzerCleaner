@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class SequencerIllumina3 : SequencerSpecifier
+    class Sequencer_Illumina3 : Sequencer
     {
-        public static SequencerSpecifier sequencer = new SequencerIllumina3();
+        public static Sequencer sequencer = new Sequencer_Illumina3();
 
         private readonly static String sequencerName = "Illumina 1.3";
 
@@ -30,7 +30,7 @@ namespace FastqAnalyzerCleaner
 	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
 	    public static readonly int qualityDistributionSpread = 40;
 
-        private SequencerIllumina3() { }
+        private Sequencer_Illumina3() { }
 
         public override String getStatement()
         {

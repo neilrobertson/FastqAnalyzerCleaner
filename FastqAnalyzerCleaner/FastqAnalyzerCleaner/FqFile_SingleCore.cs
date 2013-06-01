@@ -20,7 +20,7 @@ using System.Threading;
 
 namespace FastqAnalyzerCleaner
 {
-    class SingleCore_FqFile : FqFile
+    class FqFile_SingleCore : FqFile
     {
         private int LENGTH_SEQUENCE_ARRAY = 100000;
 	    private int index = 0;
@@ -36,7 +36,7 @@ namespace FastqAnalyzerCleaner
 	
 	    FqSequence[] fastqSeq;
 
-        public SingleCore_FqFile()
+        public FqFile_SingleCore()
 	    {
             map = HashFastq.deserializeHashmap();
 		    fastqSeq = new FqSequence[LENGTH_SEQUENCE_ARRAY];

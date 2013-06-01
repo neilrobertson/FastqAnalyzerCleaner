@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class SequencerSolexa : SequencerSpecifier
+    class Sequencer_Solexa : Sequencer
     {
-        public static SequencerSpecifier sequencer = new SequencerSolexa();
+        public static Sequencer sequencer = new Sequencer_Solexa();
 
         private readonly static String sequencerName = "Solexa";
 
@@ -30,7 +30,7 @@ namespace FastqAnalyzerCleaner
 	    private readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
 	    private readonly int qualityDistributionSpread = 40;
 
-        private SequencerSolexa() { }
+        private Sequencer_Solexa() { }
 
         public override String getStatement()
         {

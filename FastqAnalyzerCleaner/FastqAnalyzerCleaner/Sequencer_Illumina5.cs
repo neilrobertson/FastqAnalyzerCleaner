@@ -1,4 +1,4 @@
-﻿/// <copyright file="SeqeuencerSanger.cs" author="Neil Robertson">
+﻿/// <copyright file="SequencerIllumina5.cs" author="Neil Robertson">
 /// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
 ///
 /// This code is the property of Neil Robertson.  Permission must be sought before reuse.
@@ -18,116 +18,112 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class SequencerSanger : SequencerSpecifier
+    class Sequencer_Illumina5 : Sequencer
     {
-        public static SequencerSpecifier sequencer = new SequencerSanger();
+        public static  Sequencer sequencer = new Sequencer_Illumina5();
 
-        private readonly static String sequencerName = "Sanger";
+        private readonly static String sequencerName = "Illumina 1.5";
 
 	    private String machineName, multiplexIndex;
 	    private int flowCellLane, tileNo, xCoOrd, yCoOrd, pairMember;
 	
-	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 33;
+	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
 	    public static readonly int qualityDistributionSpread = 40;
-
-        private SequencerSanger() { }
-
-        public override String getStatement()
-        {
-            return "This data is from a " + sequencerName;
-        }
-       
+	
+	    private Sequencer_Illumina5() { }
+	
+	    public override String getStatement()
+   	    {
+		    return "This data is from a " + sequencerName;
+ 	    }
   	    public static void register()
   	    {
-            //SequencerSpecifier value = sequencer as SequencerSpecifier;
   		    SequencerDiscriminator.register(sequencerName, sequencer);
  	    }
   	
-	    /*
-	     * method returns subtracts sequencer specific ASCII values to return specific numerical quality score
-	     */
         public override int getQualityScore(char qualityValue)
-        {
-            int qualityScore;
-            int ASCII_CHARACTER_NUMERICAL_VALUE = (int)qualityValue;
-            qualityScore = ASCII_CHARACTER_NUMERICAL_VALUE - SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION;
-
-            return qualityScore;
-        }
+	    {
+		    int qualityScore;
+		    int ASCII_CHARACTER_NUMERICAL_VALUE = (int) qualityValue;
+		    qualityScore = ASCII_CHARACTER_NUMERICAL_VALUE - SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION;
+		
+		    return qualityScore;
+	    }
 
 	    /*
 	     * TODO: incomplete method converts quality score to phred probabity scores
 	     */
         public override int getPhredProbability(char qualityValue)
-        {
-            int phredProbabilityScore = 0;
-            return phredProbabilityScore;
-        }
+	    {
+		    int phredProbabilityScore = 0;
+		    return phredProbabilityScore;
+	    }
 
         public override int getDistributionSpread()
-        {
-            return qualityDistributionSpread;
-        }
+	    {
+		    return qualityDistributionSpread;
+	    }
 
         public override String getMachineName(String header)
-        {
-            //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
-            String[] head = header.Split(':');
+	    {
+		    //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
+            Console.Write(header);
+            String[]  head = header.Split(':');
             machineName = head[0];
-            return machineName;
-        }
 
+		    return machineName;
+	    }
 
         public override int getFlowCellLane(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split(':');
             flowCellLane = int.Parse(head[1]);
-            return flowCellLane;
-        }
+		    return flowCellLane;
+	    }
 
         public override int getTileNumber(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split(':');
             tileNo = int.Parse(head[2]);
-            return tileNo;
-        }
+		    return tileNo;
+	    }
 
         public override int getXCoOrd(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split(':');
             xCoOrd = int.Parse(head[3]);
-            return xCoOrd;
-        }
+		    return xCoOrd;
+	    }
 
         public override int getYCoOrd(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split(':');
             yCoOrd = int.Parse(head[4]);
             return yCoOrd;
-        }
+	    }
 
 
         public override String getMultiplexIndex(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split('#');
             String[] part = head[1].Split('/');
             multiplexIndex = part[0];
-            return multiplexIndex;
-        }
+		    return multiplexIndex;
+	    }
 
 
         public override int getPairMember(String header)
-        {
+	    {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
             String[] head = header.Split('#');
             String[] part = head[1].Split('/');
             pairMember = int.Parse(part[1]);
-            return pairMember;
-        }
+		    return pairMember;
+	    }
     }
 }

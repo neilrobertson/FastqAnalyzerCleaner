@@ -42,12 +42,12 @@ namespace FastqAnalyzerCleaner
             FqFile fqFile;
             if (fqFileType)
             {
-                fqFile = new MultiCore_FqFile();
+                fqFile = new FqFile_MultiCore();
                 return fqFile;
             }
             else
             {
-                fqFile = new SingleCore_FqFile();
+                fqFile = new FqFile_SingleCore();
                 return fqFile;
             }
         }

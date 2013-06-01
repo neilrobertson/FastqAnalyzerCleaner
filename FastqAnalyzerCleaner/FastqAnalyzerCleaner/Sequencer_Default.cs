@@ -1,4 +1,4 @@
-﻿/// <copyright file="SequencerIllumina8.cs" author="Neil Robertson">
+﻿/// <copyright file="DefaultSequencer.cs" author="Neil Robertson">
 /// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
 ///
 /// This code is the property of Neil Robertson.  Permission must be sought before reuse.
@@ -18,19 +18,19 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class SequencerIllumina8 : SequencerSpecifier
+    class Sequencer_Default : Sequencer
     {
-        public static SequencerSpecifier sequencer = new SequencerIllumina8();
+        public static Sequencer sequencer = new Sequencer_Default();
 
-        private readonly static String sequencerName = "Illumina 1.8";
+        private readonly static String sequencerName = "Default";
 
 	    private String machineName, multiplexIndex;
 	    private int flowCellLane, tileNo, xCoOrd, yCoOrd, pairMember;
 	
-	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 33;
-	    public static readonly int qualityDistributionSpread = 41;
+	    private readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
+	    private readonly int qualityDistributionSpread = 40;
 
-        private SequencerIllumina8() { }
+        private Sequencer_Default() { }
 
         public override String getStatement()
         {
@@ -39,13 +39,8 @@ namespace FastqAnalyzerCleaner
        
   	    public static void register()
   	    {
-            //SequencerSpecifier value = sequencer as SequencerSpecifier;
   		    SequencerDiscriminator.register(sequencerName, sequencer);
  	    }
-  	
-	    /*
-	     * method returns subtracts sequencer specific ASCII values to return specific numerical quality score
-	     */
 
         public override int getQualityScore(char qualityValue)
         {
@@ -56,9 +51,6 @@ namespace FastqAnalyzerCleaner
             return qualityScore;
         }
 
-	    /*
-	     * TODO: incomplete method converts quality score to phred probabity scores
-	     */
         public override int getPhredProbability(char qualityValue)
         {
             int phredProbabilityScore = 0;

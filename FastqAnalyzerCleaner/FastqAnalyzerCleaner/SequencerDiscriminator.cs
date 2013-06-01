@@ -24,7 +24,7 @@ namespace FastqAnalyzerCleaner
 	///</summary>
     class SequencerDiscriminator
     {
-	    public static Dictionary<String, SequencerSpecifier> storage = new Dictionary<String, SequencerSpecifier> ();
+	    public static Dictionary<String, Sequencer> storage = new Dictionary<String, Sequencer> ();
 	    public static HashSet<String> checkExists = new HashSet<String>();
 		
 		private static Boolean isSetUp = false;
@@ -33,14 +33,14 @@ namespace FastqAnalyzerCleaner
 		///</summary>
 		///<param name="sequencerName">The name of the sequencer type to select</param>
 		///<return>An instance of that particular sequencer class type</return>
-	    public static SequencerSpecifier getSequencerSpecifier(String sequencerName)
+	    public static Sequencer getSequencerSpecifier(String sequencerName)
 	    {
 			if (isSetUp == false)
 				setUp();
 
-		    SequencerSpecifier sequencer = (SequencerSpecifier) storage[sequencerName];
+		    Sequencer sequencer = (Sequencer) storage[sequencerName];
 		    if (sequencer == null)
-			    return DefaultSequencer.sequencer as SequencerSpecifier;
+			    return Sequencer_Default.sequencer as Sequencer;
 		    return sequencer;
 	    }
 	
@@ -49,7 +49,7 @@ namespace FastqAnalyzerCleaner
 		///</summary>
 		///<param name="key">The sequencer type name</param>
 		///<param name="value">A reference to a corresponding sequencer type initialized through the abstract class</param>
-	    public static void register (String key, SequencerSpecifier value)
+	    public static void register (String key, Sequencer value)
 	    {
             if (checkExists.Contains(key) == false)
             {
@@ -63,13 +63,13 @@ namespace FastqAnalyzerCleaner
 		///</summary>
 	    private static void setUp()
 	    {
-		    DefaultSequencer.register();
-		    SequencerSanger.register();
-		    SequencerSolexa.register();
-		    SequencerIllumina3.register();
-		    SequencerIllumina5.register();
-		    SequencerIllumina8.register();
-		    SequencerIllumina9.register();
+		    Sequencer_Default.register();
+		    Sequencer_Sanger.register();
+		    Sequencer_Solexa.register();
+		    Sequencer_Illumina3.register();
+		    Sequencer_Illumina5.register();
+		    Sequencer_Illumina8.register();
+		    Sequencer_Illumina9.register();
 			isSetUp = true;
 	    }
     }

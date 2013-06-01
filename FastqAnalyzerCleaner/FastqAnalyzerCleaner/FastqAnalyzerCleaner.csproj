@@ -78,24 +78,24 @@
   <ItemGroup>
     <Compile Include="FqFileSpecifier.cs" />
     <Compile Include="HelperMethods.cs" />
-    <Compile Include="MultiCore_FqFile.cs" />
+    <Compile Include="FqFile_MultiCore.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="SaveFile.cs" />
     <Compile Include="SequencerDecisionTree.cs" />
     <Compile Include="SequencerDetermination.cs" />
     <Compile Include="Nucleotide.cs" />
     <Compile Include="ParseFastq.cs" />
-    <Compile Include="DefaultSequencer.cs" />
-    <Compile Include="SequencerIllumina3.cs" />
-    <Compile Include="SequencerIllumina5.cs" />
+    <Compile Include="Sequencer_Default.cs" />
+    <Compile Include="Sequencer_Illumina3.cs" />
+    <Compile Include="Sequencer_Illumina5.cs" />
     <Compile Include="SequencerDiscriminator.cs" />
-    <Compile Include="SequencerIllumina8.cs" />
-    <Compile Include="SequencerIllumina9.cs" />
-    <Compile Include="SequencerSanger.cs" />
-    <Compile Include="SequencerSolexa.cs" />
-    <Compile Include="SequencerSpecifier.cs" />
+    <Compile Include="Sequencer_Illumina8.cs" />
+    <Compile Include="Sequencer_Illumina9.cs" />
+    <Compile Include="Sequencer_Sanger.cs" />
+    <Compile Include="Sequencer_Solexa.cs" />
+    <Compile Include="Sequencer.cs" />
     <Compile Include="HashFastq.cs" />
-    <Compile Include="IFqFile.cs" />
+    <Compile Include="FqFile.cs" />
     <Compile Include="FastqGUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,7 +106,7 @@
     <Compile Include="FqSequence.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SingleCore_FqFile.cs" />
+    <Compile Include="FqFile_SingleCore.cs" />
     <Compile Include="TaskStrategy.cs" />
     <Compile Include="UserResponse.cs" />
     <EmbeddedResource Include="FastqGUI.resx">
