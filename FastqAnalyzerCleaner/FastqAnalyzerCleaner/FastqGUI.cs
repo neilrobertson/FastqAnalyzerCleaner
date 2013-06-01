@@ -51,7 +51,7 @@ namespace FastqAnalyzerCleaner
             loadWorker.ProgressChanged += new ProgressChangedEventHandler(loadWorker_ProgressChanged);
             if (loadWorker.IsBusy != true)
             {
-                openFileDialog1.Filter = "All files (*.*)|*.*|Fastq files (*.fq)|*.fq";
+                openFileDialog1.Filter = "All files (*.*)|*.*|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     FileStream inStr = new FileStream(openFileDialog1.FileName, FileMode.Open);
@@ -60,7 +60,7 @@ namespace FastqAnalyzerCleaner
                 }
             }
         }
-
+        
         private void loadWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
