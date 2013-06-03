@@ -25,11 +25,11 @@ using System.Diagnostics;
 
 namespace FastqAnalyzerCleaner 
 {
-    public partial class Form1 : Form
+    public partial class FastqGUI : Form
     {
-        private FqFile fqFile = null;
+        public static FqFile fqFile = null;
 
-        public Form1()
+        public FastqGUI()
         {
             InitializeComponent();
         }
@@ -37,6 +37,11 @@ namespace FastqAnalyzerCleaner
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        public void setFastqFile(FqFile processedFastqFile)
+        {
+            fqFile = processedFastqFile;
         }
 
         private void openFastqFile(object sender, EventArgs e)
@@ -164,11 +169,20 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Sequence Start Cleaner";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
-                task.RunTask();
-                fqFile = task.outputFqFile;
+                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 3' starts:", "Clean Sequence Starts", "", new InputBoxValidatingHandler(inputBox_Validating));
+                if (result.OK)
+                {
+                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    {
+                        GenericFastqInputs inputs = new GenericFastqInputs();
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.TaskAction = "Sequence Start Cleaner";
+                        inputs.FastqFile = fqFile;
+                        Console.WriteLine(inputs.TaskAction);
+                        TaskStrategy task = new TaskStrategy(this, inputs);
+                        task.RunTask();
+                    }
+                }
             }
         }
 
@@ -176,11 +190,20 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Sequence End Cleaner";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
-                task.RunTask();
-                fqFile = task.outputFqFile;
+                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 5' ends:", "Clean Sequence Ends", "", new InputBoxValidatingHandler(inputBox_Validating));
+                if (result.OK)
+                {
+                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    {
+                        GenericFastqInputs inputs = new GenericFastqInputs();
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.TaskAction = "Sequence End Cleaner";
+                        inputs.FastqFile = fqFile;
+                        Console.WriteLine(inputs.TaskAction);
+                        TaskStrategy task = new TaskStrategy(this, inputs);
+                        task.RunTask();
+                    }
+                }
             }
         }
 
@@ -188,11 +211,20 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Sequence Tail Cleaner";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
-                task.RunTask();
-                fqFile = task.outputFqFile;
+                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from tails:", "Clean Sequence Tails", "", new InputBoxValidatingHandler(inputBox_Validating));
+                if (result.OK)
+                {
+                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    {
+                        GenericFastqInputs inputs = new GenericFastqInputs();
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.TaskAction = "Sequence Tail Cleaner";
+                        inputs.FastqFile = fqFile;
+                        Console.WriteLine(inputs.TaskAction);
+                        TaskStrategy task = new TaskStrategy(this, inputs);
+                        task.RunTask();
+                    }
+                }
             }
         }
 
@@ -200,11 +232,12 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Sequencer Type Rescan";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
+                GenericFastqInputs inputs = new GenericFastqInputs();
+                inputs.TaskAction = "Sequencer Type Rescan";
+                inputs.FastqFile = fqFile;
+                Console.WriteLine(inputs.TaskAction);
+                TaskStrategy task = new TaskStrategy(this, inputs);
                 task.RunTask();
-                fqFile = task.outputFqFile;
             }
         }
 
@@ -212,11 +245,12 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Create Fasta File";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
+                GenericFastqInputs inputs = new GenericFastqInputs();
+                inputs.TaskAction = "Create Fasta File";
+                inputs.FastqFile = fqFile;
+                Console.WriteLine(inputs.TaskAction);
+                TaskStrategy task = new TaskStrategy(this, inputs);
                 task.RunTask();
-                fqFile = task.outputFqFile;
             }
         }
 
@@ -224,11 +258,12 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "Sequencer Statistics";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
+                GenericFastqInputs inputs = new GenericFastqInputs();
+                inputs.TaskAction = "Sequencer Statistics";
+                inputs.FastqFile = fqFile;
+                Console.WriteLine(inputs.TaskAction);
+                TaskStrategy task = new TaskStrategy(this, inputs);
                 task.RunTask();
-                fqFile = task.outputFqFile;
             }
         }
 
@@ -236,11 +271,12 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                String taskName = "File Reanalysis";
-                Console.WriteLine(taskName);
-                TaskStrategy task = new TaskStrategy(this, fqFile, taskName);
+                GenericFastqInputs inputs = new GenericFastqInputs();
+                inputs.TaskAction = "File Reanalysis";
+                inputs.FastqFile = fqFile;
+                Console.WriteLine(inputs.TaskAction);
+                TaskStrategy task = new TaskStrategy(this, inputs);
                 task.RunTask();
-                fqFile = task.outputFqFile;
             }
         }
 
@@ -262,6 +298,15 @@ namespace FastqAnalyzerCleaner
         private void Multi_Core_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setMultiCoreProcessing(true);
+        }
+
+        private void inputBox_Validating(object sender, InputBoxValidatingArgs e)
+        {
+            if (e.Text.Trim().Length == 0)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
         }
              
     }

@@ -25,7 +25,6 @@ namespace FastqAnalyzerCleaner
         private String fastqHeader, fileName;
 	
         private Stopwatch stopwatch = new Stopwatch();
-	
 
 	    private Boolean isFastqFile = true;
         private readonly int FQ_BLOCKS_TO_CHECK = 50;
@@ -153,7 +152,7 @@ namespace FastqAnalyzerCleaner
                     }
 
                     sw.Stop();
-                    Console.Write("Time to Parse File:  " + sw.Elapsed + "s" + "\n");
+                    Console.WriteLine("Time to Parse File:  " + sw.Elapsed + "s");
                 }
             }
             catch (IOException exception)
@@ -205,6 +204,7 @@ namespace FastqAnalyzerCleaner
                     new byte[MAX_LINE],
                     new byte[MAX_LINE]
                 };
+
                 for (int i = 0; i < byteArray.Length; i++)
                 {
                     if (byteArray[i] == '\n')

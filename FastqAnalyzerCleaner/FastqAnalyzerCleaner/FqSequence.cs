@@ -31,6 +31,8 @@ namespace FastqAnalyzerCleaner
         private int nucleotidesCleaned = 0;
         private int MAX_LINE_LENGTH = 105;
 
+        private Boolean removeSeq = false;
+
         private int[] fastqSequence;
 
         public FqSequence(int seqIndex, String head, String info, int seqLen)
@@ -63,18 +65,32 @@ namespace FastqAnalyzerCleaner
 
         public void cleanStarts(int remove)
         {
-            for (int i = 0; i < index - remove; i++)
+            if (remove > index)
             {
-                fastqSequence[i] = fastqSequence[i + remove];
+                removeSeq = true;
             }
-            index = index - remove;
-            sequenceLength = sequenceLength - remove;
+            else
+            {
+                for (int i = 0; i < index - remove; i++)
+                {
+                    fastqSequence[i] = fastqSequence[i + remove];
+                }
+                index = index - remove;
+                sequenceLength = sequenceLength - remove;
+            }
         }
 
         public void cleanEnds(int remove)
         {
-            index = index - remove;
-            sequenceLength = sequenceLength - remove;
+            if (remove > index)
+            {
+                removeSeq = true;
+            }
+            else
+            {
+                index = index - remove;
+                sequenceLength = sequenceLength - remove;
+            }
         }
 
         public void performStats(String sequencerType, Dictionary<int, FqNucleotideRead> map)
@@ -156,10 +172,6 @@ namespace FastqAnalyzerCleaner
             return reconstructedHeader;
         }
 
-        public String roundTwoDecimals(double d)
-        {
-            return d.ToString("N2");
-        }
 
         public String getSeqIndex()
         {
@@ -249,6 +261,11 @@ namespace FastqAnalyzerCleaner
         public String getMachineName()
         {
             return machineName;
+        }
+
+        public Boolean removeSequence()
+        {
+            return removeSeq;
         }
     }
 }

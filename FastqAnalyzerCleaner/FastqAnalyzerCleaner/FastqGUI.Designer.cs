@@ -12,7 +12,7 @@
 
 namespace FastqAnalyzerCleaner
 {
-    partial class Form1
+    partial class FastqGUI
     {
         /// <summary>
         /// Required designer variable.
@@ -346,9 +346,9 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box.Size = new System.Drawing.Size(222, 45);
             this.Sequencer_Selection_Group_Box.TabIndex = 7;
             this.Sequencer_Selection_Group_Box.TabStop = false;
-            this.Sequencer_Selection_Group_Box.Text = "[SEQUENCER SELECTION]";
+            this.Sequencer_Selection_Group_Box.Text = "[FILE FORMAT]";
             // 
-            // Form1
+            // FastqGUI
             // 
             this.ClientSize = new System.Drawing.Size(834, 462);
             this.Controls.Add(this.Sequencer_Selection_Group_Box);
@@ -356,7 +356,7 @@ namespace FastqAnalyzerCleaner
             this.Controls.Add(this.progressStrip);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "FastqGUI";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

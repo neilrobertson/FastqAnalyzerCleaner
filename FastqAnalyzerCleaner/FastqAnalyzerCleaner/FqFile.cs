@@ -22,7 +22,7 @@ namespace FastqAnalyzerCleaner
 	///This abstract class is an interface and inherited by both single core and multicore fastq file classes.
 	///This classes represents the abstract methods that the fastq file classes must inherit.
 	///</summary>
-    abstract class FqFile
+    public abstract class FqFile
     {
         abstract public void addFastqSequence(FqSequence fqSeq);
         abstract public void cleanStarts(int remove);
@@ -63,5 +63,6 @@ namespace FastqAnalyzerCleaner
         abstract public Dictionary<int, FqNucleotideRead> getMap();
         abstract public void calculateMapQualities();
         abstract public void setHeader();
+        abstract public void cleanArray();
     }
 }

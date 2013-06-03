@@ -303,6 +303,17 @@ namespace FastqAnalyzerCleaner
 		    }
 		    return seqList;
 	    }
+
+        public override void cleanArray()
+        {
+            var temp = new List<FqSequence>();
+            foreach (FqSequence fqSeq in fastqSeq)
+            {
+                if (fqSeq.removeSequence() == false || fqSeq != null)
+                    temp.Add(fqSeq);
+            }
+            fastqSeq = temp.ToArray();
+        }
 	
 	    private void resetCounts()
 	    {

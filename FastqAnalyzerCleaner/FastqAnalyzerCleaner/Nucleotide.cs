@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class Nucleotide
+    public class Nucleotide
     {
         private String header;
 

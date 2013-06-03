@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FastqAnalyzerCleaner.exe" size="67584">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FastqAnalyzerCleaner.exe" size="73216">
       <assemblyIdentity name="FastqAnalyzerCleaner" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>hPEwEX9FtaShQ8a1fl6kGTqlyvMttAVQzgKhdHhg80c=</dsig:DigestValue>
+        <dsig:DigestValue>c/uQRQKfukzIUBRImOYI7AamY1oNI6vImD2N+8vfLRs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

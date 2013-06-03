@@ -35,8 +35,11 @@ namespace FastqAnalyzerCleaner
 		///<return>An instance of that particular sequencer class type</return>
 	    public static Sequencer getSequencerSpecifier(String sequencerName)
 	    {
-			if (isSetUp == false)
-				setUp();
+            if (isSetUp == false)
+            {
+                setUp();
+                isSetUp = true;
+            }
 
 		    Sequencer sequencer = (Sequencer) storage[sequencerName];
 		    if (sequencer == null)

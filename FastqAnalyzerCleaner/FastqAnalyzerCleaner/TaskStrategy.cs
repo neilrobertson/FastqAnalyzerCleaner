@@ -23,22 +23,22 @@ namespace FastqAnalyzerCleaner
 {
     class TaskStrategy
     {
-        private Form1 observer;
+        private FastqGUI observer;
         private static BackgroundWorker taskWorker;
-        private FqFile inputFqFile;
         private String taskName;
         private Stopwatch stopwatch;
         private ITaskStrategy task;
+        private GenericFastqInputs genericInputs;
 
-        public String taskTextOutput { get; set; }
-        public FqFile outputFqFile { get; set; }
+        public String taskTextOutput;
+        public FqFile outputFqFile;
 
        
-        public TaskStrategy(Form1 observer, FqFile inputFile, String taskName)
+        public TaskStrategy(FastqGUI observer, GenericFastqInputs inputs)
         {
             this.observer = observer;
-            this.inputFqFile = inputFile;
-            this.taskName = taskName;
+            this.taskName = inputs.TaskAction;
+            this.genericInputs = inputs;
 
             taskWorker = new BackgroundWorker();
 
@@ -48,14 +48,14 @@ namespace FastqAnalyzerCleaner
             taskWorker.ProgressChanged += new ProgressChangedEventHandler(observer.loadWorker_ProgressChanged);
             
             task = TaskDiscrimination.getTask(taskName);
+            Console.WriteLine("New task begun: {0} On thread: {1} with state: {2}", task, taskWorker.ToString(), taskWorker.IsBusy);
         }
 
         public void RunTask()
         {
             if (taskWorker.IsBusy != true)
             {
-                WorkerInput input = new WorkerInput(inputFqFile, taskName);
-                taskWorker.RunWorkerAsync(input);
+                taskWorker.RunWorkerAsync(genericInputs);
             }
         }
 
@@ -63,9 +63,7 @@ namespace FastqAnalyzerCleaner
         private void taskWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            WorkerInput input = (WorkerInput)e.Argument;
-            FqFile file = input.fqFile;
-            String taskName = input.taskName;
+            GenericFastqInputs input = (GenericFastqInputs)e.Argument;
 
             if ((worker.CancellationPending == true))
             {
@@ -76,56 +74,49 @@ namespace FastqAnalyzerCleaner
                 stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                TaskInputs taskInputs = new TaskInputs(file, null);
                 worker.ReportProgress(10, "[]");
-                TaskInputs taskOutputs = task.perform(taskInputs);
+                GenericFastqInputs taskOutputs = task.perform(input);
                 worker.ReportProgress(100, "[COMPLETE]");
-                outputFqFile = taskOutputs.fqFile;
-                taskTextOutput = taskOutputs.output;
+                outputFqFile = taskOutputs.FastqFile;
+                taskTextOutput = taskOutputs.Output;
                 Console.WriteLine(task.getStatement() + " Task - COMPLETED");
 
-                //updateGUI();
+                observer.setFastqFile(outputFqFile);
+                updateGUI();
                 stopwatch.Stop();
             }
         }
 
-        private void updateGUI(object sender, ProgressChangedEventArgs e)
+        private void updateGUI()
         {
             /**
             Application.Current.Dispatcher.Invoke(new SaveFile(() => {
                     // now you are on the UI thread
                     ;
                 });
-            */
-                 
+            */ 
             //observer.dosomething(stopwatch.Elapsed, file, outputFqFile) 
-        }
-
-        public class WorkerInput
-        {
-            public FqFile fqFile { get; set; }
-            public String taskName { get; set; }
-            public WorkerInput(FqFile fqFile, String fileName)
-            {
-                this.fqFile = fqFile;
-                this.taskName = taskName;
-            }
         }
 
         public class TaskDiscrimination
         {
             public static Dictionary<String, ITaskStrategy> storage = new Dictionary<String, ITaskStrategy>();
             public static HashSet<String> checkExists = new HashSet<String>();
-
+            public static Boolean isSetUp = false;
             public static ITaskStrategy getTask(String taskName)
             {
-                setUp();
+                if (isSetUp == false)
+                {
+                    setUp();
+                    isSetUp = true;
+                }
 
                 ITaskStrategy task = (ITaskStrategy)storage[taskName];
                 if (task == null)
                     return DefaultTask.task as ITaskStrategy;
                 return task;
             }
+
             public static void register(String key, ITaskStrategy value)
             {
                 if (checkExists.Contains(key) == false)
@@ -134,6 +125,7 @@ namespace FastqAnalyzerCleaner
                     storage.Add(key, value); 
                 }
             }
+
             private static void setUp()
             {
                 DefaultTask.register();
@@ -143,31 +135,21 @@ namespace FastqAnalyzerCleaner
                 TailCleanTask.register();
                 ReanalyzeTask.register();
                 RescanSequencerTask.register();
+                CreateFastaTask.register();
             }
         }
 
         public abstract class ITaskStrategy
         {
-            abstract public TaskInputs perform(TaskInputs inputs);
+            abstract public GenericFastqInputs perform(GenericFastqInputs inputs);
             abstract public String getStatement();
-        }
-
-        public class TaskInputs
-        {
-            public String output { get; set; }
-            public FqFile fqFile { get; set; }
-            public TaskInputs(FqFile fqFile, String output)
-            {
-                this.fqFile = fqFile;
-                this.output = output;
-            }
         }
 
         public class DefaultTask : ITaskStrategy
         {
             public static String statement = "Default";
             public static ITaskStrategy task = new DefaultTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 //Show error message
                 return inputs;
@@ -186,10 +168,10 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "Sequencer Statistics";
             public static ITaskStrategy task = new SequenceStatisticsTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.fqFile.performSequenceStatistics();
+                inputs.FastqFile.performSequenceStatistics();
                 return inputs;
             }
             public override String getStatement() {
@@ -205,14 +187,14 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "Sequence End Cleaner";
             public static ITaskStrategy task = new EndCleanTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(10, "[CLEANING SEQUENCE 5' ENDS]");
-                inputs.fqFile.cleanEnds(5);
+                inputs.FastqFile.cleanEnds(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.fqFile.performJointTests();
+                inputs.FastqFile.performJointTests();
                 taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.fqFile.performSequenceStatistics();
+                inputs.FastqFile.performSequenceStatistics();
                 return inputs;
             }
             public override String getStatement()
@@ -229,14 +211,14 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "Sequence Start Cleaner";
             public static ITaskStrategy task = new StartCleanTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(10, "[CLEANING SEQUENCE 3' ENDS]");
-                inputs.fqFile.cleanStarts(5);
+                inputs.FastqFile.cleanStarts(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.fqFile.performJointTests();
+                inputs.FastqFile.performJointTests();
                 taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.fqFile.performSequenceStatistics();
+                inputs.FastqFile.performSequenceStatistics();
                 return inputs;
             }
             public override String getStatement()
@@ -254,12 +236,12 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "File Reanalysis";
             public static ITaskStrategy task = new ReanalyzeTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.fqFile.performJointTests();
+                inputs.FastqFile.performJointTests();
                 taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.fqFile.performSequenceStatistics();
+                inputs.FastqFile.performSequenceStatistics();
                 return inputs;
             }
             public override String getStatement()
@@ -276,17 +258,17 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "Sequencer Type Rescan";
             public static ITaskStrategy task = new RescanSequencerTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 if (Preferences.getInstance().getSeqDecisionMethod())
                 {
                     taskWorker.ReportProgress(27, "[DETERMINING SEQUENCER]");
-                    SequencerDetermination seqDetermine = new SequencerDetermination(inputs.fqFile);
+                    SequencerDetermination seqDetermine = new SequencerDetermination(inputs.FastqFile);
                 }
                 else if (!Preferences.getInstance().getSeqDecisionMethod())
                 {
                     taskWorker.ReportProgress(40, "[DETERMINING SEQUENCER - TREE]");
-                    SequencerDecisionTree decTree = new SequencerDecisionTree(inputs.fqFile);
+                    SequencerDecisionTree decTree = new SequencerDecisionTree(inputs.FastqFile);
                 }
                 return inputs;
             }
@@ -304,14 +286,36 @@ namespace FastqAnalyzerCleaner
         {
             public static String statement = "Sequence Tail Cleaner";
             public static ITaskStrategy task = new TailCleanTask();
-            public override TaskInputs perform(TaskInputs inputs)
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(10, "[CLEANING SEQUENCE TAILS]");
-                inputs.fqFile.cleanStarts(5);
+                inputs.FastqFile.cleanStarts(inputs.NucleotidesToClean);
+                inputs.FastqFile.cleanEnds(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.fqFile.performJointTests();
+                inputs.FastqFile.performJointTests();
                 taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.fqFile.performSequenceStatistics();
+                inputs.FastqFile.performSequenceStatistics();
+                return inputs;
+            }
+            public override String getStatement()
+            {
+                return "Performing " + statement + " Task";
+            }
+            public static void register()
+            {
+                TaskDiscrimination.register(statement, task);
+            }
+        }
+
+        public class CreateFastaTask : ITaskStrategy
+        {
+            public static String statement = "Create Fasta File";
+            public static ITaskStrategy task = new DefaultTask();
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
+            {
+                taskWorker.ReportProgress(40, "[CREATING FASTA FORMAT]");
+                inputs.Output = inputs.FastqFile.createFastaFormat("");
+                taskWorker.ReportProgress(100, "[FASTA FORMAT CREATED]");
                 return inputs;
             }
             public override String getStatement()

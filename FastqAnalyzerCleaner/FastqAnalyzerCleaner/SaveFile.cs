@@ -27,7 +27,7 @@ namespace FastqAnalyzerCleaner
     class SaveFile
     {
         private String fileName, message, filter, saveAction;
-        private Form1 observer;
+        private FastqGUI observer;
         private FqFile fqFile;
         private BackgroundWorker saveWorker;
 
@@ -37,7 +37,7 @@ namespace FastqAnalyzerCleaner
 		///<param name="output">The string to be saved</param>
 		///<param name="message">Message to be displayed on the save file dialogue window</param>
 		///<param name="filter">String to filter access to file types in the savefiledialogue window</param>
-        public SaveFile(FqFile file, String message, Form1 o, String saveType, String filter = "Text File|*.txt|FastqFile|*.fq")
+        public SaveFile(FqFile file, String message, FastqGUI o, String saveType, String filter = "Text File|*.txt|FastqFile|*.fq")
         {
             this.fqFile = file;
             this.message = message;

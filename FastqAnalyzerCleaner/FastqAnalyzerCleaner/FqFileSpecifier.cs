@@ -1,4 +1,4 @@
-﻿/// <copyright file="FqFileSpecifier.cs" author="Neil Robertson">
+﻿/// <copyright file="FastqFileSpecifier.cs" author="Neil Robertson">
 /// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
 ///
 /// This code is the property of Neil Robertson.  Permission must be sought before reuse.

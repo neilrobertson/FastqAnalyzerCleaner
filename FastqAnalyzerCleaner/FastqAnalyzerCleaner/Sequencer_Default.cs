@@ -103,7 +103,6 @@ namespace FastqAnalyzerCleaner
             return yCoOrd;
         }
 
-
         public override String getMultiplexIndex(String header)
         {
             //@HWI-B5-690_0051_FC:3:1:5007:1023#ACAGTG/1
@@ -112,7 +111,6 @@ namespace FastqAnalyzerCleaner
             multiplexIndex = part[0];
             return multiplexIndex;
         }
-
 
         public override int getPairMember(String header)
         {

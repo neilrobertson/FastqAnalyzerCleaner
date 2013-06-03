@@ -15,8 +15,9 @@ C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerClean
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Properties.Resources.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csproj.GenerateResource.Cache
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Form1.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.manifest
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.application
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe.manifest
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.FastqGUI.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.PreferencesGUI.resources
