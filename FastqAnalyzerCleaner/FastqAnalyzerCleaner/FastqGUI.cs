@@ -34,10 +34,7 @@ namespace FastqAnalyzerCleaner
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        
 
         public void setFastqFile(FqFile processedFastqFile)
         {
@@ -307,6 +304,11 @@ namespace FastqAnalyzerCleaner
                 e.Cancel = true;
                 e.Message = "Required";
             }
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
         }
              
     }

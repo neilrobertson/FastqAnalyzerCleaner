@@ -20,13 +20,11 @@ using System.Diagnostics;
 
 namespace FastqAnalyzerCleaner
 {
-    class ParseFastq
+    public class ParseFastq
     {
         private String fastqHeader, fileName;
 	
-        private Stopwatch stopwatch = new Stopwatch();
-
-	    private Boolean isFastqFile = true;
+	    private Boolean isFastqFile = false;
         private readonly int FQ_BLOCKS_TO_CHECK = 50;
 
         private String[] header, seq, info, qscore;
@@ -34,7 +32,7 @@ namespace FastqAnalyzerCleaner
 	    private FqFile fastqFile;
 	    private FqSequence fqSeq;
 
-        private long _fileLength;
+        private long fileLength;
         private byte[] byteArray;
 
         private Stopwatch sw;
@@ -51,29 +49,29 @@ namespace FastqAnalyzerCleaner
 
         public void initByteParseFastq()
         {           
-            _fileLength = fileReader.Length;
+            fileLength = fileReader.Length;
 
-            byteArray = new byte[_fileLength];
+            byteArray = new byte[fileLength];
 
-            Console.WriteLine("File length bytes: " + _fileLength);
+            Console.WriteLine("File length bytes: " + fileLength);
 
             sw = new Stopwatch();
             sw.Start();
 
             try
             {
-                while (_fileLength > 0)
+                while (fileLength > 0)
                 {
-                    if (_fileLength < byteArray.Length)
+                    if (fileLength < byteArray.Length)
                     {
-                        fileReader.Read(byteArray, 0, (int)_fileLength);
+                        fileReader.Read(byteArray, 0, (int)fileLength);
                         break;
                     }
                     else
                     {
                         fileReader.Read(byteArray, 0, byteArray.Length);
                     }
-                    _fileLength -= byteArray.Length;
+                    fileLength -= byteArray.Length;
                 }
             }
             catch (InsufficientMemoryException exception)
@@ -146,11 +144,9 @@ namespace FastqAnalyzerCleaner
                             int hashcode = fqRead.hashcode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
-
                         fastqFile.addFastqSequence(fqSeq);
                         nLine += 3;
                     }
-
                     sw.Stop();
                     Console.WriteLine("Time to Parse File:  " + sw.Elapsed + "s");
                 }

@@ -7,14 +7,14 @@
     <framework targetVersion="4.5" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="FastqAnalyzerCleaner.exe.manifest" size="3530">
+    <dependentAssembly dependencyType="install" codebase="FastqAnalyzerCleaner.exe.manifest" size="4012">
       <assemblyIdentity name="FastqAnalyzerCleaner.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qR1hAq4SYQ3E5XHGThV6nTYy7wA5I/b1KfXJlX+ORQ0=</dsig:DigestValue>
+        <dsig:DigestValue>cBxRO7pWbrpBY2a1xG9dNb2QDpJ1OEcJ16L3JDMipgY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

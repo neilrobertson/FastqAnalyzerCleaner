@@ -39,7 +39,8 @@ namespace FastqAnalyzerCleaner
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
-        {
+        {            
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FastqGUI));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,10 +73,17 @@ namespace FastqAnalyzerCleaner
             this.Multi_Core_Radio = new System.Windows.Forms.RadioButton();
             this.Cores_Group_Box = new System.Windows.Forms.GroupBox();
             this.Sequencer_Selection_Group_Box = new System.Windows.Forms.GroupBox();
+            this.FastqGUITabs = new System.Windows.Forms.TabControl();
+            this.InformationTab = new System.Windows.Forms.TabPage();
+            this.GraphicsTab = new System.Windows.Forms.TabPage();
+            this.FastqGUI_Charts = new FastqAnalyzerCleaner.FastqGUI_Charts();
             this.menuStrip1.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
             this.Sequencer_Selection_Group_Box.SuspendLayout();
+            this.FastqGUITabs.SuspendLayout();
+            this.GraphicsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FastqGUI_Charts)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -92,7 +100,7 @@ namespace FastqAnalyzerCleaner
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(834, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(934, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -255,9 +263,9 @@ namespace FastqAnalyzerCleaner
             this.progressStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.progressStrip.Location = new System.Drawing.Point(0, 440);
+            this.progressStrip.Location = new System.Drawing.Point(0, 590);
             this.progressStrip.Name = "progressStrip";
-            this.progressStrip.Size = new System.Drawing.Size(834, 22);
+            this.progressStrip.Size = new System.Drawing.Size(934, 22);
             this.progressStrip.TabIndex = 1;
             this.progressStrip.Text = "statusStrip1";
             // 
@@ -329,9 +337,9 @@ namespace FastqAnalyzerCleaner
             this.Cores_Group_Box.Controls.Add(this.Single_Core_Radio);
             this.Cores_Group_Box.Controls.Add(this.Multi_Core_Radio);
             this.Cores_Group_Box.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
-            this.Cores_Group_Box.Location = new System.Drawing.Point(12, 395);
+            this.Cores_Group_Box.Location = new System.Drawing.Point(12, 540);
             this.Cores_Group_Box.Name = "Cores_Group_Box";
-            this.Cores_Group_Box.Size = new System.Drawing.Size(214, 42);
+            this.Cores_Group_Box.Size = new System.Drawing.Size(222, 45);
             this.Cores_Group_Box.TabIndex = 6;
             this.Cores_Group_Box.TabStop = false;
             this.Cores_Group_Box.Text = "[LOGICAL CORES]";
@@ -341,23 +349,71 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box.Controls.Add(this.Clean_Sweep_Radio);
             this.Sequencer_Selection_Group_Box.Controls.Add(this.Decision_Tree_Radio);
             this.Sequencer_Selection_Group_Box.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
-            this.Sequencer_Selection_Group_Box.Location = new System.Drawing.Point(600, 392);
+            this.Sequencer_Selection_Group_Box.Location = new System.Drawing.Point(705, 540);
             this.Sequencer_Selection_Group_Box.Name = "Sequencer_Selection_Group_Box";
             this.Sequencer_Selection_Group_Box.Size = new System.Drawing.Size(222, 45);
             this.Sequencer_Selection_Group_Box.TabIndex = 7;
             this.Sequencer_Selection_Group_Box.TabStop = false;
             this.Sequencer_Selection_Group_Box.Text = "[FILE FORMAT]";
             // 
+            // FastqGUITabs
+            // 
+            this.FastqGUITabs.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.FastqGUITabs.Alignment = System.Windows.Forms.TabAlignment.Left;
+            this.FastqGUITabs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.FastqGUITabs.Controls.Add(this.InformationTab);
+            this.FastqGUITabs.Controls.Add(this.GraphicsTab);
+            this.FastqGUITabs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.FastqGUITabs.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
+            this.FastqGUITabs.ItemSize = new System.Drawing.Size(150, 20);
+            this.FastqGUITabs.Location = new System.Drawing.Point(0, 25);
+            this.FastqGUITabs.Multiline = true;
+            this.FastqGUITabs.Name = "FastqGUITabs";
+            this.FastqGUITabs.SelectedIndex = 0;
+            this.FastqGUITabs.ShowToolTips = true;
+            this.FastqGUITabs.Size = new System.Drawing.Size(934, 515);
+            this.FastqGUITabs.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.FastqGUITabs.TabIndex = 8;
+            // 
+            // InformationTab
+            // 
+            this.InformationTab.BackColor = System.Drawing.Color.Transparent;
+            this.InformationTab.Location = new System.Drawing.Point(24, 4);
+            this.InformationTab.Name = "InformationTab";
+            this.InformationTab.Padding = new System.Windows.Forms.Padding(3);
+            this.InformationTab.Size = new System.Drawing.Size(906, 507);
+            this.InformationTab.TabIndex = 0;
+            this.InformationTab.Text = "[FASTQ DETAILS]";
+            this.InformationTab.ToolTipText = "Shows Fastq file details.";
+            // 
+            // GraphicsTab
+            // 
+            this.GraphicsTab.Controls.Add(this.FastqGUI_Charts);
+            this.GraphicsTab.Location = new System.Drawing.Point(24, 4);
+            this.GraphicsTab.Name = "GraphicsTab";
+            this.GraphicsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.GraphicsTab.Size = new System.Drawing.Size(906, 507);
+            this.GraphicsTab.TabIndex = 1;
+            this.GraphicsTab.Text = "[FASTQ GRAPHICS]";
+            this.GraphicsTab.ToolTipText = "Shows Fastq file graphics.";
+            this.GraphicsTab.UseVisualStyleBackColor = true;
+            // 
             // FastqGUI
             // 
-            this.ClientSize = new System.Drawing.Size(834, 462);
+            this.ClientSize = new System.Drawing.Size(934, 612);
+            this.Controls.Add(this.FastqGUITabs);
             this.Controls.Add(this.Sequencer_Selection_Group_Box);
             this.Controls.Add(this.Cores_Group_Box);
             this.Controls.Add(this.progressStrip);
             this.Controls.Add(this.menuStrip1);
+            this.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "FastqGUI";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "[FASTQ-ANALYZER-CLEANER]";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.progressStrip.ResumeLayout(false);
@@ -366,6 +422,9 @@ namespace FastqAnalyzerCleaner
             this.Cores_Group_Box.PerformLayout();
             this.Sequencer_Selection_Group_Box.ResumeLayout(false);
             this.Sequencer_Selection_Group_Box.PerformLayout();
+            this.FastqGUITabs.ResumeLayout(false);
+            this.GraphicsTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FastqGUI_Charts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -405,6 +464,10 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.RadioButton Multi_Core_Radio;
         private System.Windows.Forms.GroupBox Cores_Group_Box;
         private System.Windows.Forms.GroupBox Sequencer_Selection_Group_Box;
+        private System.Windows.Forms.TabControl FastqGUITabs;
+        private System.Windows.Forms.TabPage InformationTab;
+        private System.Windows.Forms.TabPage GraphicsTab;
+        private FastqGUI_Charts FastqGUI_Charts;
     }
 }
 

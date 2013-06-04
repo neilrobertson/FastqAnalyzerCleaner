@@ -21,7 +21,6 @@ namespace FastqAnalyzerCleaner
     static class HelperMethods
     {
        
-
         public static Boolean safeParseInt(String str)
         {
             try
