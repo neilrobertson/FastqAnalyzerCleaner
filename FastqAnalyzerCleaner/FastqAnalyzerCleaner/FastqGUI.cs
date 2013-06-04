@@ -28,6 +28,7 @@ namespace FastqAnalyzerCleaner
     public partial class FastqGUI : Form
     {
         public static FqFile fqFile = null;
+        private const String FILE_DIALOGUE_FILTER = "All files (*.*)|*.*|Text Files (*.txt)|*.txt|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
 
         public FastqGUI()
         {
@@ -53,11 +54,11 @@ namespace FastqAnalyzerCleaner
             loadWorker.ProgressChanged += new ProgressChangedEventHandler(loadWorker_ProgressChanged);
             if (loadWorker.IsBusy != true)
             {
-                openFileDialog1.Filter = "All files (*.*)|*.*|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                OpenFastqDialogue.Filter = FILE_DIALOGUE_FILTER;
+                if (OpenFastqDialogue.ShowDialog() == DialogResult.OK)
                 {
-                    FileStream inStr = new FileStream(openFileDialog1.FileName, FileMode.Open);
-                    InputFq input = new InputFq(inStr, openFileDialog1.FileName);
+                    FileStream inStr = new FileStream(OpenFastqDialogue.FileName, FileMode.Open);
+                    InputFq input = new InputFq(inStr, OpenFastqDialogue.FileName);
                     loadWorker.RunWorkerAsync(input);
                 }
             }
@@ -114,7 +115,7 @@ namespace FastqAnalyzerCleaner
                         Console.WriteLine("Stats for Sequence "+(i+1)+": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(),2) , fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
                     }
                     Console.WriteLine("Stats Performed");
-                    
+                    //Enable GUI
                     worker.ReportProgress(100, "[FILE LOADED]");
                 }
                 else
@@ -148,7 +149,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, "Save Fastq");
+                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, "Save Fastq", FILE_DIALOGUE_FILTER);
                 save.Save();
             }
         }
@@ -157,7 +158,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                SaveFile save = new SaveFile(fqFile, "Save Fasta File", this, "Save Fasta", "All files (*.*)|*.*|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq");
+                SaveFile save = new SaveFile(fqFile, "Save Fasta File", this, FILE_DIALOGUE_FILTER);
                 save.Save();
             }
         }
@@ -169,10 +170,10 @@ namespace FastqAnalyzerCleaner
                 InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 3' starts:", "Clean Sequence Starts", "", new InputBoxValidatingHandler(inputBox_Validating));
                 if (result.OK)
                 {
-                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
-                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
                         inputs.TaskAction = "Sequence Start Cleaner";
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
@@ -190,10 +191,10 @@ namespace FastqAnalyzerCleaner
                 InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 5' ends:", "Clean Sequence Ends", "", new InputBoxValidatingHandler(inputBox_Validating));
                 if (result.OK)
                 {
-                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
-                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
                         inputs.TaskAction = "Sequence End Cleaner";
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
@@ -211,10 +212,10 @@ namespace FastqAnalyzerCleaner
                 InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from tails:", "Clean Sequence Tails", "", new InputBoxValidatingHandler(inputBox_Validating));
                 if (result.OK)
                 {
-                    if (HelperMethods.safeParseInt(result.Text) == true)
+                    if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
-                        inputs.NucleotidesToClean = Int32.Parse(result.Text);
+                        inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
                         inputs.TaskAction = "Sequence Tail Cleaner";
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
@@ -304,12 +305,15 @@ namespace FastqAnalyzerCleaner
                 e.Cancel = true;
                 e.Message = "Required";
             }
+            else if (HelperMethods.safeParseInt(e.Text.Trim()) == false)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
         }
 
-        private void chart1_Click(object sender, EventArgs e)
-        {
+        
 
-        }
              
     }
 }

@@ -10,6 +10,8 @@
 // <email>neil.alistair.robertson@hotmail.co.uk</email>
 // <date>2013-06-1</date>
 
+using System;
+
 namespace FastqAnalyzerCleaner
 {
     partial class FastqGUI
@@ -39,10 +41,10 @@ namespace FastqAnalyzerCleaner
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
-        {            
+        {  
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FastqGUI));
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.OpenFastqDialogue = new System.Windows.Forms.OpenFileDialog();
+            this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFastqToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -76,8 +78,9 @@ namespace FastqAnalyzerCleaner
             this.FastqGUITabs = new System.Windows.Forms.TabControl();
             this.InformationTab = new System.Windows.Forms.TabPage();
             this.GraphicsTab = new System.Windows.Forms.TabPage();
+            this.Charts_Combo_Selector = new System.Windows.Forms.ComboBox();
             this.FastqGUI_Charts = new FastqAnalyzerCleaner.FastqGUI_Charts();
-            this.menuStrip1.SuspendLayout();
+            this.MenuStrip.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
             this.Sequencer_Selection_Group_Box.SuspendLayout();
@@ -86,23 +89,19 @@ namespace FastqAnalyzerCleaner
             ((System.ComponentModel.ISupportInitialize)(this.FastqGUI_Charts)).BeginInit();
             this.SuspendLayout();
             // 
-            // openFileDialog1
+            // MenuStrip
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.actionToolStripMenuItem,
             this.preferencesToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(934, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MenuStrip.Name = "MenuStrip";
+            this.MenuStrip.Size = new System.Drawing.Size(934, 24);
+            this.MenuStrip.TabIndex = 0;
+            this.MenuStrip.Text = "MenuStrip";
             // 
             // fileToolStripMenuItem
             // 
@@ -388,6 +387,7 @@ namespace FastqAnalyzerCleaner
             // 
             // GraphicsTab
             // 
+            this.GraphicsTab.Controls.Add(this.Charts_Combo_Selector);
             this.GraphicsTab.Controls.Add(this.FastqGUI_Charts);
             this.GraphicsTab.Location = new System.Drawing.Point(24, 4);
             this.GraphicsTab.Name = "GraphicsTab";
@@ -398,6 +398,18 @@ namespace FastqAnalyzerCleaner
             this.GraphicsTab.ToolTipText = "Shows Fastq file graphics.";
             this.GraphicsTab.UseVisualStyleBackColor = true;
             // 
+            // Charts_Combo_Selector
+            // 
+            this.Charts_Combo_Selector.DataSource = new FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes[] {
+            FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.FastqMeanStatistics,
+            FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.Distribution};
+            this.Charts_Combo_Selector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.Charts_Combo_Selector.FormattingEnabled = true;
+            this.Charts_Combo_Selector.Location = new System.Drawing.Point(611, 6);
+            this.Charts_Combo_Selector.Name = "Charts_Combo_Selector";
+            this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 21);
+            this.Charts_Combo_Selector.TabIndex = 1;
+            // 
             // FastqGUI
             // 
             this.ClientSize = new System.Drawing.Size(934, 612);
@@ -405,17 +417,17 @@ namespace FastqAnalyzerCleaner
             this.Controls.Add(this.Sequencer_Selection_Group_Box);
             this.Controls.Add(this.Cores_Group_Box);
             this.Controls.Add(this.progressStrip);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.MenuStrip);
             this.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.MenuStrip;
             this.MaximizeBox = false;
             this.Name = "FastqGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "[FASTQ-ANALYZER-CLEANER]";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.MenuStrip.ResumeLayout(false);
+            this.MenuStrip.PerformLayout();
             this.progressStrip.ResumeLayout(false);
             this.progressStrip.PerformLayout();
             this.Cores_Group_Box.ResumeLayout(false);
@@ -432,8 +444,8 @@ namespace FastqAnalyzerCleaner
 
         #endregion
 
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.OpenFileDialog OpenFastqDialogue;
+        private System.Windows.Forms.MenuStrip MenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFastqToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -468,6 +480,7 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.TabPage InformationTab;
         private System.Windows.Forms.TabPage GraphicsTab;
         private FastqGUI_Charts FastqGUI_Charts;
+        private System.Windows.Forms.ComboBox Charts_Combo_Selector;
     }
 }
 
