@@ -312,6 +312,13 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FastqGUI_Charts.FastqChartTypes chartType;
+            Enum.TryParse<FastqGUI_Charts.FastqChartTypes>(Charts_Combo_Selector.SelectedValue.ToString(), out chartType);
+            FastqGUI_Charts.SelectChartType(chartType);
+        }
+
         
 
              

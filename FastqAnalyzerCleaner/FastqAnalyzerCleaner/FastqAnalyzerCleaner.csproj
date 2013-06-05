@@ -151,6 +151,7 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="FastqAnalyzerCleaner_TemporaryKey.pfx" />
+    <None Include="Properties\DataSources\FastqGUI_Charts.FastqChartTypes.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

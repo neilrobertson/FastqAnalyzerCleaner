@@ -41,7 +41,7 @@ namespace FastqAnalyzerCleaner
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
-        {  
+        { 
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FastqGUI));
             this.OpenFastqDialogue = new System.Windows.Forms.OpenFileDialog();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
@@ -403,12 +403,14 @@ namespace FastqAnalyzerCleaner
             this.Charts_Combo_Selector.DataSource = new FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes[] {
             FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.FastqMeanStatistics,
             FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.Distribution};
-            this.Charts_Combo_Selector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.Charts_Combo_Selector.FormattingEnabled = true;
             this.Charts_Combo_Selector.Location = new System.Drawing.Point(611, 6);
+            this.Charts_Combo_Selector.MaxLength = 50;
             this.Charts_Combo_Selector.Name = "Charts_Combo_Selector";
-            this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 21);
+            this.Charts_Combo_Selector.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 23);
             this.Charts_Combo_Selector.TabIndex = 1;
+            this.Charts_Combo_Selector.SelectedIndexChanged += new System.EventHandler(this.Charts_Combo_Selector_SelectedIndexChanged);
             // 
             // FastqGUI
             // 

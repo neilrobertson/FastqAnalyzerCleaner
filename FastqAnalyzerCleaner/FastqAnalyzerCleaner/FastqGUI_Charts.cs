@@ -13,6 +13,8 @@ namespace FastqAnalyzerCleaner
         private System.Drawing.Point CHART_LOCATION = new System.Drawing.Point(2, 33);
         private System.Drawing.Size CHART_SIZE = new System.Drawing.Size(901, 471);
 
+        private FastqChartTypes currentChartType = FastqChartTypes.FastqMeanStatistics;
+
         private ChartArea chart_Area;
         private Legend legend;
         private Series series;
@@ -20,6 +22,15 @@ namespace FastqAnalyzerCleaner
         public FastqGUI_Charts()
         {
             CreateChartArea();
+        }
+
+        public void SelectChartType(FastqChartTypes chartType)
+        {
+            if (currentChartType != chartType)
+            {
+                this.currentChartType = chartType;
+                Console.WriteLine("Chart type selected: {0}", currentChartType.ToString());
+            }
         }
 
         public void CreateChartArea()
@@ -44,12 +55,6 @@ namespace FastqAnalyzerCleaner
             this.Size = CHART_SIZE;
             this.TabIndex = 0;
             this.Text = "FastqGUI_Charts";
-        }
-
-        public void SelectChartType()
-        {
-             
-             
         }
 
         public enum FastqChartTypes
