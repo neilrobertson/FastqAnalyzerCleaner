@@ -86,10 +86,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters.cs" />
     <Compile Include="FastqGUI_Charts.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FastqGUI_ChartSelectionCombo.cs" />
     <Compile Include="FqFileSpecifier.cs" />
     <Compile Include="GenericFastqInputs.cs" />
     <Compile Include="HelperMethods.cs" />

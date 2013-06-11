@@ -81,7 +81,7 @@ namespace FastqAnalyzerCleaner
                 taskTextOutput = taskOutputs.Output;
                 Console.WriteLine(task.getStatement() + " Task - COMPLETED");
 
-                observer.setFastqFile(outputFqFile);
+                observer.UpdateGUIThread(outputFqFile);
                 updateGUI();
                 stopwatch.Stop();
             }
@@ -136,6 +136,7 @@ namespace FastqAnalyzerCleaner
                 ReanalyzeTask.register();
                 RescanSequencerTask.register();
                 CreateFastaTask.register();
+                AdapterTask.register();
             }
         }
 
@@ -192,9 +193,7 @@ namespace FastqAnalyzerCleaner
                 taskWorker.ReportProgress(10, "[CLEANING SEQUENCE 5' ENDS]");
                 inputs.FastqFile.cleanEnds(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.FastqFile.performJointTests();
-                taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.FastqFile.performSequenceStatistics();
+                inputs.FastqFile.Tests(); 
                 return inputs;
             }
             public override String getStatement()
@@ -216,9 +215,7 @@ namespace FastqAnalyzerCleaner
                 taskWorker.ReportProgress(10, "[CLEANING SEQUENCE 3' ENDS]");
                 inputs.FastqFile.cleanStarts(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.FastqFile.performJointTests();
-                taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.FastqFile.performSequenceStatistics();
+                inputs.FastqFile.Tests(); 
                 return inputs;
             }
             public override String getStatement()
@@ -239,9 +236,7 @@ namespace FastqAnalyzerCleaner
             public override GenericFastqInputs perform(GenericFastqInputs inputs)
             {
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.FastqFile.performJointTests();
-                taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.FastqFile.performSequenceStatistics();
+                inputs.FastqFile.Tests(); 
                 return inputs;
             }
             public override String getStatement()
@@ -292,9 +287,7 @@ namespace FastqAnalyzerCleaner
                 inputs.FastqFile.cleanStarts(inputs.NucleotidesToClean);
                 inputs.FastqFile.cleanEnds(inputs.NucleotidesToClean);
                 taskWorker.ReportProgress(40, "[PERFORMING JOINT TESTS]");
-                inputs.FastqFile.performJointTests();
-                taskWorker.ReportProgress(80, "[PERFORMING SEQUENCE STATISTICS TASKS]");
-                inputs.FastqFile.performSequenceStatistics();
+                inputs.FastqFile.Tests(); 
                 return inputs;
             }
             public override String getStatement()
@@ -316,6 +309,28 @@ namespace FastqAnalyzerCleaner
                 taskWorker.ReportProgress(40, "[CREATING FASTA FORMAT]");
                 inputs.Output = inputs.FastqFile.createFastaFormat("");
                 taskWorker.ReportProgress(100, "[FASTA FORMAT CREATED]");
+                return inputs;
+            }
+            public override String getStatement()
+            {
+                return "Performing " + statement + " Task";
+            }
+            public static void register()
+            {
+                TaskDiscrimination.register(statement, task);
+            }
+        }
+
+        private class AdapterTask : ITaskStrategy
+        {
+            public static String statement = "Clean Adapters Task";
+            public static ITaskStrategy task = new AdapterTask();
+            public override GenericFastqInputs perform(GenericFastqInputs inputs)
+            {
+                taskWorker.ReportProgress(10, "[CLEANING ADAPTERS]");
+                inputs.FastqFile.cleanAdapters();
+                taskWorker.ReportProgress(50, "[PERFORMING JOINT TESTS]");
+                inputs.FastqFile.Tests();
                 return inputs;
             }
             public override String getStatement()

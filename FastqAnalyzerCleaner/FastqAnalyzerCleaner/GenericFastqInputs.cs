@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class GenericFastqInputs
+    public class GenericFastqInputs
     {
         public FqFile FastqFile { get; set; }
         public String TaskAction { get; set; }
         public int NucleotidesToClean { get; set; }
         public String Output { get; set; }
+        public int SequenceIndex { get; set; }
+        public String AdapterName { get; set; }
 
         public GenericFastqInputs() { }
     }

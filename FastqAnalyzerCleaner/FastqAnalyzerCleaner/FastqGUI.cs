@@ -35,11 +35,26 @@ namespace FastqAnalyzerCleaner
             InitializeComponent();
         }
 
-        
+        private delegate void UpdateFastqGUI(FqFile newFqFile);
 
-        public void setFastqFile(FqFile processedFastqFile)
+        public void UpdateGUIThread(FqFile newFqFile)
         {
-            fqFile = processedFastqFile;
+            if (this.InvokeRequired)
+            {
+                // Pass the same function to BeginInvoke,
+                // but the call would come on the correct
+                // thread and InvokeRequired will be false.
+                this.BeginInvoke(new UpdateFastqGUI(UpdateGUIThread), new object[] { newFqFile });
+                return;
+            }
+
+            UpdateGUI(newFqFile);
+        }
+
+        public void UpdateGUI(FqFile newFqFile)
+        {
+            Console.WriteLine("Program updating GUI on the COM Thread");
+            fqFile = newFqFile;
         }
 
         private void openFastqFile(object sender, EventArgs e)
@@ -100,21 +115,21 @@ namespace FastqAnalyzerCleaner
                     worker.ReportProgress(35, "[DESERIALIZING FASTQ MAP]");
                     fqFile.calculateMapQualities();
 
-                    worker.ReportProgress(65, "[PERFORMING JOINT TESTS]");
-                    fqFile.performJointTests();
+                    worker.ReportProgress(65, "[PERFORMING TESTS]");
+
+                    fqFile.Tests();
                     Console.WriteLine("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides");
                     Console.WriteLine("Joint Test Results: " + fqFile.getGCount() + "G   " + Math.Round(fqFile.gContents(), 2) + "%   " + fqFile.getCCount() + "C " + Math.Round(fqFile.cContents(), 2) + " %");
-                    Console.WriteLine("Misreads:  " + fqFile.getMisreadLocations().Count);
+                    Console.WriteLine("Misreads:  " + fqFile.getNCount());
                     Console.WriteLine("Distribution:  " + fqFile.getDistribution().Count);
-
-                    worker.ReportProgress(85, "[PERFORMING STATS]");
-                    fqFile.performSequenceStatistics();
+                    Console.WriteLine("Stats Performed");
                     for (int i = 0; i < 20; i++)
                     {
                         FqSequence fqSeq = fqFile.getFastqSequenceByPosition(i);
-                        Console.WriteLine("Stats for Sequence "+(i+1)+": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(),2) , fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
+                        Console.WriteLine("Stats for Sequence " + (i + 1) + ": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(), 2), fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
                     }
-                    Console.WriteLine("Stats Performed");
+                    for (int i = 0; i < fqFile.getDistribution().Count; i++)
+                        Console.WriteLine("Quality Score: {0}   Count: {1}", i, fqFile.getDistribution()[i]);
                     //Enable GUI
                     worker.ReportProgress(100, "[FILE LOADED]");
                 }
@@ -278,6 +293,19 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        private void removeAdapterSequencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fqFile != null)
+            {
+                GenericFastqInputs inputs = new GenericFastqInputs();
+                inputs.TaskAction = "Clean Adapters Task";
+                inputs.FastqFile = fqFile;
+                Console.WriteLine(inputs.TaskAction);
+                TaskStrategy task = new TaskStrategy(this, inputs);
+                task.RunTask();
+            }
+        }
+
         private void Clean_Sweep_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setSeqDecisionMethod(true);
@@ -298,6 +326,13 @@ namespace FastqAnalyzerCleaner
             Preferences.getInstance().setMultiCoreProcessing(true);
         }
 
+        private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FastqGUI_Charts.FastqChartTypes chartType;
+            Enum.TryParse<FastqGUI_Charts.FastqChartTypes>(Charts_Combo_Selector.SelectedValue.ToString(), out chartType);
+            FastqGUI_Charts.SelectChartType(chartType);
+        }
+
         private void inputBox_Validating(object sender, InputBoxValidatingArgs e)
         {
             if (e.Text.Trim().Length == 0)
@@ -311,16 +346,6 @@ namespace FastqAnalyzerCleaner
                 e.Message = "Required";
             }
         }
-
-        private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FastqGUI_Charts.FastqChartTypes chartType;
-            Enum.TryParse<FastqGUI_Charts.FastqChartTypes>(Charts_Combo_Selector.SelectedValue.ToString(), out chartType);
-            FastqGUI_Charts.SelectChartType(chartType);
-        }
-
-        
-
-             
+       
     }
 }

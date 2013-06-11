@@ -14,25 +14,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Threading;
+using System.ComponentModel;
 
 namespace FastqAnalyzerCleaner
 {
-    class FqFile_MultiCore : FqFile
+    public class FqFile_MultiCore : FqFile
     {
         private int LENGTH_SEQUENCE_ARRAY = 100000;
 	    private int index = 0;
 	
 	    private String header, sequencerType, fileName;
 	
-	    private int totalNucs, nucleotidesCleaned, misreads;
-	    private List<int> misreadLocations;
+	    private int totalNucs, nucleotidesCleaned;
 	    private List<int> distribution;
-	    private long nCount, cCount, gCount;
+	    private int nCount, cCount, gCount;
 	    private double nPercent, cPercent, gPercent;
 	    private static Dictionary<int, FqNucleotideRead> map;
+        private Dictionary<int, string> removedAdapters;
 
         private readonly int FREE_PROCESSOR_CORE = 1;
 	
@@ -87,6 +88,37 @@ namespace FastqAnalyzerCleaner
 		    }
 		    Console.Write("Sequence tails cleaned. Total Removed: " + totalRemove);
 	    }
+
+        public override void cleanAdapters()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Adapters.getInstance();
+            removedAdapters = new Dictionary<int, string>();
+
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+             // Initialize the local states
+             () => new ParallelInputs(sequencerType, "Adapter Removal"),
+             // Accumulate the thread-local computations in the loop body
+             (i, loop, adapters) =>
+             {
+                 adapters.removedAdapters = fastqSeq[i].cleanAdapters(adapters.adapters, map);
+                 return adapters;
+             },
+             adapters =>
+             {
+                Object locker = new object();
+                lock (locker)
+                {
+                    if (adapters.removedAdapters != null)
+                        removedAdapters.Add(adapters.removedAdapters.SequenceIndex, adapters.removedAdapters.AdapterName);
+                }
+             });
+
+            stopwatch.Stop();
+            Console.WriteLine("Statistics Performed in " + stopwatch.Elapsed);
+        }
 
         public override void removeRegion(int startBlock, int endBlock)
 	    {
@@ -167,7 +199,7 @@ namespace FastqAnalyzerCleaner
             fillDistributionList();
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE)},
                 // Initialize the local states
-            () => new JointSyncLists(sequencerType),
+            () => new ParallelInputs(sequencerType, "Sequence Tests"),
                 // Accumulate the thread-local computations in the loop body
             (i, loop, syncLists) =>
             {
@@ -210,7 +242,6 @@ namespace FastqAnalyzerCleaner
 
 		    totalNucleotides();
 		    resetCounts();
-		    misreadLocations = new List<int>(100);
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
                 // Initialize the local states
@@ -222,20 +253,19 @@ namespace FastqAnalyzerCleaner
                  {
                      char nucleotide = map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
 
-                     if (nucleotide == 'N') misRead.Add((i * fastqSeq[i].getFastqSeqSize()) + j + 1);
+                     if (nucleotide == 'N') Interlocked.Increment(ref nCount);
                      else if (nucleotide == 'C') Interlocked.Increment(ref cCount);
                      else if (nucleotide == 'G') Interlocked.Increment(ref gCount);
                  }
                  return misRead;
              },
-                misRead => {
+                misRead =>
+                {
                     Object locker = new object();
                     lock (locker)
-                    { misreadLocations.AddRange(misRead); }
+                    { }
                 }
              );
-		    nCount = misreadLocations.Count;
-            misreadLocations.Sort();
 		
 		    nPercent = (((double) nCount  / totalNucs) * 100);
 		    cPercent = (((double) cCount / totalNucs) * 100);
@@ -253,21 +283,19 @@ namespace FastqAnalyzerCleaner
 		    totalNucleotides();
 		    resetCounts();
 
-            misreadLocations = new List<int>(totalNucs / 100000);
-		
 		    fillDistributionList();
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
             // Initialize the local states
-            () => new JointSyncLists(sequencerType),
+            () => new ParallelInputs(sequencerType, "Sequence Tests"),
             // Accumulate the thread-local computations in the loop body
             (i, loop, syncLists) =>
             {
                for (int j = 0; j < fastqSeq[i].getFastqSeqSize(); j++)
                {
                    char nucleotide = map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
-                  
-                   if (nucleotide == 'N') syncLists.misRead.Add((i * fastqSeq[i].getFastqSeqSize()) + j + 1);
+
+                   if (nucleotide == 'N') Interlocked.Increment(ref nCount);
                    else if (nucleotide == 'C') Interlocked.Increment(ref cCount);
                    else if (nucleotide == 'G') Interlocked.Increment(ref gCount);
 
@@ -284,13 +312,11 @@ namespace FastqAnalyzerCleaner
                     Object locker = new object();
                     lock (locker)
                     { 
-                        this.misreadLocations.AddRange(syncLists.misRead);
+
                         this.combineDistributionLists(syncLists.distributes);
                     }
                 }
             );
-            misreadLocations.Sort();
-		    nCount = misreadLocations.Count;
 
             nPercent = (((double) nCount / totalNucs) * 100);
             cPercent = (((double) cCount / totalNucs) * 100);
@@ -299,19 +325,73 @@ namespace FastqAnalyzerCleaner
             Console.Write("Joint tests completed: " + stopwatch.Elapsed + "\n");
 	    }
 
-        public class JointSyncLists
+        public override void Tests()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            totalNucleotides();
+            resetCounts();
+
+            fillDistributionList();
+
+
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+                // Initialize the local states
+            () => new ParallelInputs(sequencerType, "Sequence Tests"),
+                // Accumulate the thread-local computations in the loop body
+            (i, loop, syncLists) =>
+            {
+                fastqSeq[i].Tests(map, syncLists);
+                Interlocked.Add(ref cCount, syncLists.cCount);
+                Interlocked.Add(ref gCount, syncLists.gCount);
+                Interlocked.Add(ref nCount, syncLists.nCount);
+                return syncLists;
+            },
+            syncLists =>
+            {
+                Object locker = new object();
+                lock (locker)
+                {
+                    this.combineDistributionLists(syncLists.distributes);
+                }
+            }
+            );
+      
+            nPercent = (((double)nCount / totalNucs) * 100);
+            cPercent = (((double)cCount / totalNucs) * 100);
+            gPercent = (((double)gCount / totalNucs) * 100);
+            stopwatch.Stop();
+            Console.Write("TESTS completed: " + stopwatch.Elapsed + "\n");
+        }
+
+        public class ParallelInputs
         {
             public List<int> distributes {get; set;}
             public List<int> misRead {get; set;}
-
-            public JointSyncLists(String sequencerType)
+            public List<Adapters.Adapter> adapters {get; set;}
+            public GenericFastqInputs removedAdapters { get; set; }
+            public Int32 cCount { get; set; }
+            public Int32 gCount { get; set; }
+            public Int32 nCount { get; set; }
+            
+            public ParallelInputs(String sequencerType, String taskType)
             {
-                distributes = new List<int>(40);
-                for (int j = 0; j <= SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread(); j++)
+                if (taskType == "Sequence Tests")
                 {
-                    distributes.Add(0);
+                    distributes = new List<int>(40);
+                    for (int j = 0; j <= SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread(); j++)
+                    {
+                        distributes.Add(0);
+                    }
+                    misRead = new List<int>();
                 }
-                misRead = new List<int>();
+                else if (taskType == "Adapter Removal")
+                {
+                    adapters = Adapters.getInstance().getAdaptersList();
+                    removedAdapters = null;
+                }
+
             }
         }
 
@@ -340,19 +420,6 @@ namespace FastqAnalyzerCleaner
 			    totalNucs = totalNucs + fastqSeq[i].getFastqSeqSize();
 		    }
 		    return totalNucs;
-	    }
-
-        public override void findMisreads()
-	    {
-		    misreadLocations =  new List<int>();
-		    for (int i = 0; i < index; i++)
-		    {
-			    for (int j = 0; i < fastqSeq[i].getFastqSeqSize(); j++)
-			    {
-				    if (map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide() == 'N') misreadLocations.Add((i * fastqSeq[i].getFastqSeqSize()) + j + 1);
-			    }
-		    }
-		    misreads = misreadLocations.Count;
 	    }
 
         public override List<FqSequence> createFastqSeqList()
@@ -429,20 +496,10 @@ namespace FastqAnalyzerCleaner
 		    return nucleotidesCleaned;
 	    }
 
-        public override List<int> getMisreadLocations()
-	    {
-		    return misreadLocations;
-	    }
-
         public override List<int> getDistribution()
         {
             return distribution;
         }
-
-        public override int getMisreads()
-	    {
-		    return misreads;
-	    }
 
         public override int getTotalNucleotides()
 	    {
@@ -454,17 +511,17 @@ namespace FastqAnalyzerCleaner
 		    return fastqSeq[i];
 	    }
 
-        public override double getNCount()
+        public override int getNCount()
 	    {
 		    return nCount;
 	    }
 
-        public override double getCCount()
+        public override int getCCount()
 	    {
 		    return cCount;
 	    }
 
-        public override double getGCount()
+        public override int getGCount()
 	    {
 		    return gCount;
 	    }
@@ -488,6 +545,11 @@ namespace FastqAnalyzerCleaner
 	    {
 		    return map;
 	    }
+
+        public override Dictionary<int, string> getRemovedAdapters()
+        {
+            return removedAdapters;
+        }
 
         public override void setHeader()
         {

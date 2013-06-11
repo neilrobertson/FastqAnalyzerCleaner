@@ -27,6 +27,7 @@ namespace FastqAnalyzerCleaner
         private int median, lowerThreshold, upperThreshold, firstQuart, thirdQuart;
         private String machineName;
         private int flowCellLane, tileNumber, xCoord, yCoord;
+        private int gCount = 0, cCount = 0, nCount = 0;
         private int sequenceLength;
         private int nucleotidesCleaned = 0;
         private int MAX_LINE_LENGTH = 105;
@@ -93,6 +94,64 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        public GenericFastqInputs cleanAdapters(List<Adapters.Adapter> adapters, Dictionary<int, FqNucleotideRead> map)
+        {
+            String sequence = buildSelectSequenceString(0, Adapters.getInstance().getLargestAdapterSize(), map);
+            GenericFastqInputs removedAdapter = null;
+            foreach (Adapters.Adapter adapter in adapters)
+            {
+                if (sequence.Substring(0, adapter.AdapterSequence.Length).Equals(adapter.AdapterSequence))
+                {
+                    //adapter found
+                    Console.WriteLine("Adapter found in sequence {0}: {1}", sequenceIndex, adapter.AdapterName);
+                    cleanStarts(adapter.AdapterSequence.Length);
+                    removedAdapter = new GenericFastqInputs();
+                    removedAdapter.AdapterName = adapter.AdapterName;
+                    removedAdapter.SequenceIndex = sequenceIndex;
+                }
+            }
+            return removedAdapter;
+        }
+
+        public FqFile_MultiCore.ParallelInputs Tests(Dictionary<int, FqNucleotideRead> map, FqFile_MultiCore.ParallelInputs inputs)
+        {
+            int qualitySum = 0;
+            List<int> qualities = new List<int>();
+            resetCounts();
+
+            for (int i = 0; i < index; i++)
+            {
+                char nucleotide = map[fastqSequence[i]].getNucleotide();
+
+                if (nucleotide == 'N') nCount++;
+                else if (nucleotide == 'C') cCount++;
+                else if (nucleotide == 'G') gCount++;
+
+                int qualityScore = map[fastqSequence[i]].getQualityScore();
+                qualitySum += qualityScore;
+                qualities.Add(qualityScore);
+                if (qualityScore >= 0)
+                {
+                    int currentPop = inputs.distributes[qualityScore];
+                    inputs.distributes[qualityScore] = (currentPop + 1);
+                }
+            }
+            inputs.cCount = cCount;
+            inputs.gCount = gCount;
+            inputs.nCount = nCount;
+
+            qualities.Sort();
+            int size = qualities.Count;
+            mean = (double)qualitySum / sequenceLength;
+            median = (int)qualities[(size / 2)];
+            thirdQuart = (int)qualities[((size / 4) * 3)];
+            firstQuart = (int)qualities[((size / 4))];
+            lowerThreshold = (int)qualities[0];
+            upperThreshold = (int)qualities[size - 1];
+
+            return inputs;   
+        }
+
         public void performStats(String sequencerType, Dictionary<int, FqNucleotideRead> map)
         {
             int qualitySum = 0;
@@ -151,6 +210,23 @@ namespace FastqAnalyzerCleaner
             return fqBlock.ToString();
         }
 
+        public String buildSelectSequenceString(int start, int end,  Dictionary<int, FqNucleotideRead> map)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (end > index)
+                end = index;
+
+            if (start < 0 || start > end)
+                start = 0;
+
+            for (int i = start; i < end; i++)
+            {
+                builder.Append(map[fastqSequence[i]].getNucleotide());
+            }
+            return builder.ToString();
+        }
+
         public int sequenceTailsOffset()
         {
             int tailsOffset = 0;
@@ -172,6 +248,12 @@ namespace FastqAnalyzerCleaner
             return reconstructedHeader;
         }
 
+        private void resetCounts()
+        {
+            nCount = 0;
+            cCount = 0;
+            gCount = 0;
+        }
 
         public String getSeqIndex()
         {
@@ -266,6 +348,21 @@ namespace FastqAnalyzerCleaner
         public Boolean removeSequence()
         {
             return removeSeq;
+        }
+
+        public int getNCount()
+        {
+            return nCount;
+        }
+
+        public int getCCount()
+        {
+            return cCount;
+        }
+
+        public int getGCount()
+        {
+            return gCount;
         }
     }
 }
