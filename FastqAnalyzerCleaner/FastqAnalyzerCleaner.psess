@@ -74,6 +74,9 @@
     <Report>
       <Path>FastqAnalyzerCleaner130604.vsp</Path>
     </Report>
+    <Report>
+      <Path>FastqAnalyzerCleaner130613.vsp</Path>
+    </Report>
   </Reports>
   <Launches>
     <ProjBinary>

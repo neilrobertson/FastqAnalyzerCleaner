@@ -26,6 +26,8 @@ namespace FastqAnalyzerCleaner
         private char qualityRead;
         private int phredQuality;
 
+        public FqNucleotideRead() { }
+
         public FqNucleotideRead(char nucleotide, char qualityRead)
         {
             this.nucleotide = nucleotide;

@@ -31,6 +31,9 @@ namespace FastqAnalyzerCleaner
         private FqFile fqFile;
         private BackgroundWorker saveWorker;
 
+        public static readonly string FASTQ_SAVE_ACTION = "Save Fastq";
+        public static readonly string FASTA_SAVE_ACTION = "Save Fasta";
+
 		///<summary>
 		///Default constructor for the SaveFile class, accepts string to save and parameters for the savefiledialogue window
 		///</summary>
@@ -75,11 +78,11 @@ namespace FastqAnalyzerCleaner
 
         private void saveWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (saveAction == "Save Fastq")
+            if (saveAction == FASTQ_SAVE_ACTION)
             {
                 SaveFastqAction(fqFile, fileName);
             }
-            else if (saveAction == "Save Fasta")
+            else if (saveAction == FASTA_SAVE_ACTION)
             {
                 SaveFastqAction(fqFile, fileName);
             }
@@ -117,7 +120,9 @@ namespace FastqAnalyzerCleaner
             try
             {
                 writer = new StreamWriter(@fileName);
-                
+
+                writer.Write(output);
+
                 writer.Flush();
                 writer.Close();
             }

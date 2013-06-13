@@ -25,6 +25,9 @@ namespace FastqAnalyzerCleaner
 	///</summary>
     public abstract class FqFile
     {
+        public static readonly char INITIAL_HEADER_CHARACTER = '@';
+        public static readonly char INITIAL_INFO_LINE_CHARACTER = '+';
+
         abstract public void addFastqSequence(FqSequence fqSeq);
         abstract public void cleanStarts(int remove);
         abstract public void cleanEnds(int remove);
@@ -64,6 +67,7 @@ namespace FastqAnalyzerCleaner
         abstract public void calculateMapQualities();
         abstract public void setHeader();
         abstract public Dictionary<int, string> getRemovedAdapters();
+        abstract public void setFqHashMap(Dictionary<int, FqNucleotideRead> map);
         abstract public void cleanArray();
     }
 }

@@ -45,6 +45,7 @@ namespace FastqAnalyzerCleaner
                 // but the call would come on the correct
                 // thread and InvokeRequired will be false.
                 this.BeginInvoke(new UpdateFastqGUI(UpdateGUIThread), new object[] { newFqFile });
+                Console.WriteLine("Program updating GUI on the COM Thread");
                 return;
             }
 
@@ -53,14 +54,13 @@ namespace FastqAnalyzerCleaner
 
         public void UpdateGUI(FqFile newFqFile)
         {
-            Console.WriteLine("Program updating GUI on the COM Thread");
             fqFile = newFqFile;
+
+            OutputFileDataToConsole();
         }
 
         private void openFastqFile(object sender, EventArgs e)
         {
-            fqFile = null;
-            GC.Collect();
             BackgroundWorker loadWorker = new BackgroundWorker();
 
             loadWorker.WorkerReportsProgress = true;
@@ -72,6 +72,9 @@ namespace FastqAnalyzerCleaner
                 OpenFastqDialogue.Filter = FILE_DIALOGUE_FILTER;
                 if (OpenFastqDialogue.ShowDialog() == DialogResult.OK)
                 {
+                    fqFile = null;
+                    GC.Collect();
+
                     FileStream inStr = new FileStream(OpenFastqDialogue.FileName, FileMode.Open);
                     InputFq input = new InputFq(inStr, OpenFastqDialogue.FileName);
                     loadWorker.RunWorkerAsync(input);
@@ -85,6 +88,12 @@ namespace FastqAnalyzerCleaner
             InputFq input = (InputFq)e.Argument;
             FileStream inStr = input.fileStream;
             String fileName = input.fileName;
+
+            SequencerDetermination seqDetermine;
+            SequencerDecisionTree decisionTree;
+
+            FqFile new_fqFile;
+            ParseFastq parseFq;
             
             if ((worker.CancellationPending == true))
             {
@@ -96,50 +105,40 @@ namespace FastqAnalyzerCleaner
                 stopwatch.Start();
 
                 worker.ReportProgress(3, "[PARSING FILE]");
-                ParseFastq parseFq = new ParseFastq(inStr, fileName);
+                parseFq = new ParseFastq(inStr, fileName);
 
                 if (parseFq.getFastqFileCheck() == true)
                 {
-                    fqFile = parseFq.parse();
-
-                    if (Preferences.getInstance().getSeqDecisionMethod())
+                    new_fqFile = parseFq.parse();
+                    //parseFq.initByteParseFastq();
+                    //new_fqFile = parseFq.parseByteFastq();
+                    if (new_fqFile != null)
                     {
-                        worker.ReportProgress(27, "[DETERMINING SEQUENCER]");
-                        SequencerDetermination seqDetermine = new SequencerDetermination(fqFile);
-                    }
-                    else if (!Preferences.getInstance().getSeqDecisionMethod())
-                    {
-                        worker.ReportProgress(40, "[DETERMINING SEQUENCER - TREE]");
-                        SequencerDecisionTree decTree = new SequencerDecisionTree(fqFile);
-                    }
-                    worker.ReportProgress(35, "[DESERIALIZING FASTQ MAP]");
-                    fqFile.calculateMapQualities();
+                        worker.ReportProgress(37, "[DESERIALIZING FASTQ MAP]");
+                        new_fqFile.setFqHashMap(HashFastq.deserializeHashmap());
 
-                    worker.ReportProgress(65, "[PERFORMING TESTS]");
+                        worker.ReportProgress(40, "[DETERMINING SEQUENCER]");
+                        if (Preferences.getInstance().getSeqDecisionMethod())
+                            seqDetermine = new SequencerDetermination(new_fqFile);
+                        else if (!Preferences.getInstance().getSeqDecisionMethod())
+                            decisionTree = new SequencerDecisionTree(new_fqFile);
 
-                    fqFile.Tests();
-                    Console.WriteLine("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides");
-                    Console.WriteLine("Joint Test Results: " + fqFile.getGCount() + "G   " + Math.Round(fqFile.gContents(), 2) + "%   " + fqFile.getCCount() + "C " + Math.Round(fqFile.cContents(), 2) + " %");
-                    Console.WriteLine("Misreads:  " + fqFile.getNCount());
-                    Console.WriteLine("Distribution:  " + fqFile.getDistribution().Count);
-                    Console.WriteLine("Stats Performed");
-                    for (int i = 0; i < 20; i++)
-                    {
-                        FqSequence fqSeq = fqFile.getFastqSequenceByPosition(i);
-                        Console.WriteLine("Stats for Sequence " + (i + 1) + ": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(), 2), fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
+                        new_fqFile.calculateMapQualities();
+
+                        worker.ReportProgress(65, "[PERFORMING TESTS]");
+                        new_fqFile.Tests();
+                        worker.ReportProgress(100, "[FILE LOADED]");
+
+                        UpdateGUIThread(new_fqFile);
+                        Console.WriteLine("File Load and Analysis Complete: {0}s", stopwatch.Elapsed);
                     }
-                    for (int i = 0; i < fqFile.getDistribution().Count; i++)
-                        Console.WriteLine("Quality Score: {0}   Count: {1}", i, fqFile.getDistribution()[i]);
-                    //Enable GUI
-                    worker.ReportProgress(100, "[FILE LOADED]");
                 }
                 else
                 {
-                    //Disable gui 
+                    worker.ReportProgress(0, "");
                     UserResponse.InformationResponse("File does not conform to standard format.", "File Error");
                 }
                 stopwatch.Stop();
-                Console.Write("Done: " + stopwatch.Elapsed + "\n");
             }
         }
 
@@ -164,7 +163,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, "Save Fastq", FILE_DIALOGUE_FILTER);
+                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, SaveFile.FASTQ_SAVE_ACTION, FILE_DIALOGUE_FILTER);
                 save.Save();
             }
         }
@@ -173,7 +172,7 @@ namespace FastqAnalyzerCleaner
         {
             if (fqFile != null)
             {
-                SaveFile save = new SaveFile(fqFile, "Save Fasta File", this, FILE_DIALOGUE_FILTER);
+                SaveFile save = new SaveFile(fqFile, "Save Fastq File", this, SaveFile.FASTA_SAVE_ACTION ,FILE_DIALOGUE_FILTER);
                 save.Save();
             }
         }
@@ -189,7 +188,7 @@ namespace FastqAnalyzerCleaner
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
                         inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
-                        inputs.TaskAction = "Sequence Start Cleaner";
+                        inputs.TaskAction = TaskStrategy.StartCleanTask.statement;
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
                         TaskStrategy task = new TaskStrategy(this, inputs);
@@ -210,7 +209,7 @@ namespace FastqAnalyzerCleaner
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
                         inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
-                        inputs.TaskAction = "Sequence End Cleaner";
+                        inputs.TaskAction = TaskStrategy.EndCleanTask.statement;
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
                         TaskStrategy task = new TaskStrategy(this, inputs);
@@ -231,7 +230,7 @@ namespace FastqAnalyzerCleaner
                     {
                         GenericFastqInputs inputs = new GenericFastqInputs();
                         inputs.NucleotidesToClean = Int32.Parse(result.Text.Trim());
-                        inputs.TaskAction = "Sequence Tail Cleaner";
+                        inputs.TaskAction = TaskStrategy.TailCleanTask.statement;
                         inputs.FastqFile = fqFile;
                         Console.WriteLine(inputs.TaskAction);
                         TaskStrategy task = new TaskStrategy(this, inputs);
@@ -246,7 +245,7 @@ namespace FastqAnalyzerCleaner
             if (fqFile != null)
             {
                 GenericFastqInputs inputs = new GenericFastqInputs();
-                inputs.TaskAction = "Sequencer Type Rescan";
+                inputs.TaskAction = TaskStrategy.RescanSequencerTask.statement;
                 inputs.FastqFile = fqFile;
                 Console.WriteLine(inputs.TaskAction);
                 TaskStrategy task = new TaskStrategy(this, inputs);
@@ -259,7 +258,7 @@ namespace FastqAnalyzerCleaner
             if (fqFile != null)
             {
                 GenericFastqInputs inputs = new GenericFastqInputs();
-                inputs.TaskAction = "Create Fasta File";
+                inputs.TaskAction = TaskStrategy.CreateFastaTask.statement;
                 inputs.FastqFile = fqFile;
                 Console.WriteLine(inputs.TaskAction);
                 TaskStrategy task = new TaskStrategy(this, inputs);
@@ -272,7 +271,7 @@ namespace FastqAnalyzerCleaner
             if (fqFile != null)
             {
                 GenericFastqInputs inputs = new GenericFastqInputs();
-                inputs.TaskAction = "Sequencer Statistics";
+                inputs.TaskAction = TaskStrategy.SequenceStatisticsTask.statement;
                 inputs.FastqFile = fqFile;
                 Console.WriteLine(inputs.TaskAction);
                 TaskStrategy task = new TaskStrategy(this, inputs);
@@ -285,7 +284,7 @@ namespace FastqAnalyzerCleaner
             if (fqFile != null)
             {
                 GenericFastqInputs inputs = new GenericFastqInputs();
-                inputs.TaskAction = "File Reanalysis";
+                inputs.TaskAction = TaskStrategy.ReanalyzeTask.statement;
                 inputs.FastqFile = fqFile;
                 Console.WriteLine(inputs.TaskAction);
                 TaskStrategy task = new TaskStrategy(this, inputs);
@@ -298,7 +297,7 @@ namespace FastqAnalyzerCleaner
             if (fqFile != null)
             {
                 GenericFastqInputs inputs = new GenericFastqInputs();
-                inputs.TaskAction = "Clean Adapters Task";
+                inputs.TaskAction = TaskStrategy.AdapterTask.statement;
                 inputs.FastqFile = fqFile;
                 Console.WriteLine(inputs.TaskAction);
                 TaskStrategy task = new TaskStrategy(this, inputs);
@@ -345,6 +344,22 @@ namespace FastqAnalyzerCleaner
                 e.Cancel = true;
                 e.Message = "Required";
             }
+        }
+
+        private void OutputFileDataToConsole()
+        {
+            Console.WriteLine("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides");
+            Console.WriteLine("Joint Test Results: " + fqFile.getGCount() + "G   " + Math.Round(fqFile.gContents(), 2) + "%   " + fqFile.getCCount() + "C " + Math.Round(fqFile.cContents(), 2) + " %");
+            Console.WriteLine("Misreads:  " + fqFile.getNCount());
+            Console.WriteLine("Distribution:  " + fqFile.getDistribution().Count);
+            Console.WriteLine("Stats Performed");
+            for (int i = 0; i < 20; i++)
+            {
+                FqSequence fqSeq = fqFile.getFastqSequenceByPosition(i);
+                Console.WriteLine("--  Stats for Sequence " + (i + 1) + ": LB: {0}  1Q: {1}  median: {2} Mean: {3} 3Q: {4} UB: {5}", fqSeq.getLowerThreshold(), fqSeq.getFirstQuartile(), fqSeq.getMedian(), Math.Round(fqSeq.getMean(), 2), fqSeq.getThirdQuartile(), fqSeq.getUpperThreshold());
+            }
+            for (int i = 0; i < fqFile.getDistribution().Count; i++)
+                Console.WriteLine("--->  Quality Score: {0}   Count: {1}", i, fqFile.getDistribution()[i]);
         }
        
     }

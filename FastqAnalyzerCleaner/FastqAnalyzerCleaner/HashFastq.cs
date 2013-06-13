@@ -79,7 +79,7 @@ namespace FastqAnalyzerCleaner
             }
             catch (IOException e)
             {
-                Console.Write("Creation of serialized fastq map failed \n");
+                Console.Write("Creation of serialized fastq Fq_FILE_MAP failed \n");
                 Console.Write(e.StackTrace);
             }
         }

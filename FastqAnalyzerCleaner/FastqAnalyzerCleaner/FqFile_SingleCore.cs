@@ -32,14 +32,13 @@ namespace FastqAnalyzerCleaner
 	    private List<int> distribution;
 	    private int nCount, cCount, gCount;
 	    private double nPercent, cPercent, gPercent;
-	    private static Dictionary<int, FqNucleotideRead> map;
+	    private static Dictionary<int, FqNucleotideRead> Fq_FILE_MAP;
 	    private Dictionary<int, string> removedAdapters;
 
 	    FqSequence[] fastqSeq;
 
         public FqFile_SingleCore()
 	    {
-            map = HashFastq.deserializeHashmap();
 		    fastqSeq = new FqSequence[LENGTH_SEQUENCE_ARRAY];
             Console.WriteLine("Single Core Fastq File Created.");
 	    }
@@ -94,7 +93,7 @@ namespace FastqAnalyzerCleaner
 
             for (int i = 0; i < index; i ++)
             {
-                GenericFastqInputs removedAdapter = fastqSeq[i].cleanAdapters(adapters, map);
+                GenericFastqInputs removedAdapter = fastqSeq[i].cleanAdapters(adapters, Fq_FILE_MAP);
                 if (removedAdapter != null)
                     removedAdapters.Add(removedAdapter.SequenceIndex, removedAdapter.AdapterName);
             }
@@ -112,7 +111,7 @@ namespace FastqAnalyzerCleaner
 		    {
 			    for (int j = 0; i < fastqSeq[i].getFastqSeqSize(); j++)
 			    {
-				    nucleotides.Append(map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
+				    nucleotides.Append(Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
 			    }
 		    }
 		    Console.Write("A string of nucleotides has been created");
@@ -127,7 +126,7 @@ namespace FastqAnalyzerCleaner
 		    {
 			    for (int j = 0; i < fastqSeq[i].getFastqSeqSize(); j++)
 			    {
-				    nucleotide.addCharNucleotideArray(map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
+				    nucleotide.addCharNucleotideArray(Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
 			    }
 		    }
 		    Console.Write("An array of nucleotides has been created");
@@ -139,7 +138,7 @@ namespace FastqAnalyzerCleaner
 		    StringBuilder fastqBuilder = new StringBuilder();
 		    for (int i = 0; i < index; i++)
 		    {
-			    fastqBuilder.Append(fastqSeq[i].createFastqBlock(map));
+			    fastqBuilder.Append(fastqSeq[i].createFastqBlock(Fq_FILE_MAP));
 		    }
 		    Console.Write("A fastq file has been created from " + header + " File Name: " + fileName);
 		    return fastqBuilder.ToString();
@@ -158,7 +157,7 @@ namespace FastqAnalyzerCleaner
 		    {
 			    for (int j = 0; j < fastqSeq[i].getFastqSeqSize(); j++)
 			    {
-				    fastaLine.Append(map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
+				    fastaLine.Append(Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide());
 	
 				    if (FASTA_LINE_LENGTH == fastaLine.Length)
 				    {
@@ -181,7 +180,7 @@ namespace FastqAnalyzerCleaner
             {
                 for (int j = 0; i < fastqSeq[i].getFastqSeqSize(); j++)
                 {
-                    int qualityScore = map[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
+                    int qualityScore = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
                     int currentPop = distribution[qualityScore];
                     distribution[qualityScore] = (currentPop + 1);
                 }
@@ -196,7 +195,7 @@ namespace FastqAnalyzerCleaner
 
             for (int i = 0; i < index; i ++)
             {
-                fastqSeq[i].performStats(sequencerType, map);
+                fastqSeq[i].performStats(sequencerType, Fq_FILE_MAP);
                 //fastqSeq[i].deconstructHeader(sequencerType);
             }
             stopwatch.Stop();
@@ -215,7 +214,7 @@ namespace FastqAnalyzerCleaner
             {
                  for (int j = 0; j < fastqSeq[i].getFastqSeqSize(); j++)
                  {
-                     char nucleotide = map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
+                     char nucleotide = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
 
                      if (nucleotide == 'N') nCount++;
                      else if (nucleotide == 'C') cCount ++;
@@ -245,13 +244,13 @@ namespace FastqAnalyzerCleaner
             {
                 for (int j = 0; j < fastqSeq[i].getFastqSeqSize(); j++)
                 {
-                    char nucleotide = map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
+                    char nucleotide = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
 
                     if (nucleotide == 'N') nCount++;
                     else if (nucleotide == 'C') cCount ++;
                     else if (nucleotide == 'G') gCount ++;
 
-                    int qualityScore = map[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
+                    int qualityScore = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
                     if (qualityScore >= 0)
                     {
                         int currentPop = distribution[qualityScore];
@@ -281,13 +280,13 @@ namespace FastqAnalyzerCleaner
             {
                 for (int j = 0; j < fastqSeq[i].getFastqSeqSize(); j++)
                 {
-                    char nucleotide = map[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
+                    char nucleotide = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getNucleotide();
 
                     if (nucleotide == 'N') nCount++;
                     else if (nucleotide == 'C') cCount++;
                     else if (nucleotide == 'G') gCount++;
 
-                    int qualityScore = map[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
+                    int qualityScore = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
                     if (qualityScore >= 0)
                     {
                         int currentPop = distribution[qualityScore];
@@ -443,7 +442,7 @@ namespace FastqAnalyzerCleaner
 
         public override Dictionary<int, FqNucleotideRead> getMap()
 	    {
-		    return map;
+		    return Fq_FILE_MAP;
 	    }
 
         public override Dictionary<int, string> getRemovedAdapters()
@@ -457,9 +456,15 @@ namespace FastqAnalyzerCleaner
             header = fastqSeq[LOCATION].getMachineName();
         }
 
+        public override void setFqHashMap(Dictionary<int, FqNucleotideRead> map)
+        {
+            Fq_FILE_MAP = map;
+        }
+
         public override void calculateMapQualities()
         {
-            map = HashFastq.calculateHashQualities(sequencerType, map);
+            Fq_FILE_MAP = HashFastq.calculateHashQualities(sequencerType, Fq_FILE_MAP);
         }
+
     }
 }

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace FastqAnalyzerCleaner
 {
 	///<summary>
-	///The SequencerDiscriminator class conforms to the Abstract Factory pattern and returns the desired sequencer class by building a map
+	///The SequencerDiscriminator class conforms to the Abstract Factory pattern and returns the desired sequencer class by building a Fq_FILE_MAP
 	///of sequencer classes and allowing selection via string input
 	///</summary>
     class SequencerDiscriminator
@@ -48,7 +48,7 @@ namespace FastqAnalyzerCleaner
 	    }
 	
 		///<summary>
-		///Called by individual sequencer type classes to register with the global map of types
+		///Called by individual sequencer type classes to register with the global Fq_FILE_MAP of types
 		///</summary>
 		///<param name="key">The sequencer type name</param>
 		///<param name="value">A reference to a corresponding sequencer type initialized through the abstract class</param>

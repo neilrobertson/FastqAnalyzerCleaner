@@ -37,23 +37,23 @@ namespace FastqAnalyzerCleaner
 
         private Stopwatch sw;
 
+        public static readonly char CARRIDGE_RETURN = '\n';
+
         private FileStream fileReader;
 
 	    public ParseFastq(FileStream fileReader, String fileName)
 	    {
             this.fileName = fileName;
             this.fileReader = fileReader;
+            this.fileLength = fileReader.Length;
+            Console.WriteLine("File name: {0} Size: {1}MB OPENED", fileName, HelperMethods.ConvertBytesToMegabytes(fileLength).ToString("0.00"));
 
-            isFastqFile = checkFastqFile();
+            this.isFastqFile = checkFastqFile();
 	    }
 
         public void initByteParseFastq()
         {           
-            fileLength = fileReader.Length;
-
             byteArray = new byte[fileLength];
-
-            Console.WriteLine("File length bytes: " + fileLength);
 
             sw = new Stopwatch();
             sw.Start();
@@ -184,7 +184,7 @@ namespace FastqAnalyzerCleaner
             fastqFile = FqFileSpecifier.getInstance().getFqFile(Preferences.getInstance().getMultiCoreProcessing());
             fastqFile.setFastqFileName(fileName);
 
-            FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
+            FqNucleotideRead fqRead = new FqNucleotideRead();
             FqSequence fqSeq;
 
             sw = new Stopwatch();
@@ -203,7 +203,7 @@ namespace FastqAnalyzerCleaner
 
                 for (int i = 0; i < byteArray.Length; i++)
                 {
-                    if (byteArray[i] == '\n')
+                    if (byteArray[i] == CARRIDGE_RETURN)
                     {
                         fqBlocks[lineIter][0] = (byte) bitIter;
                         bitIter = 1;
@@ -270,8 +270,8 @@ namespace FastqAnalyzerCleaner
                 // Check sets
                 for (int i = 0; i < FQ_BLOCKS_TO_CHECK; i++)
                 {
-                    if ((char)header[i][0] != '@') return false;
-                    if ((char)info[i][0] != '+') return false;
+                    if ((char)header[i][0] != FqFile.INITIAL_HEADER_CHARACTER) return false;
+                    if ((char)info[i][0] != FqFile.INITIAL_INFO_LINE_CHARACTER) return false;
                     if (nucleotide.isDNA(seq[i]) != true) return false;
                     for (int j = 0; j < FQ_BLOCKS_TO_CHECK; j++)
                         if (seq[i].Length != qscore[j].Length) return false;

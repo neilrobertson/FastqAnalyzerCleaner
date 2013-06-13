@@ -30,9 +30,6 @@ namespace FastqAnalyzerCleaner
         private ITaskStrategy task;
         private GenericFastqInputs genericInputs;
 
-        public String taskTextOutput;
-        public FqFile outputFqFile;
-
        
         public TaskStrategy(FastqGUI observer, GenericFastqInputs inputs)
         {
@@ -75,27 +72,15 @@ namespace FastqAnalyzerCleaner
                 stopwatch.Start();
 
                 worker.ReportProgress(10, "[]");
-                GenericFastqInputs taskOutputs = task.perform(input);
+                input = task.perform(input);
                 worker.ReportProgress(100, "[COMPLETE]");
-                outputFqFile = taskOutputs.FastqFile;
-                taskTextOutput = taskOutputs.Output;
+                
                 Console.WriteLine(task.getStatement() + " Task - COMPLETED");
 
-                observer.UpdateGUIThread(outputFqFile);
-                updateGUI();
+                observer.UpdateGUIThread(input.FastqFile);
+                
                 stopwatch.Stop();
             }
-        }
-
-        private void updateGUI()
-        {
-            /**
-            Application.Current.Dispatcher.Invoke(new SaveFile(() => {
-                    // now you are on the UI thread
-                    ;
-                });
-            */ 
-            //observer.dosomething(stopwatch.Elapsed, file, outputFqFile) 
         }
 
         public class TaskDiscrimination
@@ -184,7 +169,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class EndCleanTask : ITaskStrategy
+        public class EndCleanTask : ITaskStrategy
         {
             public static String statement = "Sequence End Cleaner";
             public static ITaskStrategy task = new EndCleanTask();
@@ -206,7 +191,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class StartCleanTask : ITaskStrategy
+        public class StartCleanTask : ITaskStrategy
         {
             public static String statement = "Sequence Start Cleaner";
             public static ITaskStrategy task = new StartCleanTask();
@@ -229,7 +214,7 @@ namespace FastqAnalyzerCleaner
         }
 
 
-        private class ReanalyzeTask : ITaskStrategy
+        public class ReanalyzeTask : ITaskStrategy
         {
             public static String statement = "File Reanalysis";
             public static ITaskStrategy task = new ReanalyzeTask();
@@ -249,7 +234,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class RescanSequencerTask : ITaskStrategy
+        public class RescanSequencerTask : ITaskStrategy
         {
             public static String statement = "Sequencer Type Rescan";
             public static ITaskStrategy task = new RescanSequencerTask();
@@ -277,7 +262,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class TailCleanTask : ITaskStrategy
+        public class TailCleanTask : ITaskStrategy
         {
             public static String statement = "Sequence Tail Cleaner";
             public static ITaskStrategy task = new TailCleanTask();
@@ -321,7 +306,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private class AdapterTask : ITaskStrategy
+        public class AdapterTask : ITaskStrategy
         {
             public static String statement = "Clean Adapters Task";
             public static ITaskStrategy task = new AdapterTask();
