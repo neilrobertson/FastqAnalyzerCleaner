@@ -1,0 +1,14 @@
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Release\FastqAnalyzerCleaner.exe.config
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Release\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Release\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Release\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Release\FastqAnalyzerCleaner.pdb
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.FastqGUI.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.PreferencesGUI.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.Properties.Resources.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.csproj.GenerateResource.Cache
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Release\FastqAnalyzerCleaner.pdb

@@ -67,7 +67,7 @@ namespace FastqAnalyzerCleaner
         /// <param name="ASSUMPTION_POINT">The assumption point at which the sequencer decision tree will select a sequencer type.  
         ///  This figure represents the total number of sequences to test.</param>
         /// <param name="showSeq">Show sequences as part of the sequence statistics function.</param>
-        /// <param name="sortMean">Sort sequences by the mean of their statistics.</param>
+        /// <param name="sortMean">Sort sequences by the Mean of their statistics.</param>
         /// <param name="mCores">Use multiple or single logical cores in the processing of files (where applicable).</param>
         public void setPreferences(int LOWER_C_BOUNDARY, int UPPER_C_BOUNDARY, int LOWER_G_BOUNDARY, int UPPER_G_BOUNDARY, int N_MISREADS_THRESHOLD, int ASSUMPTION_POINT, Boolean showSeq, Boolean sortMean, Boolean mCores)
         {
@@ -146,7 +146,7 @@ namespace FastqAnalyzerCleaner
         }
 
 		/// <summary>
-        /// Returns a boolean representing whether or not to sort statistics by mean
+        /// Returns a boolean representing whether or not to sort statistics by Mean
         /// </summary>
         /// <returns></returns>
         public Boolean getSortMeanStatsPref()

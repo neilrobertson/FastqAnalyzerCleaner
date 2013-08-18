@@ -30,10 +30,10 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -73,30 +73,48 @@
     <ApplicationIcon>dna_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net, Version=1.0.0.282, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>..\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters.cs" />
+    <Compile Include="IFqFile.cs" />
+    <Compile Include="DirectoryController.cs" />
+    <Compile Include="FastqController.cs" />
     <Compile Include="FastqGUI_Charts.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FastqGUI_Display.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FastqGUI_Output.cs" />
+    <Compile Include="FqFileMap.cs" />
     <Compile Include="FqFileSpecifier.cs" />
+    <Compile Include="FqFile_Component_Details.cs" />
+    <Compile Include="FqPerBaseSatistics.cs" />
+    <Compile Include="FqSequence_InputsOuptuts.cs" />
     <Compile Include="GenericFastqInputs.cs" />
     <Compile Include="HelperMethods.cs" />
-    <Compile Include="FqFile_MultiCore.cs" />
+    <Compile Include="FqFile_Component.cs" />
     <Compile Include="InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ITaskStrategy.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="PreferencesGUI.cs">
       <SubType>Form</SubType>
@@ -104,6 +122,7 @@
     <Compile Include="PreferencesGUI.Designer.cs">
       <DependentUpon>PreferencesGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProtocolBuffersSerialization.cs" />
     <Compile Include="SaveFile.cs" />
     <Compile Include="SequencerDecisionTree.cs" />
     <Compile Include="SequencerDetermination.cs" />
@@ -119,7 +138,6 @@
     <Compile Include="Sequencer_Solexa.cs" />
     <Compile Include="Sequencer.cs" />
     <Compile Include="HashFastq.cs" />
-    <Compile Include="FqFile.cs" />
     <Compile Include="FastqGUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,8 +148,21 @@
     <Compile Include="FqSequence.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FqFile_SingleCore.cs" />
-    <Compile Include="TaskStrategy.cs" />
+    <Compile Include="TaskDiscriminator.cs" />
+    <Compile Include="Task_AdapterTask.cs" />
+    <Compile Include="Task_DefaultTask.cs" />
+    <Compile Include="Task_EndCleanTask.cs" />
+    <Compile Include="Task_FindSequences.cs" />
+    <Compile Include="Task_LoadTask.cs" />
+    <Compile Include="Task_ReanalyzeTask.cs" />
+    <Compile Include="Task_RemoveBelowMeanThreshold.cs" />
+    <Compile Include="Task_RemoveMisSeqeuence.cs" />
+    <Compile Include="Task_RescanSequencerTask.cs" />
+    <Compile Include="Task_SaveCSV.cs" />
+    <Compile Include="Task_SaveFastq.cs" />
+    <Compile Include="Task_SequenceStatisticsTask.cs" />
+    <Compile Include="Task_StartCleanTask.cs" />
+    <Compile Include="Task_TailCleanTask.cs" />
     <Compile Include="UserResponse.cs" />
     <EmbeddedResource Include="FastqGUI.resx">
       <DependentUpon>FastqGUI.cs</DependentUpon>
@@ -147,9 +178,8 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="FastqAnalyzerCleaner_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\FastqGUI_Charts.FastqChartTypes.datasource" />
     <None Include="Properties\Settings.settings">
@@ -163,7 +193,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

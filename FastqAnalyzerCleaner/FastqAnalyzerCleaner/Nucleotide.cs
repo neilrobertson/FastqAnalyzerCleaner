@@ -52,10 +52,10 @@ namespace FastqAnalyzerCleaner
         }
 
 
-        public Boolean isDNA(String dna)
+        public static Boolean isDNA(String dna)
         {
 
-            char[] validCodes = { 'T', 'C', 'A', 'G', 'N' };
+            char[] validCodes = { 'T', 'C', 'A', 'G', 'N', 'X' };
             Boolean validOrNot = true; // Assume that dna is a valid string.
 
             for (int position = 0; position < dna.Length; position++)

@@ -28,11 +28,12 @@ namespace FastqAnalyzerCleaner
     {
         private String fileName, message, filter, saveAction;
         private FastqGUI observer;
-        private FqFile fqFile;
+        private IFqFile fqFile;
         private BackgroundWorker saveWorker;
 
         public static readonly string FASTQ_SAVE_ACTION = "Save Fastq";
         public static readonly string FASTA_SAVE_ACTION = "Save Fasta";
+        public static readonly string CSV_SAVE_ACTION = "Save CSV";
 
 		///<summary>
 		///Default constructor for the SaveFile class, accepts string to save and parameters for the savefiledialogue window
@@ -40,7 +41,7 @@ namespace FastqAnalyzerCleaner
 		///<param name="output">The string to be saved</param>
 		///<param name="message">Message to be displayed on the save file dialogue window</param>
 		///<param name="filter">String to filter access to file types in the savefiledialogue window</param>
-        public SaveFile(FqFile file, String message, FastqGUI o, String saveType, String filter = "Text File|*.txt|FastqFile|*.fq")
+        public SaveFile(IFqFile file, String message, FastqGUI o, String saveType, String filter = "Text File|*.txt|FastqFile|*.fq")
         {
             this.fqFile = file;
             this.message = message;
@@ -57,9 +58,8 @@ namespace FastqAnalyzerCleaner
             SaveFileDialog save = new SaveFileDialog();
             save.Filter = filter;
             save.Title = message;
-            save.ShowDialog();
-
-            if (save.FileName != "")
+            
+            if (save.ShowDialog() == DialogResult.OK)
             {
                 fileName = save.FileName;
                 saveWorker = new BackgroundWorker();
@@ -86,9 +86,13 @@ namespace FastqAnalyzerCleaner
             {
                 SaveFastqAction(fqFile, fileName);
             }
+            else if (saveAction == CSV_SAVE_ACTION)
+            {
+                SaveCSVAction(fqFile, fileName);
+            }
         }
 
-        private void SaveFastqAction(FqFile fq, String fileName)
+        private void SaveFastqAction(IFqFile fq, String fileName)
         {
             StreamWriter writer;
             try
@@ -110,7 +114,7 @@ namespace FastqAnalyzerCleaner
             }
         }
 
-        private void SaveFastaAction(FqFile fq, String fileName)
+        private void SaveFastaAction(IFqFile fq, String fileName)
         {
             saveWorker.ReportProgress(40, "[CREATING FASTA FORMAT]");
             String output = fqFile.createFastaFormat("");
@@ -123,6 +127,43 @@ namespace FastqAnalyzerCleaner
 
                 writer.Write(output);
 
+                writer.Flush();
+                writer.Close();
+            }
+            catch (IOException exception)
+            {
+                Console.WriteLine(exception.ToString());
+                UserResponse.ErrorResponse(exception.ToString());
+            }
+        }
+
+        private void SaveCSVAction(IFqFile fq, String fileName)
+        {
+            StreamWriter writer;
+
+            string COMMA_DELIMITER = ",";
+            string[] output;
+
+            try
+            {
+                writer = new StreamWriter(@fileName);
+                saveWorker.ReportProgress(30, "[CREATING CSV FORMAT]");
+                
+                output = new string[] {"Sequence Index", "Header", "Total Nucleotides", "G Count", "C Count", "Misread Count", "Lower Threshold", "First Quartile",
+                                        "Median", "Mean", "Third Quartile", "Upper Threshold" };
+                writer.WriteLine(string.Join(COMMA_DELIMITER, output));
+
+                for (int i = 0; i < fqFile.getFastqArraySize(); i++)
+                {
+                    FqSequence fqSeq = fqFile.getFastqSequenceByPosition(i);
+                    output = new string[] { fqSeq.getSeqIndex().ToString(), fqSeq.getSequenceHeader(), fqSeq.getFastqSeqSize().ToString(), fqSeq.getGCount().ToString(), 
+                                            fqSeq.getCCount().ToString(), fqSeq.getNCount().ToString(), fqSeq.getLowerThreshold().ToString(),
+                                            fqSeq.getFirstQuartile().ToString(), fqSeq.getMedian().ToString(), fqSeq.getMean().ToString(),
+                                            fqSeq.getThirdQuartile().ToString(), fqSeq.getUpperThreshold().ToString(), 
+                                            fqSeq.createSequenceString(fqFile.getMap()) };
+                    writer.WriteLine(string.Join(COMMA_DELIMITER, output));
+                }
+                saveWorker.ReportProgress(100, "[FASTQ FORMAT CREATED]");
                 writer.Flush();
                 writer.Close();
             }

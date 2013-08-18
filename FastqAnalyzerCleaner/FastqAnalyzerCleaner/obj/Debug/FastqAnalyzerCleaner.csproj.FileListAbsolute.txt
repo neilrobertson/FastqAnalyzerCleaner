@@ -7,17 +7,36 @@ C:\Users\Neil Robertson\Documents\Visual Studio 2012\Projects\FastqAnalyzerClean
 C:\Users\Neil Robertson\Documents\Visual Studio 2012\Projects\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe
 C:\Users\Neil Robertson\Documents\Visual Studio 2012\Projects\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.pdb
 C:\Users\Neil Robertson\Documents\Visual Studio 2012\Projects\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.config
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.pdb
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.pdb
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Properties.Resources.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csproj.GenerateResource.Cache
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.manifest
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.application
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe.manifest
-C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.application
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.FastqGUI.resources
 C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.PreferencesGUI.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.config
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.pdb
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Properties.Resources.resources
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.pdb
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.config
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.pdb
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.exe
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\FastqAnalyzerCleaner.pdb
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.dll
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.pdb
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.xml
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csprojResolveAssemblyReference.cache
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.FastqGUI.resources
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.PreferencesGUI.resources
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.Properties.Resources.resources
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.csproj.GenerateResource.Cache
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.exe.manifest
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.application
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\ZedGraph.dll
+C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.pri

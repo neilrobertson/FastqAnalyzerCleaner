@@ -106,7 +106,6 @@ namespace FastqAnalyzerCleaner
                 for (int j = 0; j < qualities.Length; j++)
                 {
                     fqRead = new FqNucleotideRead(nucleotides[i], qualities[j]);
-                    Console.WriteLine(fqRead.toString());
                     int hashcode = fqRead.hashcode();
                     if (existance.Contains(hashcode) == false)
                     {

@@ -23,7 +23,7 @@ namespace FastqAnalyzerCleaner
     {
         private String sequencerType = null;
         private int index;
-        private FqFile fastqFile;
+        private IFqFile fastqFile;
         private FqSequence fastqSeq;
         private Dictionary<int, FqNucleotideRead> map;
 
@@ -32,7 +32,7 @@ namespace FastqAnalyzerCleaner
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public SequencerDecisionTree(FqFile aFastqFile)
+        public SequencerDecisionTree(IFqFile aFastqFile)
         {
             ASSUMPTION_POINT = Preferences.getInstance().getAssumptionPref();
             fastqFile = aFastqFile;
@@ -47,7 +47,7 @@ namespace FastqAnalyzerCleaner
          * point
          * @param fastqFile
          */
-        private void DecisionTree(FqFile fastqFile)
+        private void DecisionTree(IFqFile fastqFile)
 	    {
 		    stopwatch.Start();
 		    Boolean upper = false, lower = false;
@@ -276,6 +276,12 @@ namespace FastqAnalyzerCleaner
 		    int i = endPoint;
             stopwatch.Stop();
 		    fastqFile.setSequencerType(sequencerType);
+
+            if (fastqFile is FqFile_Component)
+            {
+                fastqFile.setFqHashMap(FastqController.getInstance().GetFqFileMap().ConstructSequencerSpecificReadMap(sequencerType));
+                Console.WriteLine("Calculating and setting sequencer specific file map to component");
+            }
             Console.WriteLine("Time To Determine Sequencer:  " + stopwatch.Elapsed);
             Console.WriteLine("Sequencer Name: " + sequencerType);
             Console.WriteLine("File contains {0} sequences", fastqFile.getFastqArraySize());

@@ -37,19 +37,10 @@ namespace FastqAnalyzerCleaner
             return uniqueInstance;
         }
 
-        public FqFile getFqFile(Boolean fqFileType)
+        public FqFile_Component getFqFile(Boolean fqFileType)
         {
-            FqFile fqFile;
-            if (fqFileType)
-            {
-                fqFile = new FqFile_MultiCore();
-                return fqFile;
-            }
-            else
-            {
-                fqFile = new FqFile_SingleCore();
-                return fqFile;
-            }
+            FqFile_Component fqFile;
+                return fqFile = new FqFile_Component();
         }
 
     }

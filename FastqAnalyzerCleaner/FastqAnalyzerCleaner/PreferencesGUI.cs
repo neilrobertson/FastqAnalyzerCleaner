@@ -12,9 +12,12 @@ namespace FastqAnalyzerCleaner
 {
     public partial class PreferencesGUI : Form
     {
+        private Preferences current_Preferences;
+
         public PreferencesGUI()
         {
             InitializeComponent();
+            current_Preferences = Preferences.getInstance();
         }
     }
 }

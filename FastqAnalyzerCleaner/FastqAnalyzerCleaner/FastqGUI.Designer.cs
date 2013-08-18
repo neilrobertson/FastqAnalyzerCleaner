@@ -49,15 +49,20 @@ namespace FastqAnalyzerCleaner
             this.openFastqToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveFastqToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFastaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveCSVDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.flushMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clean3EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clean5EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanTailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.createFastaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeAdapterSequencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.findSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reanalyzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,16 +84,15 @@ namespace FastqAnalyzerCleaner
             this.InformationTab = new System.Windows.Forms.TabPage();
             this.GraphicsTab = new System.Windows.Forms.TabPage();
             this.Charts_Combo_Selector = new System.Windows.Forms.ComboBox();
-            this.FastqGUI_Charts = new FastqAnalyzerCleaner.FastqGUI_Charts();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.removeAdapterSequencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeSequencesWithFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.belowMeanThresholdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
             this.Sequencer_Selection_Group_Box.SuspendLayout();
             this.FastqGUITabs.SuspendLayout();
             this.GraphicsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FastqGUI_Charts)).BeginInit();
             this.SuspendLayout();
             // 
             // MenuStrip
@@ -111,8 +115,10 @@ namespace FastqAnalyzerCleaner
             this.openFastqToolStripMenuItem,
             this.toolStripSeparator1,
             this.saveFastqToolStripMenuItem,
-            this.saveFastaToolStripMenuItem,
+            this.saveCSVDataToolStripMenuItem,
             this.toolStripSeparator2,
+            this.flushMemoryToolStripMenuItem,
+            this.toolStripSeparator6,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
@@ -121,39 +127,52 @@ namespace FastqAnalyzerCleaner
             // openFastqToolStripMenuItem
             // 
             this.openFastqToolStripMenuItem.Name = "openFastqToolStripMenuItem";
-            this.openFastqToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.openFastqToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.openFastqToolStripMenuItem.Text = "Open Fastq...";
             this.openFastqToolStripMenuItem.Click += new System.EventHandler(this.openFastqFile);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(140, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
             // 
             // saveFastqToolStripMenuItem
             // 
             this.saveFastqToolStripMenuItem.Name = "saveFastqToolStripMenuItem";
-            this.saveFastqToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.saveFastqToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.saveFastqToolStripMenuItem.Text = "Save Fastq...";
             this.saveFastqToolStripMenuItem.Click += new System.EventHandler(this.saveFastqToolStripMenuItem_Click);
             // 
-            // saveFastaToolStripMenuItem
+            // saveCSVDataToolStripMenuItem
             // 
-            this.saveFastaToolStripMenuItem.Name = "saveFastaToolStripMenuItem";
-            this.saveFastaToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
-            this.saveFastaToolStripMenuItem.Text = "Save Fasta...";
-            this.saveFastaToolStripMenuItem.Click += new System.EventHandler(this.saveFastaToolStripMenuItem_Click);
+            this.saveCSVDataToolStripMenuItem.Name = "saveCSVDataToolStripMenuItem";
+            this.saveCSVDataToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.saveCSVDataToolStripMenuItem.Text = "Save CSV Data...";
+            this.saveCSVDataToolStripMenuItem.Click += new System.EventHandler(this.saveCSVDataToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(140, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+            // 
+            // flushMemoryToolStripMenuItem
+            // 
+            this.flushMemoryToolStripMenuItem.Name = "flushMemoryToolStripMenuItem";
+            this.flushMemoryToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.flushMemoryToolStripMenuItem.Text = "Flush Memory";
+            this.flushMemoryToolStripMenuItem.Click += new System.EventHandler(this.flushMemoryToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(155, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.quitToolStripMenuItem.Text = "Quit";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -161,10 +180,12 @@ namespace FastqAnalyzerCleaner
             this.clean3EndsToolStripMenuItem,
             this.clean5EndsToolStripMenuItem,
             this.cleanTailsToolStripMenuItem,
+            this.removeSequencesWithFailedReadsToolStripMenuItem,
             this.toolStripSeparator3,
-            this.createFastaToolStripMenuItem,
+            this.removeAdapterSequencesToolStripMenuItem,
             this.toolStripSeparator4,
-            this.removeAdapterSequencesToolStripMenuItem});
+            this.findSequenceToolStripMenuItem,
+            this.toolStripSeparator5});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.editToolStripMenuItem.Text = "EDIT";
@@ -173,21 +194,21 @@ namespace FastqAnalyzerCleaner
             // 
             this.clean3EndsToolStripMenuItem.Name = "clean3EndsToolStripMenuItem";
             this.clean3EndsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.clean3EndsToolStripMenuItem.Text = "Clean 3\' Ends";
+            this.clean3EndsToolStripMenuItem.Text = "Trim 3\' Ends";
             this.clean3EndsToolStripMenuItem.Click += new System.EventHandler(this.clean3EndsToolStripMenuItem_Click);
             // 
             // clean5EndsToolStripMenuItem
             // 
             this.clean5EndsToolStripMenuItem.Name = "clean5EndsToolStripMenuItem";
             this.clean5EndsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.clean5EndsToolStripMenuItem.Text = "Clean 5\' Ends";
+            this.clean5EndsToolStripMenuItem.Text = "Trim 5\' Ends";
             this.clean5EndsToolStripMenuItem.Click += new System.EventHandler(this.clean5EndsToolStripMenuItem_Click);
             // 
             // cleanTailsToolStripMenuItem
             // 
             this.cleanTailsToolStripMenuItem.Name = "cleanTailsToolStripMenuItem";
             this.cleanTailsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.cleanTailsToolStripMenuItem.Text = "Clean Tails";
+            this.cleanTailsToolStripMenuItem.Text = "Trim Tails";
             this.cleanTailsToolStripMenuItem.Click += new System.EventHandler(this.cleanTailsToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
@@ -195,12 +216,29 @@ namespace FastqAnalyzerCleaner
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(218, 6);
             // 
-            // createFastaToolStripMenuItem
+            // removeAdapterSequencesToolStripMenuItem
             // 
-            this.createFastaToolStripMenuItem.Name = "createFastaToolStripMenuItem";
-            this.createFastaToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.createFastaToolStripMenuItem.Text = "Create Fasta...";
-            this.createFastaToolStripMenuItem.Click += new System.EventHandler(this.createFastaToolStripMenuItem_Click);
+            this.removeAdapterSequencesToolStripMenuItem.Name = "removeAdapterSequencesToolStripMenuItem";
+            this.removeAdapterSequencesToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            this.removeAdapterSequencesToolStripMenuItem.Text = "Remove Adapter Sequences";
+            this.removeAdapterSequencesToolStripMenuItem.Click += new System.EventHandler(this.removeAdapterSequencesToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(218, 6);
+            // 
+            // findSequenceToolStripMenuItem
+            // 
+            this.findSequenceToolStripMenuItem.Name = "findSequenceToolStripMenuItem";
+            this.findSequenceToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            this.findSequenceToolStripMenuItem.Text = "Find Sequence...";
+            this.findSequenceToolStripMenuItem.Click += new System.EventHandler(this.findSequenceToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(218, 6);
             // 
             // actionToolStripMenuItem
             // 
@@ -246,6 +284,7 @@ namespace FastqAnalyzerCleaner
             this.changePreferencesToolStripMenuItem.Name = "changePreferencesToolStripMenuItem";
             this.changePreferencesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.changePreferencesToolStripMenuItem.Text = "Change Preferences...";
+            this.changePreferencesToolStripMenuItem.Click += new System.EventHandler(this.changePreferencesToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -392,7 +431,6 @@ namespace FastqAnalyzerCleaner
             // GraphicsTab
             // 
             this.GraphicsTab.Controls.Add(this.Charts_Combo_Selector);
-            this.GraphicsTab.Controls.Add(this.FastqGUI_Charts);
             this.GraphicsTab.Location = new System.Drawing.Point(24, 4);
             this.GraphicsTab.Name = "GraphicsTab";
             this.GraphicsTab.Padding = new System.Windows.Forms.Padding(3);
@@ -404,9 +442,6 @@ namespace FastqAnalyzerCleaner
             // 
             // Charts_Combo_Selector
             // 
-            this.Charts_Combo_Selector.DataSource = new FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes[] {
-        FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.FastqMeanStatistics,
-        FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.Distribution};
             this.Charts_Combo_Selector.FormattingEnabled = true;
             this.Charts_Combo_Selector.Location = new System.Drawing.Point(611, 6);
             this.Charts_Combo_Selector.MaxLength = 50;
@@ -416,17 +451,28 @@ namespace FastqAnalyzerCleaner
             this.Charts_Combo_Selector.TabIndex = 1;
             this.Charts_Combo_Selector.SelectedIndexChanged += new System.EventHandler(this.Charts_Combo_Selector_SelectedIndexChanged);
             // 
-            // toolStripSeparator4
+            // removeSequencesWithFailedReadsToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(218, 6);
+            this.removeSequencesWithFailedReadsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.withFailedReadsToolStripMenuItem,
+            this.belowMeanThresholdToolStripMenuItem});
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Name = "removeSequencesWithFailedReadsToolStripMenuItem";
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Text = "Remove Sequences";
+            //
+            // withFailedReadsToolStripMenuItem
             // 
-            // removeAdapterSequencesToolStripMenuItem
+            this.withFailedReadsToolStripMenuItem.Name = "withFailedReadsToolStripMenuItem";
+            this.withFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.withFailedReadsToolStripMenuItem.Text = "With Failed Reads";
+            this.withFailedReadsToolStripMenuItem.Click += new System.EventHandler(this.withFailedReadsToolStripMenuItem_Click);
             // 
-            this.removeAdapterSequencesToolStripMenuItem.Name = "removeAdapterSequencesToolStripMenuItem";
-            this.removeAdapterSequencesToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.removeAdapterSequencesToolStripMenuItem.Text = "Remove Adapter Sequences";
-            this.removeAdapterSequencesToolStripMenuItem.Click += new System.EventHandler(this.removeAdapterSequencesToolStripMenuItem_Click);
+            // belowMeanThresholdToolStripMenuItem
+            // 
+            this.belowMeanThresholdToolStripMenuItem.Name = "belowMeanThresholdToolStripMenuItem";
+            this.belowMeanThresholdToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.belowMeanThresholdToolStripMenuItem.Text = "Below Mean Threshold...";
+            this.belowMeanThresholdToolStripMenuItem.Click += new System.EventHandler(this.belowMeanThresholdToolStripMenuItem_Click);
             // 
             // FastqGUI
             // 
@@ -454,7 +500,6 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box.PerformLayout();
             this.FastqGUITabs.ResumeLayout(false);
             this.GraphicsTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.FastqGUI_Charts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -468,7 +513,6 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ToolStripMenuItem openFastqToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveFastqToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveFastaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.StatusStrip progressStrip;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
@@ -479,7 +523,6 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ToolStripMenuItem clean5EndsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cleanTailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem createFastaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rescanToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reanalyzeToolStripMenuItem;
@@ -501,6 +544,15 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ComboBox Charts_Combo_Selector;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem removeAdapterSequencesToolStripMenuItem;
+        private FastqGUI_Display FastqGUI_Display;
+        private System.Windows.Forms.ToolStripMenuItem saveCSVDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem findSequenceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flushMemoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem removeSequencesWithFailedReadsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem withFailedReadsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem belowMeanThresholdToolStripMenuItem;
     }
 }
 

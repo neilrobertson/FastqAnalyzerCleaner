@@ -14,16 +14,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using ProtoBuf;
 
 
 namespace FastqAnalyzerCleaner
 {
     [Serializable]
+    [ProtoContract]
     public class FqNucleotideRead
     {
+        [ProtoMember(1)]
         private char nucleotide;
+        [ProtoMember(2)]
         private char qualityRead;
+        [ProtoMember(3)]
         private int phredQuality;
 
         public FqNucleotideRead() { }

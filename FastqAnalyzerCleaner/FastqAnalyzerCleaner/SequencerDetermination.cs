@@ -25,13 +25,13 @@ namespace FastqAnalyzerCleaner
         private char sequencerIdentifierCode = '0';
         private Dictionary<int, FqNucleotideRead> map;
 
-        public SequencerDetermination(FqFile fastqFile)
+        public SequencerDetermination(IFqFile fastqFile)
         {
             map = fastqFile.getMap();
             sequencer(fastqFile);
         }
 
-        private void sequencer(FqFile fastqFile)
+        private void sequencer(IFqFile fastqFile)
 	    {
 		    String sequencer = null;
 		
@@ -120,7 +120,13 @@ namespace FastqAnalyzerCleaner
 		this.sequencerType = sequencer;
 		
 		fastqFile.setSequencerType(sequencerType);
-		
+
+        if (fastqFile is FqFile_Component)
+        {
+            fastqFile.setFqHashMap(FastqController.getInstance().GetFqFileMap().ConstructSequencerSpecificReadMap(sequencerType));
+            Console.WriteLine("Calculating and setting sequencer specific file map to component");
+        }
+
 		stopwatch.Stop();
 		Console.WriteLine("Time To Determine Sequencer:  " + stopwatch.Elapsed);
         Console.WriteLine("Sequencer Name: " + sequencer);
