@@ -19,9 +19,10 @@ namespace FastqAnalyzerCleaner
             String extension = Path.GetExtension(inputs.SaveFileName);
             String fileName = Path.GetFileNameWithoutExtension(inputs.SaveFileName);
             String[] part = Path.GetFileNameWithoutExtension(inputs.FastqFile.getFileName()).Split('_');
+            String directory = Path.GetDirectoryName(inputs.SaveFileName);
             String number = part[part.Length - 1];
 
-            String FullName = String.Format(@"{0}_{1}{2}", fileName, number, extension);
+            String FullName = String.Format(@"{0}{1}{2}_{3}{4}", directory, Path.DirectorySeparatorChar, fileName, number, extension);
 
             string COMMA_DELIMITER = ",";
             string[] output;
@@ -45,6 +46,7 @@ namespace FastqAnalyzerCleaner
                 writer.WriteLine(string.Join(COMMA_DELIMITER, output));
             }
 
+            Console.WriteLine("Saving CSV TO: {0}", FullName);
             writer.Flush();
             writer.Close();
             return inputs;

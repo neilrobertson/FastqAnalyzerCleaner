@@ -50,28 +50,28 @@ namespace FastqAnalyzerCleaner
         /// Delegate method to update GUI from non COM thread.  Matches method signiture for UpdateGUIThread.
         /// </summary>
         /// <param name="newFqFile"></param>
-        private delegate void UpdateFastqGUI(IFqFile newFqFile);
+        private delegate void UpdateFastqGUI(GenericFastqInputs input);
 
         /// <summary>
         /// Method updates the GUI when on this thread or calls an invoke upon it for instances when called from non 
         /// COM thread.  Ensures that alterations that occur within the GUI occur within its on thread model.
         /// </summary>
         /// <param name="newFqFile"></param>
-        public void UpdateGUIThread(IFqFile newFqFile)
+        public void UpdateGUIThread(GenericFastqInputs input)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new UpdateFastqGUI(UpdateGUIThread), new object[] { newFqFile });
+                this.BeginInvoke(new UpdateFastqGUI(UpdateGUIThread), new object[] { input });
                 return;
             }
-            UpdateGUI(newFqFile);
+            UpdateGUI(input);
         }
 
         /// <summary>
         /// Updates the GUI.  Calls the FastqGUI_Display and FastqGUI_Charts classes to update the information contained within them.
         /// </summary>
         /// <param name="newFqFile"></param>
-        public void UpdateGUI(IFqFile newFqFile)
+        public void UpdateGUI(GenericFastqInputs input)
         {
             //fqFile = newFqFile;
 
@@ -449,6 +449,7 @@ namespace FastqAnalyzerCleaner
                     GenericFastqInputs inputs = new GenericFastqInputs();
                     inputs.NucleotideSequence = result.Text.Trim();
                     inputs.TaskAction = Task_FindSequences.statement;
+                    FastqController.getInstance().GetFqFileMap().InitializeNewSequenceSearchList();
                     FastqController.getInstance().InitializeAction(inputs);
                 }
             }
@@ -480,7 +481,7 @@ namespace FastqAnalyzerCleaner
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                InputBoxResult result = InputBox.Show("Enter the Phred Mean Threshold For Sequences:", "Remove Sequences", "", new inputBox_MeanThresholdValidating(inputBox_Validating));
+                InputBoxResult result = InputBox.Show("Enter the Phred Mean Threshold For Sequences:", "Remove Sequences", "", new InputBoxValidatingHandler(inputBox_MeanThresholdValidating));
                 if (result.OK)
                 {
                     if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
@@ -600,8 +601,8 @@ namespace FastqAnalyzerCleaner
             }
             else
             {
-                int i = HelperMethods.safeParseInt(e.Text.Trim());
-                if (i > FastqController.getInstance().getFastqFileMap().GlobalScores.MaxSeqSize || i < 1)
+                int i = Int32.Parse(e.Text.Trim());
+                if (i > FastqController.getInstance().GetFqFileMap().GlobalDetails.MaxSeqSize || i < 1)
                 {
                     e.Cancel = true;
                     e.Message = "Required";
@@ -647,7 +648,7 @@ namespace FastqAnalyzerCleaner
             }
             else
             {
-                int i = HelperMethods.safeParseInt(e.Text.Trim());
+                int i = Int32.Parse(e.Text.Trim());
                 if (i > 40 || i < 1)
                 {
                     e.Cancel = true;

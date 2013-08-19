@@ -34,6 +34,9 @@ namespace FastqAnalyzerCleaner
         abstract public void cleanEnds(int remove);
         abstract public void cleanTails(int start, int end);
         abstract public void cleanAdapters();
+        abstract public void removeBelowMeanThreshold(int threshold);
+        abstract public void removeSequencesWithMisreads();
+        abstract public List<FqSequence> findSequence(String sequence);
         abstract public void removeRegion(int startBlock, int endBlock);
         abstract public String createNucleotideString();
         abstract public Nucleotide createNucleotideArray();
@@ -55,6 +58,7 @@ namespace FastqAnalyzerCleaner
         abstract public String getSequencerType();
         abstract public int getNucleotidesCleaned();
         abstract public List<int> getDistribution();
+        abstract public List<int> getSequenceLengthDistribution();
         abstract public int totalNucleotides();
         abstract public int getTotalNucleotides();
         abstract public FqSequence getFastqSequenceByPosition(int i);
@@ -66,6 +70,7 @@ namespace FastqAnalyzerCleaner
         abstract public double nContents();
         abstract public int getMaxSeqSize();
         abstract public int getMinSeqSize();
+        abstract public int getSequencesRemoved();
         abstract public Dictionary<int, FqNucleotideRead> getMap();
         abstract public void calculateMapQualities();
         abstract public void setHeader();

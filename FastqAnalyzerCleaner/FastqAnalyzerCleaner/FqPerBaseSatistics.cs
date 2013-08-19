@@ -61,5 +61,10 @@ namespace FastqAnalyzerCleaner
             baseQualities = null;
         }
 
+        public int GetPerBaseCount()
+        {
+            return baseQualities.Count();
+        }
+
     }
 }

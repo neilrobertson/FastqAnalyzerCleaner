@@ -51,6 +51,16 @@ namespace FastqAnalyzerCleaner
             return FqReadMap;
         }
 
+        public void InitializeNewSequenceSearchList()
+        {
+            QueriedSequences = new List<FqSequence>();
+        }
+
+        public void AddSequenceQueryResults(List<FqSequence> results)
+        {
+            QueriedSequences.AddRange(results);
+        }
+
         public void CalculateGlobalFileScores()
         {
             GlobalDetails = new FqFile_Component_Details();
@@ -59,7 +69,7 @@ namespace FastqAnalyzerCleaner
             {
                 FqFile_Component_Details currentDetails = ComponentMap[fqFileComponents[i]];
 
-                GlobalDetails.CombineFqFile_Component_DetailsScores(currentDetails);
+                GlobalDetails.Combine_FqFile_Component_DetailsScores(currentDetails);
             }
         }
 

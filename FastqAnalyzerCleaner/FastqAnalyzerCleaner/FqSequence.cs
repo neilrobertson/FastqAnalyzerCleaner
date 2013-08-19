@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ProtoBuf;
+using System.Text.RegularExpressions;
 
 namespace FastqAnalyzerCleaner
 {
@@ -65,9 +66,11 @@ namespace FastqAnalyzerCleaner
         [ProtoMember(21, IsRequired = true)]
         public int MAX_LINE_LENGTH = 105;
         [ProtoMember(22, IsRequired = true)]
-        public Boolean RemoveSequence;
+        public Boolean RemoveSequence = false;
         [ProtoMember(23, IsRequired = true, OverwriteList = true)]
         public int[] fastqSequence;
+        [ProtoMember(24, IsRequired = true)]
+        public int MatchKey;
 
         public FqSequence() { }
 
@@ -80,13 +83,6 @@ namespace FastqAnalyzerCleaner
             MAX_LINE_LENGTH = SEQUENCE_LENGTH;
 
             fastqSequence = new int[MAX_LINE_LENGTH];
-
-            NCount = 0;
-            CCount = 0;
-            GCount = 0;
-            NucleotidesCleaned = 0;
-            index = 0;
-            RemoveSequence = false;
         }
 
         public void addNucleotideRead(int hashcode)
@@ -106,11 +102,12 @@ namespace FastqAnalyzerCleaner
 
         }
 
-        public void cleanStarts(int remove)
+        public int cleanStarts(int remove)
         {
             if (remove > index)
             {
                 RemoveSequence = true;
+                return index;
             }
             else
             {
@@ -120,20 +117,37 @@ namespace FastqAnalyzerCleaner
                 }
                 index = index - remove;
                 SEQUENCE_LENGTH = SEQUENCE_LENGTH - remove;
+                return remove;
             }
         }
 
-        public void cleanEnds(int remove)
+        public int cleanEnds(int remove)
         {
             if (remove > index)
             {
                 RemoveSequence = true;
+                return index;
             }
             else
             {
                 index = index - remove;
                 SEQUENCE_LENGTH = SEQUENCE_LENGTH - remove;
+                return remove;
             }
+        }
+
+        public FqSequence findSequence(String seq, Dictionary<int, FqNucleotideRead> map)
+        {
+            string input = createSequenceString(map);
+
+            Match match = Regex.Match(input, seq.ToUpper(), RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                MatchKey = match.Groups[1].Index;
+                return this;
+            }
+            return null;
         }
 
         public GenericFastqInputs cleanAdapters(List<Adapters.Adapter> adapters, Dictionary<int, FqNucleotideRead> map)
@@ -253,9 +267,9 @@ namespace FastqAnalyzerCleaner
                 qual.Append(map[fastqSequence[i]].getQualityRead());
             }
             fqBlock.Append(Header + "\n");
-            fqBlock.Append(seq + "\n");
+            fqBlock.Append(seq.ToString() + "\n");
             fqBlock.Append(InfoLine + "\n");
-            fqBlock.Append(qual + "\n");
+            fqBlock.Append(qual.ToString() + "\n");
             return fqBlock.ToString();
         }
 
@@ -305,11 +319,6 @@ namespace FastqAnalyzerCleaner
         }
 
         public int getSeqIndex()
-        {
-            return SequenceIndex;
-        }
-
-        public int getSequenceIndex()
         {
             return SequenceIndex;
         }
@@ -394,9 +403,14 @@ namespace FastqAnalyzerCleaner
             return MachineName;
         }
 
-        public Boolean removeSequence()
+        public Boolean getRemoveSequence()
         {
             return RemoveSequence;
+        }
+
+        public void setRemoveSequence(Boolean remove)
+        {
+            this.RemoveSequence = remove;
         }
 
         public int getNCount()

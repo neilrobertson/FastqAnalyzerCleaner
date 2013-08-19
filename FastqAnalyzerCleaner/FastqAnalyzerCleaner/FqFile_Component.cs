@@ -77,7 +77,10 @@ namespace FastqAnalyzerCleaner
         
         [ProtoMember(18, IsRequired = true)]
         public double gPercent;
-        
+
+        [ProtoMember(19, IsRequired = true)]
+        public int sequencesRemoved;
+
         [ProtoIgnore]
         public static Dictionary<int, FqNucleotideRead> Fq_FILE_MAP;
         
@@ -86,6 +89,9 @@ namespace FastqAnalyzerCleaner
         
         [ProtoMember(21, IsRequired = true, OverwriteList = true)]
         public FqPerBaseSatistics[] perBaseStatistics;
+
+        [ProtoMember(22, IsRequired = true, OverwriteList = true)]
+        public List<int> sequenceLengthDistribution;
         
         [ProtoMember(23, IsRequired = true)]
         public readonly int FREE_PROCESSOR_CORE = 1;
@@ -124,13 +130,16 @@ namespace FastqAnalyzerCleaner
         /// </summary>
         /// <param name="remove">The number of nucleotides to remove from the start of a sequence</param>
         public override void cleanStarts(int remove)
-	    {
-		    for (int i = 0; i < index; i++)
-		    {
-			    fastqSeq[i].cleanStarts(remove);
-			    nucleotidesCleaned += remove;
-		    }
-            Console.WriteLine("Sequence 5' Ends Cleaned. Nucleotides Removed: {0}", nucleotidesCleaned);
+        {
+            int actuallyRemoved = 0;
+            Parallel.For(0, index, i =>
+            {
+                int rem = fastqSeq[i].cleanStarts(remove);
+                Interlocked.Add(ref actuallyRemoved, rem);
+            });
+            nucleotidesCleaned += actuallyRemoved;
+            Console.WriteLine("Nucleotides cleaned from sequence ends: {0}", actuallyRemoved);
+            cleanArray();
 	    }
 
         /// <summary>
@@ -139,12 +148,15 @@ namespace FastqAnalyzerCleaner
         /// <param name="remove">The number of nucleotides to clean from the sequence end</param>
         public override void cleanEnds(int remove)
 	    {
-		    for (int i = 0; i < index; i++)
-		    {
-			    fastqSeq[i].cleanEnds(remove);
-			    nucleotidesCleaned += remove;
-		    }
-            Console.WriteLine("Sequence 5' Ends Cleaned. Nucleotides Removed: {0}", nucleotidesCleaned);
+            int actuallyRemoved = 0;
+            Parallel.For(0, index, i =>
+            {
+                int rem = fastqSeq[i].cleanEnds(remove);
+                Interlocked.Add(ref actuallyRemoved, rem);
+            });
+            nucleotidesCleaned += actuallyRemoved;
+            Console.WriteLine("Nucleotides cleaned from sequence ends: {0}", actuallyRemoved);
+            cleanArray();
 	    }
 
         /// <summary>
@@ -155,12 +167,12 @@ namespace FastqAnalyzerCleaner
         public override void cleanTails(int start, int end)
 	    {
 		    int totalRemove = start + end;
-		    for (int i = 0; i < index; i++)
-		    {
-			    fastqSeq[i].cleanStarts(start);
-			    fastqSeq[i].cleanEnds(end);
-			    nucleotidesCleaned += totalRemove;
-		    }
+            Parallel.For(0, index, i =>
+            {
+                fastqSeq[i].cleanStarts(start);
+                fastqSeq[i].cleanEnds(end);
+            });
+            cleanArray();
 		    Console.Write("Sequence tails cleaned. Total Removed: " + totalRemove);
 	    }
 
@@ -196,6 +208,55 @@ namespace FastqAnalyzerCleaner
 
             stopwatch.Stop();
             Console.WriteLine("Statistics Performed in " + stopwatch.Elapsed);
+        }
+
+        /// <summary>
+        /// Removes sequences below mean theshold
+        /// </summary>
+        /// <param name="threshold">The mean threshold</param>
+        public override void removeBelowMeanThreshold(int threshold)
+        {
+            Parallel.For(0, index, i =>
+            {
+                if (fastqSeq[i].getMean() < threshold)
+                {
+                    fastqSeq[i].setRemoveSequence(true);
+                    Interlocked.Add(ref nucleotidesCleaned, fastqSeq[i].getFastqSeqSize());   
+                }
+            });
+            cleanArray();
+        }
+
+        /// <summary>
+        /// Remove sequences that contain misread nucleotides
+        /// </summary>
+        public override void removeSequencesWithMisreads()
+        {
+            Parallel.For(0, index, i =>
+            {
+                if (fastqSeq[i].getNCount() > 0)
+                {
+                    fastqSeq[i].setRemoveSequence(true);
+                    Interlocked.Add(ref nucleotidesCleaned, fastqSeq[i].getFastqSeqSize());
+                }
+            });
+            cleanArray();
+        }
+
+        /// <summary>
+        /// Find sequences with sequence
+        /// </summary>
+        public override List<FqSequence> findSequence(String sequence)
+        {
+            List<FqSequence> foundSequences = new List<FqSequence>();
+            for (int i = 0; i < index; i++)
+            {
+                FqSequence result = fastqSeq[i].findSequence(sequence, Fq_FILE_MAP);
+                if (result != null)
+                    foundSequences.Add(result);
+            }
+            Console.WriteLine("Found {0} Sequences Containing: {1}", foundSequences.Count, sequence);
+            return foundSequences;
         }
 
         /// <summary>
@@ -450,6 +511,7 @@ namespace FastqAnalyzerCleaner
             resetCounts();
 
             fillDistributionList();
+            fillSequenceLengthDistributionList();
 
             BuildPerSequenceStatisticsList();
             
@@ -464,7 +526,6 @@ namespace FastqAnalyzerCleaner
                 Interlocked.Add(ref gCount, syncLists.gCount);
                 Interlocked.Add(ref nCount, syncLists.nCount);
 
-                //object locker = new object();
                 lock (locker)
                     this.CombinePerBaseStatisticsLists(syncLists.perSeqQuals, syncLists.sequenceLength); 
                 
@@ -472,15 +533,18 @@ namespace FastqAnalyzerCleaner
             },
             syncLists =>
             {
-                //object locker = new object();
                 lock (locker)
                     this.CombineDistributionLists(syncLists.distributes);   
             }
             );
-            Parallel.For(0, maxSeqSize, i =>
+            int count = 0;
+            for (int i = (maxSeqSize - 1); i >= 0; i--)
             {
+                int numAtLength = perBaseStatistics[i].GetPerBaseCount();
+                sequenceLengthDistribution[i] = (numAtLength - count);
+                count += numAtLength;
                 perBaseStatistics[i].reconcileBaseSatistics();
-            });
+            }
 
             nPercent = (((double)nCount / totalNucs) * 100);
             cPercent = (((double)cCount / totalNucs) * 100);
@@ -518,13 +582,18 @@ namespace FastqAnalyzerCleaner
                 perBaseStatistics[i] = new FqPerBaseSatistics();
         }
 
+        private void fillSequenceLengthDistributionList()
+        {
+            sequenceLengthDistribution = new List<int>(maxSeqSize);
+            for (int i = 0; i < maxSeqSize; i++)
+                sequenceLengthDistribution.Add(0);
+        }
+
         private void fillDistributionList()
 	    {
             distribution = new List<int>(40);
 		    for (int j = 0; j <= SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread(); j++)
-		    {
 			    distribution.Add(0);
-		    }
 	    }
 
         public override int totalNucleotides()
@@ -557,13 +626,19 @@ namespace FastqAnalyzerCleaner
 
         public override void cleanArray()
         {
+            int removed = 0;
             var temp = new List<FqSequence>();
             foreach (FqSequence fqSeq in fastqSeq)
             {
-                if (fqSeq.removeSequence() == false || fqSeq != null)
+                if (fqSeq.getRemoveSequence() == false && fqSeq != null)
                     temp.Add(fqSeq);
+                else
+                    removed++;
             }
             fastqSeq = temp.ToArray();
+            index -= removed;
+            sequencesRemoved += removed;
+            Console.WriteLine("Sequences removed from Component: {0}", removed);
         }
 
         private void resetCounts()
@@ -623,6 +698,11 @@ namespace FastqAnalyzerCleaner
             return distribution;
         }
 
+        public override List<int> getSequenceLengthDistribution()
+        {
+            return sequenceLengthDistribution;
+        }
+
         public override int getTotalNucleotides()
 	    {
 		    return totalNucs;
@@ -671,6 +751,11 @@ namespace FastqAnalyzerCleaner
         public override int getMinSeqSize()
         {
             return minSeqSize;
+        }
+
+        public override int getSequencesRemoved()
+        {
+            return sequencesRemoved;
         }
 
         public override Dictionary<int, FqNucleotideRead> getMap()

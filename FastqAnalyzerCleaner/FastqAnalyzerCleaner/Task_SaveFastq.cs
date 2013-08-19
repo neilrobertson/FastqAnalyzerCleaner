@@ -34,6 +34,7 @@ namespace FastqAnalyzerCleaner
             writer.Close();
 
             task = new Task_SaveFastq();
+            register();
         }
 
         public override String getStatement()

@@ -40,3 +40,8 @@ C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqA
 C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\obj\Debug\FastqAnalyzerCleaner.application
 C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\ZedGraph.dll
 C:\Users\Neil Robertson\Desktop\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.pri
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.dll
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\ZedGraph.dll
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.pdb
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.xml
+C:\Users\Neil Robertson\Documents\GitHub\FastqAnalyzerCleaner\FastqAnalyzerCleaner\FastqAnalyzerCleaner\bin\Debug\protobuf-net.pri

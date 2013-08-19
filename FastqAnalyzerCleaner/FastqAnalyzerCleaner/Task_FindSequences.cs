@@ -14,7 +14,8 @@ namespace FastqAnalyzerCleaner
 
         public override GenericFastqInputs perform(GenericFastqInputs inputs)
         {
-            //Show error message
+            List<FqSequence> foundSequences = inputs.FastqFile.findSequence(inputs.NucleotideSequence);
+            FastqController.getInstance().GetFqFileMap().AddSequenceQueryResults(foundSequences);
             return inputs;
         }
 

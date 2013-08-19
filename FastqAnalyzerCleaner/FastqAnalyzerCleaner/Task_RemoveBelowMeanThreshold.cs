@@ -14,7 +14,8 @@ namespace FastqAnalyzerCleaner
 
         public override GenericFastqInputs perform(GenericFastqInputs inputs)
         {
-            //inputs.FastqFile.FindSequence(inputs.NucleotideSequence);
+            inputs.FastqFile.removeBelowMeanThreshold(inputs.MeanThreshold);
+            inputs.FastqFile.Tests();
             return inputs;
         }
 

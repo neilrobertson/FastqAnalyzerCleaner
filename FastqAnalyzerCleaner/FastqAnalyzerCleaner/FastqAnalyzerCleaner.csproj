@@ -104,7 +104,6 @@
     </Compile>
     <Compile Include="FastqGUI_Output.cs" />
     <Compile Include="FqFileMap.cs" />
-    <Compile Include="FqFileSpecifier.cs" />
     <Compile Include="FqFile_Component_Details.cs" />
     <Compile Include="FqPerBaseSatistics.cs" />
     <Compile Include="FqSequence_InputsOuptuts.cs" />

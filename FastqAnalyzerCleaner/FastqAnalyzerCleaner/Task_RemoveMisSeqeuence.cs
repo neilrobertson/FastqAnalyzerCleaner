@@ -14,7 +14,9 @@ namespace FastqAnalyzerCleaner
 
         public override GenericFastqInputs perform(GenericFastqInputs inputs)
         {
-            //Show error message
+
+            inputs.FastqFile.removeSequencesWithMisreads();
+            inputs.FastqFile.Tests();
             return inputs;
         }
         public override String getStatement()

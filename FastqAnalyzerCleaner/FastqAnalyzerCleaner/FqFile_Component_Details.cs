@@ -14,6 +14,7 @@ namespace FastqAnalyzerCleaner
         public int TotalNucs { get; set; }
         public int NucleotidesCleaned { get; set; }
         public List<int> Distribution { get; set; }
+        public List<int> SequenceLengthDistribution { get; set; }
         public int NCount { get; set; }
         public int CCount { get; set; }
         public int GCount { get; set; }
@@ -22,8 +23,9 @@ namespace FastqAnalyzerCleaner
         public double NPercent { get; set; }
         public double CPercent { get; set; }
         public double GPercent { get; set; }
+        public int SequencesRemoved { get; set; }
         public Dictionary<int, string> RemovedAdapters { get; set; }
-        public FqPerBaseSatistics[] perBaseStatistics;
+        public FqPerBaseSatistics[] perBaseStatistics { get; set; }
    
         public FqFile_Component_Details()
         {
@@ -37,6 +39,7 @@ namespace FastqAnalyzerCleaner
             this.TotalNucs = component.getTotalNucleotides();
             this.NucleotidesCleaned = component.getNucleotidesCleaned();
             this.Distribution = component.getDistribution();
+            this.SequenceLengthDistribution = component.getSequenceLengthDistribution();
             this.NCount = component.getNCount();
             this.CCount = component.getCCount();
             this.GCount = component.getGCount();
@@ -45,11 +48,12 @@ namespace FastqAnalyzerCleaner
             this.NPercent = component.nContents();
             this.CPercent = component.cContents();
             this.GPercent = component.gContents();
+            this.SequencesRemoved = component.getSequencesRemoved();
             this.RemovedAdapters = component.getRemovedAdapters();
             this.perBaseStatistics = component.GetPerBaseStatisticsArray();
         }
 
-        public void CombineFqFile_Component_DetailsScores(FqFile_Component_Details inputDetails)
+        public void Combine_FqFile_Component_DetailsScores(FqFile_Component_Details inputDetails)
         {
             this.sequencerType = inputDetails.sequencerType;
             this.TotalNucs += inputDetails.TotalNucs;
@@ -57,12 +61,14 @@ namespace FastqAnalyzerCleaner
             this.NCount += inputDetails.NCount;
             this.CCount += inputDetails.CCount;
             this.GCount += inputDetails.GCount;
+            this.SequencesRemoved += inputDetails.SequencesRemoved;
             if (inputDetails.MaxSeqSize > this.MaxSeqSize)
                 this.MaxSeqSize = inputDetails.MaxSeqSize;
             if (inputDetails.MinSeqSize < this.MinSeqSize)
                 this.MinSeqSize = inputDetails.MinSeqSize;
             CalculatePercents();
             CombineDistributionLists(inputDetails.Distribution);
+            CombineSequenceLengthDistributionLists(inputDetails.SequenceLengthDistribution);
         }
 
         private void CalculatePercents()
@@ -83,6 +89,24 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        public void CombineSequenceLengthDistributionLists(List<int> seqLenDistribution)
+        {
+            if (SequenceLengthDistribution == null)
+                InitializeSeqLenghtDistribution();
+
+            for (int i = 0; i < seqLenDistribution.Count; i++)
+            {
+                SequenceLengthDistribution[i] += seqLenDistribution[i];
+            }
+        }
+
+        private void InitializeSeqLenghtDistribution()
+        {
+            SequenceLengthDistribution = new List<int>(MaxSeqSize);
+            for (int i = 0; i < MaxSeqSize; i++)
+                SequenceLengthDistribution.Add(0);
+        }
+
         private void InitializeDistributionList()
         {
             Distribution = new List<int>(40);
@@ -101,6 +125,7 @@ namespace FastqAnalyzerCleaner
             Console.WriteLine("Total Nucs {0} MinSeqSize: {1} MaxSeqSize: {2}", TotalNucs, MinSeqSize, MaxSeqSize);
 
             Console.WriteLine("Nucleotides Cleaned: {0}", NucleotidesCleaned);
+            Console.WriteLine("Sequences Cleaned: {0}", SequencesRemoved);
         }
     }
 }
