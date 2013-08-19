@@ -1,16 +1,31 @@
-﻿using System;
+﻿// <copyright file="FastqController.cs" author="Neil Robertson">
+// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
+//
+// This code is the property of Neil Robertson.  Permission must be sought before reuse.
+// It has been written explicitly for the MRes Bioinfomatics course at the University 
+// of Glasgow, Scotland under the supervision of Derek Gatherer.
+//
+// </copyright>
+// <author>Neil Robertson</author>
+// <email>neil.alistair.robertson@hotmail.co.uk</email>
+// <date>2013-06-1</date>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
-using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
 
 namespace FastqAnalyzerCleaner
 {
+    /// <summary>
+    /// This Singleton class is the main controller class for the program.  It contains methods that manage resource use and core methods,
+    /// for initializing and launching tasks.
+    /// </summary>
     public class FastqController
     {
         private static object acessSync = new object();
@@ -29,6 +44,10 @@ namespace FastqAnalyzerCleaner
         private ProtocolBuffersSerialization protobufSerialization;
         private Stopwatch sw;
 
+        /// <summary>
+        /// Constructor for the fastqController sets the controller state to ready, calls the directory controller to change 
+        /// the directory environment for the program and flushes all .fqprotobin files from memory that were in use in previous sessions.
+        /// </summary>
         public FastqController()
         {
             CONTROLLER_STATE = FastqControllerState.STATE_READY;
@@ -36,16 +55,25 @@ namespace FastqAnalyzerCleaner
             FlushMemoryOfProtobinFiles();
         }
 
+        /// <summary>
+        /// Accessor for this singleton class, locked for syncronized use. 
+        /// </summary>
+        /// <returns></returns>
         public static FastqController getInstance()
         {
-            if (uniqueInstance == null)
+            lock (acessSync)
             {
-                lock (acessSync)
+                if (uniqueInstance == null)
                     uniqueInstance = new FastqController();
             }
             return uniqueInstance;
         }
 
+        /// <summary>
+        /// First point of call for the creation of a task within this class.  Checks controller state is ready, then builds 
+        /// a background worker thread for tasks and launches thread.
+        /// </summary>
+        /// <param name="genericInputs">Input details that are necessary within the task, including potential file components</param>
         public void InitializeAction(GenericFastqInputs genericInputs)
         {
             if (fqFileMap != null && CONTROLLER_STATE == FastqControllerState.STATE_READY)
@@ -65,6 +93,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Entry point for the thread, allows controller to create unified method signature for the PerformAction method.
+        /// Method checks threads state and hands of to PerformAction.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void RunTask(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
@@ -80,6 +114,14 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// The key method in the controller class, where fastqFile_components are serialized and deserialized in and out of 
+        /// the classes queues for processing.  The tasks are constructed through an interface - ITaskStrategy - which 
+        /// is designated through the task abstract factory class.  After processing, files are deserialized and a details class
+        /// for each component is populated, as are the global scores.
+        /// </summary>
+        /// <param name="worker">The backgroundworker thread</param>
+        /// <param name="input">Generic inputs, including taskname and any further details necessary to complete a task such as nucleotide scores etc.</param>
         public void PerformAction(BackgroundWorker worker, GenericFastqInputs input)
         {
             BackgroundWorker loadWorker = worker;
@@ -168,6 +210,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Creates a fqFile_component_details class from the core information that is best still stored within the programs memory.
+        /// These classes populate a dictionary within the fqfilemap class where the component filename is their key.
+        /// </summary>
+        /// <param name="component">The component who's details are to be stored</param>
         public void BuildFqFileMap(IFqFile component)
         {
             FqFile_Component_Details componentDetails = new FqFile_Component_Details();
@@ -176,6 +223,10 @@ namespace FastqAnalyzerCleaner
             fqFileMap.GetFqFileComponentDetailsMap()[component.getFileName()] = componentDetails;
         }
 
+        /// <summary>
+        /// Priming the component queue, used prior to the work of the tasks starting, this method ensures that there are 
+        /// some components deserialized into memory for use.
+        /// </summary>
         public void PrimeFqFileComponentQueue()
         {
             int threadId;
@@ -188,6 +239,9 @@ namespace FastqAnalyzerCleaner
             toPerform.Enqueue(secondComponent);
         }
 
+        /// <summary>
+        /// Serializes remaining file components onto disk after task has completed.
+        /// </summary>
         public void SerializeRemainingFqComponents()
         {
             ProtocolBuffersSerialization protoBuf = new ProtocolBuffersSerialization();
@@ -199,6 +253,9 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method asynchronously serializes components to memory.
+        /// </summary>
         private void SerializeFqComponentToMemory()
         {
             while (toSerialize.Count != 0)
@@ -215,6 +272,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method to be used in the event of the failure of the PerformAction method experiencing some exception.
+        /// Method warns user and flushes memory of fqprotobin files before returning program to initial state.
+        /// </summary>
+        /// <param name="mainMessage">Main message to send to user</param>
+        /// <param name="headerMessage">Header message to send to user</param>
         public void ControllerStateFailureResponse(String mainMessage, String headerMessage)
         {
             UserResponse.ErrorResponse(mainMessage, headerMessage);
@@ -224,6 +287,12 @@ namespace FastqAnalyzerCleaner
             CONTROLLER_STATE = FastqControllerState.STATE_READY;
         }
 
+        /// <summary>
+        /// Creates the basis for loading a new fastq file into the program.
+        /// </summary>
+        /// <param name="fileName">Name of the file</param>
+        /// <param name="fileLength">Length of the file</param>
+        /// <returns></returns>
         public FqFileMap CreateNewFastqFile(String fileName, long fileLength)
         {
             fqFileMap = new FqFileMap();
@@ -232,6 +301,10 @@ namespace FastqAnalyzerCleaner
             return fqFileMap;
         }
 
+        /// <summary>
+        /// Adds a filename and directory of a fqprotobin file component to the fqfilemaps directory list
+        /// </summary>
+        /// <param name="fqComponentDirectory">The fqprotobin filename/directory</param>
         public void addFqFileComponentDirectory(String fqComponentDirectory)
         {
             if (fqFileMap != null)
@@ -240,22 +313,36 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Resets the state of a controller for loading a new file
+        /// </summary>
         public void PrimeForNewFile()
         {
             fqFileMap = null;
             FlushMemoryOfProtobinFiles();
         }
 
+        /// <summary>
+        /// Sets the observer to the fastqgui controller
+        /// </summary>
+        /// <param name="observer">The gui observer</param>
         public void SetObserver(FastqGUI observer)
         {
             this.observer = observer;
         }
 
+        /// <summary>
+        /// Accessor method to obtain the fqfilemap
+        /// </summary>
+        /// <returns>The active instance of the fqfilemap class</returns>
         public FqFileMap GetFqFileMap()
         {
             return fqFileMap;
         }
 
+        /// <summary>
+        /// Flushes the programs environment directory of fqprotobin files
+        /// </summary>
         public void FlushMemoryOfProtobinFiles()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Environment.CurrentDirectory);
@@ -276,6 +363,9 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Enum for the FastqController class to determine controller state.
+        /// </summary>
         public enum FastqControllerState
         {
             STATE_READY = 1,

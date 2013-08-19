@@ -22,60 +22,91 @@ using ProtoBuf;
 
 namespace FastqAnalyzerCleaner
 {
+    /// <summary>
+    /// FqFile_Component is a model class that represents the structure of whole or part of a fastq file.  It 
+    /// implements the IFastqFile interface and has been annotated for serialization with protocol buffers.
+    /// </summary>
     [Serializable]
     [ProtoContract]
     public class FqFile_Component : IFqFile
     {
         [ProtoMember(3, IsRequired=true, OverwriteList=true)]
-        public int LENGTH_SEQUENCE_ARRAY = 100000;
+        public int LENGTH_SEQUENCE_ARRAY = 10000;
+
         [ProtoMember(4, IsRequired = true)]
-        public int index;
+        public int index = 0;
+        
         [ProtoMember(5, IsRequired = true)]
         public String header;
+        
         [ProtoMember(6, IsRequired = true)]
         public String sequencerType;
+        
         [ProtoMember(7, IsRequired = true)]
         public String fileName;
+        
         [ProtoMember(8, IsRequired = true)]
         public int totalNucs;
+        
         [ProtoMember(9, IsRequired = true)]
         public int nucleotidesCleaned;
+        
         [ProtoMember(10, IsRequired = true)]
         public List<int> distribution;
+        
         [ProtoMember(11, IsRequired = true)]
         public int nCount;
+        
         [ProtoMember(12, IsRequired = true)]
         public int cCount;
+        
         [ProtoMember(13, IsRequired = true)]
         public int gCount;
+        
         [ProtoMember(14, IsRequired = true)]
         public int maxSeqSize = 0;
+        
         [ProtoMember(15, IsRequired = true)]
         public int minSeqSize = 0;
+        
         [ProtoMember(16, IsRequired = true)]
         public double nPercent;
+        
         [ProtoMember(17, IsRequired = true)]
         public double cPercent;
+        
         [ProtoMember(18, IsRequired = true)]
         public double gPercent;
+        
         [ProtoIgnore]
         public static Dictionary<int, FqNucleotideRead> Fq_FILE_MAP;
+        
         [ProtoMember(20, IsRequired = true, OverwriteList = true)]
         public Dictionary<int, string> removedAdapters;
+        
         [ProtoMember(21, IsRequired = true, OverwriteList = true)]
         public FqPerBaseSatistics[] perBaseStatistics;
+        
         [ProtoMember(23, IsRequired = true)]
         public readonly int FREE_PROCESSOR_CORE = 1;
+        
         [ProtoMember(24, IsRequired = true, OverwriteList = true)]
         public FqSequence[] fastqSeq;
 	
+        /// <summary>
+        /// Constructor for the fqFile_component classes, initializes an array of FqSequence 
+        /// </summary>
 	    public FqFile_Component()
 	    {
-            index = 0;
 		    fastqSeq = new FqSequence[LENGTH_SEQUENCE_ARRAY];
             Console.WriteLine("Multi Core Fastq File Component Created.");
 	    }
 
+        /// <summary>
+        /// Adds a FqSequence to the array and increments the index, contains provisions for increasing the size of the array
+        /// for overflow
+        /// </summary>
+        /// <param name="fqSeq"></param>
         public override void addFastqSequence(FqSequence fqSeq)
 	    {
 		    fastqSeq[index] = fqSeq;
@@ -88,6 +119,10 @@ namespace FastqAnalyzerCleaner
             }
 	    }
 
+        /// <summary>
+        /// Cleans a specified amount of nucleotides from the start of a sequence
+        /// </summary>
+        /// <param name="remove">The number of nucleotides to remove from the start of a sequence</param>
         public override void cleanStarts(int remove)
 	    {
 		    for (int i = 0; i < index; i++)
@@ -98,6 +133,10 @@ namespace FastqAnalyzerCleaner
             Console.WriteLine("Sequence 5' Ends Cleaned. Nucleotides Removed: {0}", nucleotidesCleaned);
 	    }
 
+        /// <summary>
+        /// Cleans a specified number of nucleotides from the end of a sequence
+        /// </summary>
+        /// <param name="remove">The number of nucleotides to clean from the sequence end</param>
         public override void cleanEnds(int remove)
 	    {
 		    for (int i = 0; i < index; i++)
@@ -108,6 +147,11 @@ namespace FastqAnalyzerCleaner
             Console.WriteLine("Sequence 5' Ends Cleaned. Nucleotides Removed: {0}", nucleotidesCleaned);
 	    }
 
+        /// <summary>
+        /// Cleans a specified amount of nucleotides from sequence starts and tails
+        /// </summary>
+        /// <param name="start">The number of nucleotides to remove from start</param>
+        /// <param name="end">The number of nucleotides to remove from end</param>
         public override void cleanTails(int start, int end)
 	    {
 		    int totalRemove = start + end;
@@ -120,6 +164,9 @@ namespace FastqAnalyzerCleaner
 		    Console.Write("Sequence tails cleaned. Total Removed: " + totalRemove);
 	    }
 
+        /// <summary>
+        /// Cleans adapter sequences from seqeuences
+        /// </summary>
         public override void cleanAdapters()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -151,11 +198,20 @@ namespace FastqAnalyzerCleaner
             Console.WriteLine("Statistics Performed in " + stopwatch.Elapsed);
         }
 
+        /// <summary>
+        /// Deprecated method
+        /// </summary>
+        /// <param name="startBlock"></param>
+        /// <param name="endBlock"></param>
         public override void removeRegion(int startBlock, int endBlock)
 	    {
-		
+            throw new NotImplementedException();
 	    }
 
+        /// <summary>
+        /// Creates a nucleotide string for the complete file component
+        /// </summary>
+        /// <returns>A string of nucleotides for the whole file components sequences</returns>
         public override String createNucleotideString()
 	    {
 		    StringBuilder nucleotides = new StringBuilder();
@@ -170,7 +226,10 @@ namespace FastqAnalyzerCleaner
 		    return nucleotides.ToString();
 	    }
 
-
+        /// <summary>
+        /// Creates an array of nucleotides from the whole sequence
+        /// </summary>
+        /// <returns>An array of Nucleotide objects</returns>
         public override Nucleotide createNucleotideArray()
 	    {
 		    Nucleotide nucleotide = new Nucleotide(header);
@@ -185,6 +244,10 @@ namespace FastqAnalyzerCleaner
 		    return nucleotide;
 	    }
 
+        /// <summary>
+        /// Creates a fastq file format from the fqFileComponent
+        /// </summary>
+        /// <returns>A string in the format of a fastq file for the entire component</returns>
         public override String createFastqFormat()
 	    {
 		    StringBuilder fastqBuilder = new StringBuilder();
@@ -196,6 +259,11 @@ namespace FastqAnalyzerCleaner
 		    return fastqBuilder.ToString();
 	    }
 
+        /// <summary>
+        /// Creates a fasta format style string for the entire fq file component
+        /// </summary>
+        /// <param name="message">A message you would like to include in the fasta header</param>
+        /// <returns>A string of nucleotides for the fqFileComponent in the fasta format</returns>
         public override String createFastaFormat(String message)
 	    {
 		    int FASTA_LINE_LENGTH = 70;
@@ -225,6 +293,10 @@ namespace FastqAnalyzerCleaner
 		    return fastaFile.ToString();
 	    }
 
+        /// <summary>
+        /// Performs a distribution test on the quality reads of the fastq file component
+        /// </summary>
+        /// <returns>A list that outlines the distribution of qualities within this file component</returns>
         public override List<int> performDistributionTest()
 	    {
             fillDistributionList();
@@ -251,6 +323,9 @@ namespace FastqAnalyzerCleaner
 		    return distribution;
 	    }
 
+        /// <summary>
+        /// Performs sequence statistics on each of the sequences within the file component
+        /// </summary>
         public override void performSequenceStatistics()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -259,13 +334,15 @@ namespace FastqAnalyzerCleaner
             Parallel.For(0, index, i =>
             {
                 fastqSeq[i].performStats(sequencerType, Fq_FILE_MAP);
-                //fastqSeq[i].deconstructHeader(sequencerType);
             });
 
             stopwatch.Stop();
             Console.WriteLine("Statistics Performed in " + stopwatch.Elapsed);
         }
 
+        /// <summary>
+        /// Performs tests on the nucleotides contained within this file component
+        /// </summary>
         public override void performNucleotideTests()
 	    {
             Stopwatch stopwatch = new Stopwatch();
@@ -306,6 +383,9 @@ namespace FastqAnalyzerCleaner
             Console.Write("Nucleotide tests completed: " + stopwatch.Elapsed + "\n");
 	    }
 
+        /// <summary>
+        /// Perform both distribution and nucleotide tests on fqfile component
+        /// </summary>
         public override void performJointTests()
 	    {
             Stopwatch stopwatch = new Stopwatch();
@@ -355,6 +435,11 @@ namespace FastqAnalyzerCleaner
             Console.Write("Joint tests completed: " + stopwatch.Elapsed + "\n");
 	    }
 
+
+        /// <summary>
+        /// Prefered combined method for testing file, combines nucleotide, distribution and per base sequence statistics 
+        /// tests into one multi
+        /// </summary>
         public override void Tests()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -403,7 +488,7 @@ namespace FastqAnalyzerCleaner
             stopwatch.Stop();
             Console.Write("TESTS completed: " + stopwatch.Elapsed + "\n");
         }
-
+        
         private void reconcileOutputs(List<int> distributes, int[] seqStats, int seqLength)
         {
             this.CombineDistributionLists(distributes);

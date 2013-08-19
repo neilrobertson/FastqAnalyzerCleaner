@@ -1,4 +1,17 @@
-﻿using System;
+﻿// <copyright file="FastqController.cs" author="Neil Robertson">
+// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
+//
+// This code is the property of Neil Robertson.  Permission must be sought before reuse.
+// It has been written explicitly for the MRes Bioinfomatics course at the University 
+// of Glasgow, Scotland under the supervision of Derek Gatherer.
+//
+// </copyright>
+// <author>Neil Robertson</author>
+// <email>neil.alistair.robertson@hotmail.co.uk</email>
+// <date>2013-06-1</date>
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +19,25 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
+    /// <summary>
+    /// Simple class for outputting the details of a fqFile to the console
+    /// </summary>
     public class FastqGUI_Output
     {
         private static FastqGUI_Output uniqueInstance;
-        private static object syncLock;
+        private static object syncLock = new object();
 
+        /// <summary>
+        /// Private constructor for the class
+        /// </summary>
         private FastqGUI_Output() { }
 
+        /// <summary>
+        /// Accessor returns unique instance of this singleton class
+        /// </summary>
+        /// <returns>The unique instance of this singleton class</returns>
         public static FastqGUI_Output getInstance() 
         {
-            syncLock = new object();
-            
             lock (syncLock)
             {
                 if (uniqueInstance == null)
@@ -26,6 +47,10 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Outputs the data for a FastqFile to the console, keeping code clean in other classes
+        /// </summary>
+        /// <param name="fqFile"></param>
         public void OutputFileDataToConsole(IFqFile fqFile)
         {
             Console.WriteLine("Joint Test Results Completed on " + fqFile.getTotalNucleotides() + " Nucleotides");

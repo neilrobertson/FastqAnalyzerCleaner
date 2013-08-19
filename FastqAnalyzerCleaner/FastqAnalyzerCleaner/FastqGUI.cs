@@ -26,12 +26,19 @@ using System.Threading;
 
 namespace FastqAnalyzerCleaner 
 {
+    /// <summary>
+    /// The main GUI class for the program
+    /// </summary>
     public partial class FastqGUI : Form
     {
         private static FastqController fastqController;
         private const String FILE_DIALOGUE_FILTER = "All files (*.*)|*.*|Text Files (*.txt)|*.txt|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
         private BackgroundWorker loadWorker;
 
+        /// <summary>
+        /// Constructor for the main GUI class. Initializes the components that form the GUI, obtains an instance of the controller
+        /// and sets this class as its observer.
+        /// </summary>
         public FastqGUI()
         {
             InitializeComponent();
@@ -39,8 +46,17 @@ namespace FastqAnalyzerCleaner
             fastqController.SetObserver(this);
         }
 
+        /// <summary>
+        /// Delegate method to update GUI from non COM thread.  Matches method signiture for UpdateGUIThread.
+        /// </summary>
+        /// <param name="newFqFile"></param>
         private delegate void UpdateFastqGUI(IFqFile newFqFile);
 
+        /// <summary>
+        /// Method updates the GUI when on this thread or calls an invoke upon it for instances when called from non 
+        /// COM thread.  Ensures that alterations that occur within the GUI occur within its on thread model.
+        /// </summary>
+        /// <param name="newFqFile"></param>
         public void UpdateGUIThread(IFqFile newFqFile)
         {
             if (this.InvokeRequired)
@@ -51,6 +67,10 @@ namespace FastqAnalyzerCleaner
             UpdateGUI(newFqFile);
         }
 
+        /// <summary>
+        /// Updates the GUI.  Calls the FastqGUI_Display and FastqGUI_Charts classes to update the information contained within them.
+        /// </summary>
+        /// <param name="newFqFile"></param>
         public void UpdateGUI(IFqFile newFqFile)
         {
             //fqFile = newFqFile;
@@ -61,7 +81,11 @@ namespace FastqAnalyzerCleaner
             //FastqGUI_Charts.DrawCurrentChartSelection(fqFile);
         }
 
-        
+        /// <summary>
+        /// Obtains the file details that are to be processed and initializes the backgroundworker that will process the file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openFastqFile(object sender, EventArgs e)
         {
             loadWorker = new BackgroundWorker();
@@ -87,6 +111,12 @@ namespace FastqAnalyzerCleaner
             }
         }
         
+        /// <summary>
+        /// Parses file into component chunks through the parseFastq class before handing component details to FastqController
+        /// for processing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
@@ -111,12 +141,14 @@ namespace FastqAnalyzerCleaner
 
                     if (parseFq.getFastqFileCheck() == true && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
                     {
+                        //Create new fqFileMap in controller and prime state for load
                         FastqController.CONTROLLER_STATE = FastqController.FastqControllerState.PARSING;
                         FastqController.getInstance().CreateNewFastqFile(fileName, parseFq.GetFastqFileLength());
 
                         int fqFileComponentNumber = 1;
                         ProtocolBuffersSerialization protoBuf = new ProtocolBuffersSerialization();
 
+                        // Uses IEnummerable yield return to parse components back to this class via this foreach loop
                         foreach (FqFile_Component fqFileComponent in parseFq.ParseComponents())
                         {
                             Double progressPercent = (Double)(((fqFileComponentNumber-1) * FqFileMap.FQ_BLOCK_LIMIT) / (Double)(parseFq.GetLineCount() / 4));
@@ -174,12 +206,22 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Reports progress state to the GUI progress bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void loadWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             toolStripProgressBar1.Value = (e.ProgressPercentage);
             toolStripStatusLabel1.Text = (String) e.UserState;
         }
 
+        /// <summary>
+        /// Method allows the cancellation of backgroundworker thread for loading and processing files.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void loadWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
@@ -191,9 +233,13 @@ namespace FastqAnalyzerCleaner
                 UserResponse.InformationResponse("Loading cancelled at request");
             }
             FastqController.CONTROLLER_STATE = FastqController.FastqControllerState.STATE_READY;
-            Console.WriteLine("Process complete");
+            Console.WriteLine("Process ended.");
         }
 
+        /// <summary>
+        /// Internal class for passing both filename and fileStream to worker thread within the confines of the required method 
+        /// signature
+        /// </summary>
         public class InputFq
         {
             public FileStream fileStream { get; set; }
@@ -205,6 +251,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Responds to button click on the Save Fastq Menu Item, opens dialogue to select filename and then passes details to the 
+        /// controller class for processing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveFastqToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -225,6 +277,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Responds to button click on the Save CSV Menu Item, opens dialogue to select filename and then passes details to the 
+        /// controller class for processing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveCSVDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -244,6 +302,12 @@ namespace FastqAnalyzerCleaner
             }
         }  
         
+        /// <summary>
+        /// Method responds to button clicks on the clean 3 ends tool strip menu item.  It obtains int for nucleotides to clean 
+        /// from sequences and hands to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clean3EndsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -262,6 +326,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the clean 5 ends tool strip menu item.  It obtains int for nucleotides to clean 
+        /// from sequences and hands to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clean5EndsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -280,6 +350,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the tail clean tool strip menu item.  It obtains int for nucleotides to clean 
+        /// from sequences and hands to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cleanTailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -298,6 +374,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the rescan tool strip menu iteam and then hands details to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rescanToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -308,6 +389,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the show sequence statistics tool strip menu iteam and then hands details to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void showSequenceStatisticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -318,6 +404,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the reanalyze tool strip menu iteam and then hands details to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void reanalyzeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -328,6 +419,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the remove adapters tool strip menu iteam and then hands details to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeAdapterSequencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -338,6 +434,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the find sequences tool strip menu iteam and then hands details to controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void findSequenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -353,6 +454,12 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method responds to button clicks on the "remove sequences > with failed reads" menu item.  It hands the task to the controller for
+        /// processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void withFailedReadsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
@@ -363,11 +470,17 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Method corresponds to the "remove sequences > below mean threshold" button click.  It accepts a value for the mean threshold and then
+        /// passes to the controller for processing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void belowMeanThresholdToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                InputBoxResult result = InputBox.Show("Enter the Phred Mean Threshold For Sequences:", "Remove Sequences", "", new InputBoxValidatingHandler(inputBox_Validating));
+                InputBoxResult result = InputBox.Show("Enter the Phred Mean Threshold For Sequences:", "Remove Sequences", "", new inputBox_MeanThresholdValidating(inputBox_Validating));
                 if (result.OK)
                 {
                     if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
@@ -381,26 +494,51 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Changes the preferences item for the Clean Sweep sequencer determination method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Clean_Sweep_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setSeqDecisionMethod(true);
         }
 
+        /// <summary>
+        /// Changes the preferences item for the Decision Tree sequencer determination method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Decision_Tree_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setSeqDecisionMethod(false);
         }
 
+        /// <summary>
+        /// Changes the preferences item for the Single Core processing method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Single_Core_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setMultiCoreProcessing(false);
         }
 
+        /// <summary>
+        /// Changes the preferences item for the Single Core processing method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Multi_Core_Radio_CheckedChanged(object sender, EventArgs e)
         {
             Preferences.getInstance().setMultiCoreProcessing(true);
         }
 
+        /// <summary>
+        /// Changes the chart type via this combo box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
         {
             FastqGUI_Charts.FastqChartTypes chartType;
@@ -409,17 +547,32 @@ namespace FastqAnalyzerCleaner
             
         }
 
+        /// <summary>
+        /// Changes the preferences via the preferences Gui
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changePreferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PreferencesGUI preferencesGUI = new PreferencesGUI();
 
         }
 
+        /// <summary>
+        /// Flushes memory of fqprotobin files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void flushMemoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FastqController.getInstance().FlushMemoryOfProtobinFiles();
         }
 
+        /// <summary>
+        /// Exits program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.AllowQuit == true)
@@ -428,6 +581,11 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        /// <summary>
+        /// Validation method for the input box for an integer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void inputBox_Validating(object sender, InputBoxValidatingArgs e)
         {
             if (e.Text.Trim().Length == 0)
@@ -440,8 +598,22 @@ namespace FastqAnalyzerCleaner
                 e.Cancel = true;
                 e.Message = "Required";
             }
+            else
+            {
+                int i = HelperMethods.safeParseInt(e.Text.Trim());
+                if (i > FastqController.getInstance().getFastqFileMap().GlobalScores.MaxSeqSize || i < 1)
+                {
+                    e.Cancel = true;
+                    e.Message = "Required";
+                }
+            }
         }
 
+        /// <summary>
+        /// Validation method for input box for sequence data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void inputBox_SequenceValidating(object sender, InputBoxValidatingArgs e)
         {
             if (e.Text.Trim().Length == 0)
@@ -453,6 +625,34 @@ namespace FastqAnalyzerCleaner
             {
                 e.Cancel = true;
                 e.Message = "Required";
+            }
+        }
+
+        /// <summary>
+        /// Validation method for input box for mean threshold
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void inputBox_MeanThresholdValidating(object sender, InputBoxValidatingArgs e)
+        {
+            if (e.Text.Trim().Length == 0)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else if (HelperMethods.safeParseInt(e.Text.Trim()) == false)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else
+            {
+                int i = HelperMethods.safeParseInt(e.Text.Trim());
+                if (i > 40 || i < 1)
+                {
+                    e.Cancel = true;
+                    e.Message = "Required";
+                }
             }
         }
        
