@@ -32,7 +32,10 @@ namespace FastqAnalyzerCleaner
         private int LOWER_C_BOUNDARY = 13, UPPER_C_BOUNDARY = 25;
         private int LOWER_G_BOUNDARY = 13, UPPER_G_BOUNDARY = 25;
         private int N_MISREADS_THRESHOLD = 1;
-        private Boolean showSeqStats = true, sortMeanStats = false, sequencerDetermination = false, multiCore = true;
+        private Boolean showSeqStats = true, sortMeanStats = false, sequencerDetermination = false;
+
+        private readonly static int FREE_CORE = 1;
+        private int CoresToUse = Environment.ProcessorCount - FREE_CORE;
 
         /// <summary>
         /// Default constructor is private.  This class is initialized with a standard state that represents how the program should
@@ -69,7 +72,7 @@ namespace FastqAnalyzerCleaner
         /// <param name="showSeq">Show sequences as part of the sequence statistics function.</param>
         /// <param name="sortMean">Sort sequences by the Mean of their statistics.</param>
         /// <param name="mCores">Use multiple or single logical cores in the processing of files (where applicable).</param>
-        public void setPreferences(int LOWER_C_BOUNDARY, int UPPER_C_BOUNDARY, int LOWER_G_BOUNDARY, int UPPER_G_BOUNDARY, int N_MISREADS_THRESHOLD, int ASSUMPTION_POINT, Boolean showSeq, Boolean sortMean, Boolean mCores)
+        public void setPreferences(int LOWER_C_BOUNDARY, int UPPER_C_BOUNDARY, int LOWER_G_BOUNDARY, int UPPER_G_BOUNDARY, int N_MISREADS_THRESHOLD, int ASSUMPTION_POINT, Boolean showSeq, Boolean sortMean, int cores)
         {
             this.LOWER_C_BOUNDARY = LOWER_C_BOUNDARY;
             this.UPPER_C_BOUNDARY = UPPER_C_BOUNDARY;
@@ -79,7 +82,7 @@ namespace FastqAnalyzerCleaner
             this.ASSUMPTION_POINT = ASSUMPTION_POINT;
             this.showSeqStats = showSeq;
             this.sortMeanStats = sortMean;
-            this.multiCore = mCores;
+            this.CoresToUse = cores;
         }
 
         /// <summary>
@@ -176,18 +179,32 @@ namespace FastqAnalyzerCleaner
         /// Sets multi core (true) or single core processing logic
         /// </summary>
         /// <param name="multi">The boolean to decide the processing cores to use</param>
-        public void setMultiCoreProcessing(Boolean multi)
+        public void setMultiCoreProcessing()
         {
-            this.multiCore = multi;
+            CoresToUse = Environment.ProcessorCount;
+        }
+
+        public void setSingleCoreProcessing()
+        {
+            CoresToUse = 1;
         }
 
 		/// <summary>
         /// Returns the boolean that determines whether to use single or multi(true) core processing
         /// </summary>
         /// <returns></returns>
-        public Boolean getMultiCoreProcessing()
+        public int getCoresUsed()
         {
-            return multiCore;
+            return CoresToUse;
         }
+
+        /// <summary>
+        /// Returns the number of cores to use in the parallelized tasks
+        /// </summary>
+        /// <returns></returns>
+        public int getCoresToUse()
+        {
+            return CoresToUse;
+        }   
     }
 }

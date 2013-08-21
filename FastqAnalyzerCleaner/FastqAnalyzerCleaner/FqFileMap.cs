@@ -26,6 +26,9 @@ namespace FastqAnalyzerCleaner
         public FqFile_Component_Details GlobalDetails { get; set; }
         public Dictionary<String, FqFile_Component_Details> ComponentMap;
 
+        public String LastTask { get; set; }
+        public String TimeTaken { get; set; }
+
         public Boolean isMapConstructed = false;
 
         public List<FqSequence> QueriedSequences;

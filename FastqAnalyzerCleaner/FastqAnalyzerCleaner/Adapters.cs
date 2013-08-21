@@ -31,6 +31,8 @@ namespace FastqAnalyzerCleaner
         private static List<Adapter> adapters;
         private int largestAdapterSequence;
 
+        public readonly static String ADAPTER_SERIALIZATION_NAME = "adptr.bin";
+
         /// <summary>
         /// Constructor attempts to deserialize the adapter class into memory and finds length of largest adapter.
         /// </summary>
@@ -140,7 +142,7 @@ namespace FastqAnalyzerCleaner
         {
             try
             {
-                using (Stream stream = File.Open(@"adptr.bin", FileMode.Open))
+                using (Stream stream = File.Open(@ADAPTER_SERIALIZATION_NAME, FileMode.Open))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
                     List<Adapter> tempAdapterResource = (List<Adapter>)bin.Deserialize(stream);
@@ -176,7 +178,7 @@ namespace FastqAnalyzerCleaner
 
             try
             {
-                using (Stream stream = File.Open(@"adptr.bin", FileMode.Create))
+                using (Stream stream = File.Open(@ADAPTER_SERIALIZATION_NAME, FileMode.Create))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
                     bin.Serialize(stream, tempAdapterResource);

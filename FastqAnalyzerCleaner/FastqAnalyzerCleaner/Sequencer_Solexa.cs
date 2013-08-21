@@ -28,7 +28,8 @@ namespace FastqAnalyzerCleaner
 	    private int flowCellLane, tileNo, xCoOrd, yCoOrd, pairMember;
 	
 	    private readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
-	    private readonly int qualityDistributionSpread = 40;
+	    private readonly int qualityDistributionSpread = 45;
+        private readonly int subZeroQualities = 5;
 
         private Sequencer_Solexa() { }
 
@@ -111,6 +112,11 @@ namespace FastqAnalyzerCleaner
         public override int getDistributionSpread()
         {
             return qualityDistributionSpread;
+        }
+
+        public override int getSubZeroQualities()
+        {
+            return subZeroQualities;
         }
 
         public override String getMachineName(String header)

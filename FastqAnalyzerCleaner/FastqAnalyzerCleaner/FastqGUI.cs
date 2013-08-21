@@ -73,11 +73,8 @@ namespace FastqAnalyzerCleaner
         /// <param name="newFqFile"></param>
         public void UpdateGUI(GenericFastqInputs input)
         {
-            //fqFile = newFqFile;
-
-            //FastqGUI_Output.getInstance().OutputFileDataToConsole(fqFile);
             Console.WriteLine("Total Memory Allocated: {0}", HelperMethods.ConvertBytesToMegabytes(GC.GetTotalMemory(false)));
-            // UpdateDisplay 
+            FastqGUI_Display.Update(input);
             //FastqGUI_Charts.DrawCurrentChartSelection(fqFile);
         }
 
@@ -87,16 +84,8 @@ namespace FastqAnalyzerCleaner
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void openFastqFile(object sender, EventArgs e)
-        {
-            loadWorker = new BackgroundWorker();
-
-            loadWorker.WorkerReportsProgress = true;
-            loadWorker.WorkerSupportsCancellation = true;
-            loadWorker.DoWork += new DoWorkEventHandler(loadWorker_DoWork);
-            loadWorker.ProgressChanged += new ProgressChangedEventHandler(loadWorker_ProgressChanged);
-            loadWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(loadWorker_Completed);
-            
-            if (loadWorker.IsBusy != true)
+        {            
+            if (FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
                 OpenFastqDialogue.Filter = FILE_DIALOGUE_FILTER;
                 if (OpenFastqDialogue.ShowDialog() == DialogResult.OK)
@@ -104,9 +93,20 @@ namespace FastqAnalyzerCleaner
                     FastqController.getInstance().PrimeForNewFile();
                     GC.Collect();
 
-                    FileStream inStr = new FileStream(OpenFastqDialogue.FileName, FileMode.Open);
-                    InputFq input = new InputFq(inStr, OpenFastqDialogue.FileName);
-                    loadWorker.RunWorkerAsync(input);
+                    loadWorker = new BackgroundWorker();
+
+                    loadWorker.WorkerReportsProgress = true;
+                    loadWorker.WorkerSupportsCancellation = true;
+                    loadWorker.DoWork += new DoWorkEventHandler(loadWorker_DoWork);
+                    loadWorker.ProgressChanged += new ProgressChangedEventHandler(loadWorker_ProgressChanged);
+                    loadWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(loadWorker_Completed);
+
+                    if (loadWorker.IsBusy != true)
+                    {
+                        FileStream inStr = new FileStream(OpenFastqDialogue.FileName, FileMode.Open);
+                        InputFq input = new InputFq(inStr, OpenFastqDialogue.FileName);
+                        loadWorker.RunWorkerAsync(input);
+                    }
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace FastqAnalyzerCleaner
 
                                 if (returnValue == false)
                                 {
-                                    UserResponse.ErrorResponse("File serialization methods failed, please check you have sufficient memory and restart the application", "File Error");
+                                    UserResponse.ErrorResponse("File serialization methods failed, please check you have hard disk space and restart the application", "File Error");
                                     Console.WriteLine("Serialization failed");
                                     loadWorker.CancelAsync();
                                 }
@@ -522,7 +522,7 @@ namespace FastqAnalyzerCleaner
         /// <param name="e"></param>
         private void Single_Core_Radio_CheckedChanged(object sender, EventArgs e)
         {
-            Preferences.getInstance().setMultiCoreProcessing(false);
+            Preferences.getInstance().setSingleCoreProcessing();
         }
 
         /// <summary>
@@ -532,7 +532,7 @@ namespace FastqAnalyzerCleaner
         /// <param name="e"></param>
         private void Multi_Core_Radio_CheckedChanged(object sender, EventArgs e)
         {
-            Preferences.getInstance().setMultiCoreProcessing(true);
+            Preferences.getInstance().setMultiCoreProcessing();
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace FastqAnalyzerCleaner
             else
             {
                 int i = Int32.Parse(e.Text.Trim());
-                if (i > FastqController.getInstance().GetFqFileMap().GlobalDetails.MaxSeqSize || i < 1)
+                if (i > (FastqController.getInstance().GetFqFileMap().GlobalDetails.MaxSeqSize - 1) && i < 1)
                 {
                     e.Cancel = true;
                     e.Message = "Required";

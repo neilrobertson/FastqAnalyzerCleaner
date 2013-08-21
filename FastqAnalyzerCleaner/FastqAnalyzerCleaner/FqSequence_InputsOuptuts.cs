@@ -19,6 +19,7 @@ namespace FastqAnalyzerCleaner
             public Int32 gCount { get; set; }
             public Int32 nCount { get; set; }
             public int sequenceLength { get; set; }
+            public int subZeroOffset { get; set; }
 
             public FqSequence_InputsOuptuts(String sequencerType, String taskType, FqFile_Component fqFile)
             {
@@ -30,6 +31,7 @@ namespace FastqAnalyzerCleaner
                         distributes.Add(0);
                     }
                     perSeqQuals = new int[fqFile.getMaxSeqSize()];
+                    subZeroOffset = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getSubZeroQualities();
                 }
                 else if (taskType == ADAPTER_TASK)
                 {

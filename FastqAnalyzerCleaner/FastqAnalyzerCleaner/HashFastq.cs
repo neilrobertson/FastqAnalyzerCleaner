@@ -24,6 +24,8 @@ namespace FastqAnalyzerCleaner
     {
         private Dictionary<int, FqNucleotideRead> map;
 	    private HashSet<int> checkExists;
+
+        public readonly static String FQ_FILE_MAP_SERIALIZING_NAME = "fqhsh.bin";
 	
 	    public HashFastq()
 	    {
@@ -44,7 +46,7 @@ namespace FastqAnalyzerCleaner
         {
             try
             {
-                using (Stream stream = File.Open("fqhsh.bin", FileMode.Open))
+                using (Stream stream = File.Open(@FQ_FILE_MAP_SERIALIZING_NAME, FileMode.Open))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
                     Dictionary<int, FqNucleotideRead> hashmap = (Dictionary<int, FqNucleotideRead>)bin.Deserialize(stream);
@@ -71,7 +73,7 @@ namespace FastqAnalyzerCleaner
             Dictionary<int, FqNucleotideRead> hashmap = HashFastq.createHashMap();
             try
             {
-                using (Stream stream = File.Open("fqhsh.bin", FileMode.Create))
+                using (Stream stream = File.Open(@FQ_FILE_MAP_SERIALIZING_NAME, FileMode.Create))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
                     bin.Serialize(stream, hashmap);

@@ -12,6 +12,7 @@ namespace FastqAnalyzerCleaner
         public String sequencerType { get; set; }
         public String fileName { get; set; }
         public int TotalNucs { get; set; }
+        public int TotalSequences { get; set; }
         public int NucleotidesCleaned { get; set; }
         public List<int> Distribution { get; set; }
         public List<int> SequenceLengthDistribution { get; set; }
@@ -37,6 +38,7 @@ namespace FastqAnalyzerCleaner
             this.ComponentName = component.getFileName();
             this.sequencerType = component.getSequencerType();
             this.TotalNucs = component.getTotalNucleotides();
+            this.TotalSequences = component.getFastqArraySize();
             this.NucleotidesCleaned = component.getNucleotidesCleaned();
             this.Distribution = component.getDistribution();
             this.SequenceLengthDistribution = component.getSequenceLengthDistribution();
@@ -57,15 +59,21 @@ namespace FastqAnalyzerCleaner
         {
             this.sequencerType = inputDetails.sequencerType;
             this.TotalNucs += inputDetails.TotalNucs;
+            this.TotalSequences += inputDetails.TotalSequences;
             this.NucleotidesCleaned += inputDetails.NucleotidesCleaned;
             this.NCount += inputDetails.NCount;
             this.CCount += inputDetails.CCount;
             this.GCount += inputDetails.GCount;
             this.SequencesRemoved += inputDetails.SequencesRemoved;
+            
             if (inputDetails.MaxSeqSize > this.MaxSeqSize)
                 this.MaxSeqSize = inputDetails.MaxSeqSize;
-            if (inputDetails.MinSeqSize < this.MinSeqSize)
+
+            if (this.MinSeqSize == 0)
                 this.MinSeqSize = inputDetails.MinSeqSize;
+            else if (inputDetails.MinSeqSize < this.MinSeqSize)
+                this.MinSeqSize = inputDetails.MinSeqSize;
+
             CalculatePercents();
             CombineDistributionLists(inputDetails.Distribution);
             CombineSequenceLengthDistributionLists(inputDetails.SequenceLengthDistribution);
@@ -109,7 +117,7 @@ namespace FastqAnalyzerCleaner
 
         private void InitializeDistributionList()
         {
-            Distribution = new List<int>(40);
+            Distribution = new List<int>(SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread());
             for (int j = 0; j <= SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread(); j++)
             {
                 Distribution.Add(0);

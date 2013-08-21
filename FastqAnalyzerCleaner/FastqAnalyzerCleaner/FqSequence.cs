@@ -104,7 +104,7 @@ namespace FastqAnalyzerCleaner
 
         public int cleanStarts(int remove)
         {
-            if (remove > index)
+            if (remove >= index)
             {
                 RemoveSequence = true;
                 return index;
@@ -123,7 +123,7 @@ namespace FastqAnalyzerCleaner
 
         public int cleanEnds(int remove)
         {
-            if (remove > index)
+            if (remove >= index)
             {
                 RemoveSequence = true;
                 return index;
@@ -188,11 +188,10 @@ namespace FastqAnalyzerCleaner
                 int qualityScore = map[fastqSequence[i]].getQualityScore();
                 qualitySum += qualityScore;
                 qualities.Add(qualityScore);
-                if (qualityScore >= 0)
-                {
-                    int currentPop = inputs.distributes[qualityScore];
-                    inputs.distributes[qualityScore] = (currentPop + 1);
-                }
+
+                int currentPop = inputs.distributes[(qualityScore + inputs.subZeroOffset)];
+                inputs.distributes[(qualityScore + inputs.subZeroOffset)] = (currentPop + 1);
+                
             }
             inputs.cCount = CCount;
             inputs.gCount = GCount;

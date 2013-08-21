@@ -29,6 +29,7 @@ namespace FastqAnalyzerCleaner
 	
 	    private readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
 	    private readonly int qualityDistributionSpread = 40;
+        private readonly int subZeroQualities = 0;
 
         private Sequencer_Default() { }
 
@@ -60,6 +61,11 @@ namespace FastqAnalyzerCleaner
         public override int getDistributionSpread()
         {
             return qualityDistributionSpread;
+        }
+
+        public override int getSubZeroQualities()
+        {
+            return subZeroQualities;
         }
 
         public override String getMachineName(String header)

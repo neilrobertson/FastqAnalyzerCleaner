@@ -177,7 +177,7 @@ namespace FastqAnalyzerCleaner
 
                 if (IsFastqFile == true)
                 {
-
+                    FastqController.getInstance().GetFqFileMap().FastqFileFormatType = FILE_FORMAT_TYPE;
                     FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
                     //fastqFile = FqFileSpecifier.getInstance().getFqFile(Preferences.getInstance().getMultiCoreProcessing());
                     fastqFile.setFastqFileName(fileName);
@@ -234,6 +234,8 @@ namespace FastqAnalyzerCleaner
   
                 if (IsFastqFile == true)
                 {
+                    FastqController.getInstance().GetFqFileMap().FastqFileFormatType = FILE_FORMAT_TYPE;
+
                     FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
                     FqFile_Component fastqFileComponent = new FqFile_Component();
 
@@ -276,6 +278,7 @@ namespace FastqAnalyzerCleaner
             }
             finally
             {
+                fileReader.FlushAsync();
                 fileReader.Close();
             }
         }
@@ -294,6 +297,8 @@ namespace FastqAnalyzerCleaner
 
             if (IsFastqFile == true)
             {
+                FastqController.getInstance().GetFqFileMap().FastqFileFormatType = FILE_FORMAT_TYPE;
+
                 FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
                 //fastqFile = FqFileSpecifier.getInstance().getFqFile(Preferences.getInstance().getMultiCoreProcessing());
                 fastqFile.setFastqFileName(fileName);
@@ -358,6 +363,8 @@ namespace FastqAnalyzerCleaner
 
                 if (IsFastqFile == true)
                 {
+                    FastqController.getInstance().GetFqFileMap().FastqFileFormatType = FILE_FORMAT_TYPE;
+
                     FqNucleotideRead fqRead = new FqNucleotideRead(' ', ' ');
                     FqFile_Component fastqFileComponent = new FqFile_Component();
 

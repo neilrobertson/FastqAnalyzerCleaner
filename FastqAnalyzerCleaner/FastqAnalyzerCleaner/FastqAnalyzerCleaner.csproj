@@ -96,9 +96,7 @@
     <Compile Include="IFqFile.cs" />
     <Compile Include="DirectoryController.cs" />
     <Compile Include="FastqController.cs" />
-    <Compile Include="FastqGUI_Charts.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="FastqGUI_Charts.cs" />
     <Compile Include="FastqGUI_Display.cs">
       <SubType>Component</SubType>
     </Compile>

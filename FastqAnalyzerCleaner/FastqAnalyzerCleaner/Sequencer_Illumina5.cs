@@ -29,6 +29,7 @@ namespace FastqAnalyzerCleaner
 	
 	    public static readonly int SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION = 64;
 	    public static readonly int qualityDistributionSpread = 40;
+        public static readonly int subZeroQualities = 0;
 	
 	    private Sequencer_Illumina5() { }
 	
@@ -40,19 +41,16 @@ namespace FastqAnalyzerCleaner
   	    {
   		    SequencerDiscriminator.register(sequencerName, sequencer);
  	    }
-  	
-        public override int getQualityScore(char qualityValue)
-	    {
-		    int qualityScore;
-		    int ASCII_CHARACTER_NUMERICAL_VALUE = (int) qualityValue;
-		    qualityScore = ASCII_CHARACTER_NUMERICAL_VALUE - SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION;
-		
-		    return qualityScore;
-	    }
 
-	    /*
-	     * TODO: incomplete method converts quality score to phred probabity scores
-	     */
+        public override int getQualityScore(char qualityValue)
+        {
+            int qualityScore;
+            int ASCII_CHARACTER_NUMERICAL_VALUE = (int)qualityValue;
+            qualityScore = ASCII_CHARACTER_NUMERICAL_VALUE - SEQUENCER_SPECIFIC_ASCII_SUBRTRACTION;
+
+            return qualityScore;
+        }
+
         public override int getPhredProbability(char qualityValue)
 	    {
 		    int phredProbabilityScore = 0;
@@ -63,6 +61,11 @@ namespace FastqAnalyzerCleaner
 	    {
 		    return qualityDistributionSpread;
 	    }
+
+        public override int getSubZeroQualities()
+        {
+            return subZeroQualities;
+        }
 
         public override String getMachineName(String header)
 	    {

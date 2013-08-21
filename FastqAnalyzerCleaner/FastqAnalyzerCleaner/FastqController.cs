@@ -188,6 +188,8 @@ namespace FastqAnalyzerCleaner
                     sw.Stop();
                     Console.WriteLine("Task: {0} Completed in Time: {1}", task.getStatement(), sw.Elapsed);
 
+                    fqFileMap.LastTask = input.TaskAction;
+                    fqFileMap.TimeTaken = sw.Elapsed.ToString();
                     observer.UpdateGUIThread(input);
                 }
                 catch (IOException exception)

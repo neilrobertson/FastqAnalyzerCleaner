@@ -35,5 +35,6 @@ namespace FastqAnalyzerCleaner
         abstract public int getYCoOrd(string header);
         abstract public int getFlowCellLane(string header);
         abstract public int getDistributionSpread();
+        abstract public int getSubZeroQualities();
     }
 }

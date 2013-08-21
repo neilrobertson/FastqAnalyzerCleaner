@@ -58,6 +58,9 @@ namespace FastqAnalyzerCleaner
             this.clean3EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clean5EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanTailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeSequencesWithFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.belowMeanThresholdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.removeAdapterSequencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -82,16 +85,15 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box = new System.Windows.Forms.GroupBox();
             this.FastqGUITabs = new System.Windows.Forms.TabControl();
             this.InformationTab = new System.Windows.Forms.TabPage();
+            this.FastqGUI_Display = new FastqGUI_Display();
             this.GraphicsTab = new System.Windows.Forms.TabPage();
             this.Charts_Combo_Selector = new System.Windows.Forms.ComboBox();
-            this.removeSequencesWithFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.withFailedReadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.belowMeanThresholdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
             this.Sequencer_Selection_Group_Box.SuspendLayout();
             this.FastqGUITabs.SuspendLayout();
+            this.InformationTab.SuspendLayout();
             this.GraphicsTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -210,6 +212,29 @@ namespace FastqAnalyzerCleaner
             this.cleanTailsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.cleanTailsToolStripMenuItem.Text = "Trim Tails";
             this.cleanTailsToolStripMenuItem.Click += new System.EventHandler(this.cleanTailsToolStripMenuItem_Click);
+            // 
+            // removeSequencesWithFailedReadsToolStripMenuItem
+            // 
+            this.removeSequencesWithFailedReadsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.withFailedReadsToolStripMenuItem,
+            this.belowMeanThresholdToolStripMenuItem});
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Name = "removeSequencesWithFailedReadsToolStripMenuItem";
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+            this.removeSequencesWithFailedReadsToolStripMenuItem.Text = "Remove Sequences";
+            // 
+            // withFailedReadsToolStripMenuItem
+            // 
+            this.withFailedReadsToolStripMenuItem.Name = "withFailedReadsToolStripMenuItem";
+            this.withFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.withFailedReadsToolStripMenuItem.Text = "With Failed Reads";
+            this.withFailedReadsToolStripMenuItem.Click += new System.EventHandler(this.withFailedReadsToolStripMenuItem_Click);
+            // 
+            // belowMeanThresholdToolStripMenuItem
+            // 
+            this.belowMeanThresholdToolStripMenuItem.Name = "belowMeanThresholdToolStripMenuItem";
+            this.belowMeanThresholdToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.belowMeanThresholdToolStripMenuItem.Text = "Below Mean Threshold...";
+            this.belowMeanThresholdToolStripMenuItem.Click += new System.EventHandler(this.belowMeanThresholdToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -420,6 +445,7 @@ namespace FastqAnalyzerCleaner
             // InformationTab
             // 
             this.InformationTab.BackColor = System.Drawing.Color.Transparent;
+            this.InformationTab.Controls.Add(this.FastqGUI_Display);
             this.InformationTab.Location = new System.Drawing.Point(24, 4);
             this.InformationTab.Name = "InformationTab";
             this.InformationTab.Padding = new System.Windows.Forms.Padding(3);
@@ -427,6 +453,22 @@ namespace FastqAnalyzerCleaner
             this.InformationTab.TabIndex = 0;
             this.InformationTab.Text = "[FASTQ DETAILS]";
             this.InformationTab.ToolTipText = "Shows Fastq file details.";
+            // 
+            // FastqGUI_Display
+            // 
+            this.FastqGUI_Display.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FastqGUI_Display.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.FastqGUI_Display.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.FastqGUI_Display.Cursor = System.Windows.Forms.Cursors.Default;
+            this.FastqGUI_Display.Location = new System.Drawing.Point(6, 6);
+            this.FastqGUI_Display.Margin = new System.Windows.Forms.Padding(2);
+            this.FastqGUI_Display.Name = "FastqGUI_Display";
+            this.FastqGUI_Display.ReadOnly = true;
+            this.FastqGUI_Display.Size = new System.Drawing.Size(897, 499);
+            this.FastqGUI_Display.TabIndex = 9;
+            this.FastqGUI_Display.Text = "";
             // 
             // GraphicsTab
             // 
@@ -450,29 +492,6 @@ namespace FastqAnalyzerCleaner
             this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 23);
             this.Charts_Combo_Selector.TabIndex = 1;
             this.Charts_Combo_Selector.SelectedIndexChanged += new System.EventHandler(this.Charts_Combo_Selector_SelectedIndexChanged);
-            // 
-            // removeSequencesWithFailedReadsToolStripMenuItem
-            // 
-            this.removeSequencesWithFailedReadsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.withFailedReadsToolStripMenuItem,
-            this.belowMeanThresholdToolStripMenuItem});
-            this.removeSequencesWithFailedReadsToolStripMenuItem.Name = "removeSequencesWithFailedReadsToolStripMenuItem";
-            this.removeSequencesWithFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.removeSequencesWithFailedReadsToolStripMenuItem.Text = "Remove Sequences";
-            //
-            // withFailedReadsToolStripMenuItem
-            // 
-            this.withFailedReadsToolStripMenuItem.Name = "withFailedReadsToolStripMenuItem";
-            this.withFailedReadsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.withFailedReadsToolStripMenuItem.Text = "With Failed Reads";
-            this.withFailedReadsToolStripMenuItem.Click += new System.EventHandler(this.withFailedReadsToolStripMenuItem_Click);
-            // 
-            // belowMeanThresholdToolStripMenuItem
-            // 
-            this.belowMeanThresholdToolStripMenuItem.Name = "belowMeanThresholdToolStripMenuItem";
-            this.belowMeanThresholdToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.belowMeanThresholdToolStripMenuItem.Text = "Below Mean Threshold...";
-            this.belowMeanThresholdToolStripMenuItem.Click += new System.EventHandler(this.belowMeanThresholdToolStripMenuItem_Click);
             // 
             // FastqGUI
             // 
@@ -499,6 +518,7 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box.ResumeLayout(false);
             this.Sequencer_Selection_Group_Box.PerformLayout();
             this.FastqGUITabs.ResumeLayout(false);
+            this.InformationTab.ResumeLayout(false);
             this.GraphicsTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -544,7 +564,6 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ComboBox Charts_Combo_Selector;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem removeAdapterSequencesToolStripMenuItem;
-        private FastqGUI_Display FastqGUI_Display;
         private System.Windows.Forms.ToolStripMenuItem saveCSVDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem findSequenceToolStripMenuItem;
@@ -553,6 +572,7 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ToolStripMenuItem removeSequencesWithFailedReadsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem withFailedReadsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem belowMeanThresholdToolStripMenuItem;
+        private FastqGUI_Display FastqGUI_Display;
     }
 }
 

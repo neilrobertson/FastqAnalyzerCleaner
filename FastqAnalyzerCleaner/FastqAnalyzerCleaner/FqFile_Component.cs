@@ -249,12 +249,14 @@ namespace FastqAnalyzerCleaner
         public override List<FqSequence> findSequence(String sequence)
         {
             List<FqSequence> foundSequences = new List<FqSequence>();
-            for (int i = 0; i < index; i++)
+            object locker = new object();
+            Parallel.For(0, index, i =>
             {
                 FqSequence result = fastqSeq[i].findSequence(sequence, Fq_FILE_MAP);
                 if (result != null)
-                    foundSequences.Add(result);
-            }
+                    lock(locker)
+                        foundSequences.Add(result);
+            });
             Console.WriteLine("Found {0} Sequences Containing: {1}", foundSequences.Count, sequence);
             return foundSequences;
         }
@@ -361,7 +363,9 @@ namespace FastqAnalyzerCleaner
         public override List<int> performDistributionTest()
 	    {
             fillDistributionList();
-            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE)},
+            int subZeroOffset = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getSubZeroQualities();
+
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse())},
                 // Initialize the local states
             () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
                 // Accumulate the thread-local computations in the loop body
@@ -370,8 +374,8 @@ namespace FastqAnalyzerCleaner
                 for (int j = 0; i < fastqSeq[i].getFastqSeqSize(); j++)
                 {
                     int qualityScore = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
-                    int currentPop = syncLists.distributes[qualityScore];
-                    syncLists.distributes[qualityScore] = (currentPop + 1);
+                    int currentPop = syncLists.distributes[(qualityScore + subZeroOffset)];
+                    syncLists.distributes[(qualityScore + subZeroOffset)] = (currentPop + 1);
                 }
                 return syncLists;
             },
@@ -412,7 +416,7 @@ namespace FastqAnalyzerCleaner
 		    totalNucleotides();
 		    resetCounts();
 
-            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse()) },
                 // Initialize the local states
              () => new System.Collections.Concurrent.BlockingCollection<int>(),
                 // Accumulate the thread-local computations in the loop body
@@ -457,7 +461,9 @@ namespace FastqAnalyzerCleaner
 
 		    fillDistributionList();
 
-            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+            int subZeroOffset = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getSubZeroQualities();
+
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse()) },
             // Initialize the local states
             () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
             // Accumulate the thread-local computations in the loop body
@@ -472,11 +478,10 @@ namespace FastqAnalyzerCleaner
                    else if (nucleotide == 'G') Interlocked.Increment(ref gCount);
 
                    int qualityScore = Fq_FILE_MAP[fastqSeq[i].getFastqSeqAtPosition(j)].getQualityScore();
-                   if (qualityScore >= 0)
-                   {
-                       int currentPop = syncLists.distributes[qualityScore];
-                       syncLists.distributes[qualityScore] = (currentPop + 1);
-                   }
+                   
+                   int currentPop = syncLists.distributes[(qualityScore + subZeroOffset)];
+                   syncLists.distributes[(qualityScore + subZeroOffset)] = (currentPop + 1);
+                   
                }
                 return syncLists;
             },
@@ -514,8 +519,8 @@ namespace FastqAnalyzerCleaner
             fillSequenceLengthDistributionList();
 
             BuildPerSequenceStatisticsList();
-            
-            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse()) },
                 // Initialize the local states
             () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
                 // Accumulate the thread-local computations in the loop body
@@ -591,7 +596,7 @@ namespace FastqAnalyzerCleaner
 
         private void fillDistributionList()
 	    {
-            distribution = new List<int>(40);
+            distribution = new List<int>(SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread());
 		    for (int j = 0; j <= SequencerDiscriminator.getSequencerSpecifier(sequencerType).getDistributionSpread(); j++)
 			    distribution.Add(0);
 	    }
@@ -599,8 +604,8 @@ namespace FastqAnalyzerCleaner
         public override int totalNucleotides()
 	    {
 		    totalNucs = 0;
-            maxSeqSize = 0;
-            minSeqSize = 0;
+            maxSeqSize = fastqSeq[0].getFastqSeqSize();
+            minSeqSize = fastqSeq[0].getFastqSeqSize();
             int seqNucs = 0;
 
 		    for (int i = 0; i < index; i++)
