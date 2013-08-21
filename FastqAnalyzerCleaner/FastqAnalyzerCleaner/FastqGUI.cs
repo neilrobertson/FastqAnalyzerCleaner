@@ -74,7 +74,7 @@ namespace FastqAnalyzerCleaner
         public void UpdateGUI(GenericFastqInputs input)
         {
             Console.WriteLine("Total Memory Allocated: {0}", HelperMethods.ConvertBytesToMegabytes(GC.GetTotalMemory(false)));
-            FastqGUI_Display.Update(input);
+            //FastqGUI_Display.Update(input);
             //FastqGUI_Charts.DrawCurrentChartSelection(fqFile);
         }
 

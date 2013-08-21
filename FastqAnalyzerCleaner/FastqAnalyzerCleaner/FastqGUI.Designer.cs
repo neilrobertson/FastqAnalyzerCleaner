@@ -42,6 +42,7 @@ namespace FastqAnalyzerCleaner
         /// </summary>
         private void InitializeComponent()
         { 
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FastqGUI));
             this.OpenFastqDialogue = new System.Windows.Forms.OpenFileDialog();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
@@ -54,6 +55,10 @@ namespace FastqAnalyzerCleaner
             this.flushMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reanalyzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSequenceStatisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clean3EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clean5EndsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,10 +71,6 @@ namespace FastqAnalyzerCleaner
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.findSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rescanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reanalyzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showSequenceStatisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,9 +86,11 @@ namespace FastqAnalyzerCleaner
             this.Sequencer_Selection_Group_Box = new System.Windows.Forms.GroupBox();
             this.FastqGUITabs = new System.Windows.Forms.TabControl();
             this.InformationTab = new System.Windows.Forms.TabPage();
-            this.FastqGUI_Display = new FastqGUI_Display();
+            this.FastqGUI_Display = new System.Windows.Forms.RichTextBox();
             this.GraphicsTab = new System.Windows.Forms.TabPage();
+            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.Charts_Combo_Selector = new System.Windows.Forms.ComboBox();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.MenuStrip.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
@@ -95,14 +98,15 @@ namespace FastqAnalyzerCleaner
             this.FastqGUITabs.SuspendLayout();
             this.InformationTab.SuspendLayout();
             this.GraphicsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // MenuStrip
             // 
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
             this.actionToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.preferencesToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
@@ -175,6 +179,37 @@ namespace FastqAnalyzerCleaner
             this.quitToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // actionToolStripMenuItem
+            // 
+            this.actionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rescanToolStripMenuItem,
+            this.reanalyzeToolStripMenuItem,
+            this.showSequenceStatisticsToolStripMenuItem});
+            this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.actionToolStripMenuItem.Text = "ACTION";
+            // 
+            // rescanToolStripMenuItem
+            // 
+            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
+            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.rescanToolStripMenuItem.Text = "Rescan";
+            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.rescanToolStripMenuItem_Click);
+            // 
+            // reanalyzeToolStripMenuItem
+            // 
+            this.reanalyzeToolStripMenuItem.Name = "reanalyzeToolStripMenuItem";
+            this.reanalyzeToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.reanalyzeToolStripMenuItem.Text = "Reanalyze";
+            this.reanalyzeToolStripMenuItem.Click += new System.EventHandler(this.reanalyzeToolStripMenuItem_Click);
+            // 
+            // showSequenceStatisticsToolStripMenuItem
+            // 
+            this.showSequenceStatisticsToolStripMenuItem.Name = "showSequenceStatisticsToolStripMenuItem";
+            this.showSequenceStatisticsToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.showSequenceStatisticsToolStripMenuItem.Text = "Show Sequence Statistics";
+            this.showSequenceStatisticsToolStripMenuItem.Click += new System.EventHandler(this.showSequenceStatisticsToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -264,37 +299,6 @@ namespace FastqAnalyzerCleaner
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(218, 6);
-            // 
-            // actionToolStripMenuItem
-            // 
-            this.actionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rescanToolStripMenuItem,
-            this.reanalyzeToolStripMenuItem,
-            this.showSequenceStatisticsToolStripMenuItem});
-            this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
-            this.actionToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.actionToolStripMenuItem.Text = "ACTION";
-            // 
-            // rescanToolStripMenuItem
-            // 
-            this.rescanToolStripMenuItem.Name = "rescanToolStripMenuItem";
-            this.rescanToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.rescanToolStripMenuItem.Text = "Rescan";
-            this.rescanToolStripMenuItem.Click += new System.EventHandler(this.rescanToolStripMenuItem_Click);
-            // 
-            // reanalyzeToolStripMenuItem
-            // 
-            this.reanalyzeToolStripMenuItem.Name = "reanalyzeToolStripMenuItem";
-            this.reanalyzeToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.reanalyzeToolStripMenuItem.Text = "Reanalyze";
-            this.reanalyzeToolStripMenuItem.Click += new System.EventHandler(this.reanalyzeToolStripMenuItem_Click);
-            // 
-            // showSequenceStatisticsToolStripMenuItem
-            // 
-            this.showSequenceStatisticsToolStripMenuItem.Name = "showSequenceStatisticsToolStripMenuItem";
-            this.showSequenceStatisticsToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.showSequenceStatisticsToolStripMenuItem.Text = "Show Sequence Statistics";
-            this.showSequenceStatisticsToolStripMenuItem.Click += new System.EventHandler(this.showSequenceStatisticsToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -472,6 +476,9 @@ namespace FastqAnalyzerCleaner
             // 
             // GraphicsTab
             // 
+            this.GraphicsTab.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.GraphicsTab.Controls.Add(this.trackBar1);
+            this.GraphicsTab.Controls.Add(this.zedGraphControl1);
             this.GraphicsTab.Controls.Add(this.Charts_Combo_Selector);
             this.GraphicsTab.Location = new System.Drawing.Point(24, 4);
             this.GraphicsTab.Name = "GraphicsTab";
@@ -480,7 +487,20 @@ namespace FastqAnalyzerCleaner
             this.GraphicsTab.TabIndex = 1;
             this.GraphicsTab.Text = "[FASTQ GRAPHICS]";
             this.GraphicsTab.ToolTipText = "Shows Fastq file graphics.";
-            this.GraphicsTab.UseVisualStyleBackColor = true;
+            // 
+            // zedGraphControl1
+            // 
+            this.zedGraphControl1.Location = new System.Drawing.Point(6, 57);
+            this.zedGraphControl1.Name = "zedGraphControl1";
+            this.zedGraphControl1.ScrollGrace = 0D;
+            this.zedGraphControl1.ScrollMaxX = 0D;
+            this.zedGraphControl1.ScrollMaxY = 0D;
+            this.zedGraphControl1.ScrollMaxY2 = 0D;
+            this.zedGraphControl1.ScrollMinX = 0D;
+            this.zedGraphControl1.ScrollMinY = 0D;
+            this.zedGraphControl1.ScrollMinY2 = 0D;
+            this.zedGraphControl1.Size = new System.Drawing.Size(894, 444);
+            this.zedGraphControl1.TabIndex = 2;
             // 
             // Charts_Combo_Selector
             // 
@@ -492,6 +512,13 @@ namespace FastqAnalyzerCleaner
             this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 23);
             this.Charts_Combo_Selector.TabIndex = 1;
             this.Charts_Combo_Selector.SelectedIndexChanged += new System.EventHandler(this.Charts_Combo_Selector_SelectedIndexChanged);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(6, 6);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(599, 45);
+            this.trackBar1.TabIndex = 3;
             // 
             // FastqGUI
             // 
@@ -520,6 +547,8 @@ namespace FastqAnalyzerCleaner
             this.FastqGUITabs.ResumeLayout(false);
             this.InformationTab.ResumeLayout(false);
             this.GraphicsTab.ResumeLayout(false);
+            this.GraphicsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -572,7 +601,9 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ToolStripMenuItem removeSequencesWithFailedReadsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem withFailedReadsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem belowMeanThresholdToolStripMenuItem;
-        private FastqGUI_Display FastqGUI_Display;
+        private System.Windows.Forms.RichTextBox FastqGUI_Display;
+        private ZedGraph.ZedGraphControl zedGraphControl1;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 
