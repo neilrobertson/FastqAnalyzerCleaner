@@ -70,11 +70,11 @@ namespace FastqAnalyzerCleaner
             this.removeAdapterSequencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.findSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.progressStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -88,9 +88,9 @@ namespace FastqAnalyzerCleaner
             this.InformationTab = new System.Windows.Forms.TabPage();
             this.FastqGUI_Display = new System.Windows.Forms.RichTextBox();
             this.GraphicsTab = new System.Windows.Forms.TabPage();
+            this.graphicsTrackBar = new System.Windows.Forms.TrackBar();
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.Charts_Combo_Selector = new System.Windows.Forms.ComboBox();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.MenuStrip.SuspendLayout();
             this.progressStrip.SuspendLayout();
             this.Cores_Group_Box.SuspendLayout();
@@ -98,15 +98,15 @@ namespace FastqAnalyzerCleaner
             this.FastqGUITabs.SuspendLayout();
             this.InformationTab.SuspendLayout();
             this.GraphicsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.graphicsTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // MenuStrip
             // 
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.actionToolStripMenuItem,
             this.editToolStripMenuItem,
+            this.actionToolStripMenuItem,
             this.preferencesToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
@@ -221,8 +221,7 @@ namespace FastqAnalyzerCleaner
             this.toolStripSeparator3,
             this.removeAdapterSequencesToolStripMenuItem,
             this.toolStripSeparator4,
-            this.findSequenceToolStripMenuItem,
-            this.toolStripSeparator5});
+            this.findSequenceToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.editToolStripMenuItem.Text = "EDIT";
@@ -295,11 +294,6 @@ namespace FastqAnalyzerCleaner
             this.findSequenceToolStripMenuItem.Text = "Find Sequence...";
             this.findSequenceToolStripMenuItem.Click += new System.EventHandler(this.findSequenceToolStripMenuItem_Click);
             // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(218, 6);
-            // 
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -328,6 +322,11 @@ namespace FastqAnalyzerCleaner
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(99, 22);
             this.helpToolStripMenuItem1.Text = "Help";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(218, 6);
             // 
             // progressStrip
             // 
@@ -477,7 +476,7 @@ namespace FastqAnalyzerCleaner
             // GraphicsTab
             // 
             this.GraphicsTab.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.GraphicsTab.Controls.Add(this.trackBar1);
+            this.GraphicsTab.Controls.Add(this.graphicsTrackBar);
             this.GraphicsTab.Controls.Add(this.zedGraphControl1);
             this.GraphicsTab.Controls.Add(this.Charts_Combo_Selector);
             this.GraphicsTab.Location = new System.Drawing.Point(24, 4);
@@ -487,6 +486,14 @@ namespace FastqAnalyzerCleaner
             this.GraphicsTab.TabIndex = 1;
             this.GraphicsTab.Text = "[FASTQ GRAPHICS]";
             this.GraphicsTab.ToolTipText = "Shows Fastq file graphics.";
+            // 
+            // graphicsTrackBar
+            // 
+            this.graphicsTrackBar.Location = new System.Drawing.Point(6, 6);
+            this.graphicsTrackBar.Name = "graphicsTrackBar";
+            this.graphicsTrackBar.Size = new System.Drawing.Size(599, 45);
+            this.graphicsTrackBar.TabIndex = 3;
+            this.graphicsTrackBar.Scroll += new System.EventHandler(this.GraphicSelectionTrackBarMoved);
             // 
             // zedGraphControl1
             // 
@@ -504,6 +511,10 @@ namespace FastqAnalyzerCleaner
             // 
             // Charts_Combo_Selector
             // 
+            this.Charts_Combo_Selector.DataSource = new FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes[] {
+            FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.Distribution,
+            FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics,
+            FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes.SequenceLengthDistribution};
             this.Charts_Combo_Selector.FormattingEnabled = true;
             this.Charts_Combo_Selector.Location = new System.Drawing.Point(611, 6);
             this.Charts_Combo_Selector.MaxLength = 50;
@@ -512,13 +523,6 @@ namespace FastqAnalyzerCleaner
             this.Charts_Combo_Selector.Size = new System.Drawing.Size(284, 23);
             this.Charts_Combo_Selector.TabIndex = 1;
             this.Charts_Combo_Selector.SelectedIndexChanged += new System.EventHandler(this.Charts_Combo_Selector_SelectedIndexChanged);
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Location = new System.Drawing.Point(6, 6);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(599, 45);
-            this.trackBar1.TabIndex = 3;
             // 
             // FastqGUI
             // 
@@ -548,7 +552,7 @@ namespace FastqAnalyzerCleaner
             this.InformationTab.ResumeLayout(false);
             this.GraphicsTab.ResumeLayout(false);
             this.GraphicsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.graphicsTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -589,7 +593,6 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.TabControl FastqGUITabs;
         private System.Windows.Forms.TabPage InformationTab;
         private System.Windows.Forms.TabPage GraphicsTab;
-        private FastqGUI_Charts FastqGUI_Charts;
         private System.Windows.Forms.ComboBox Charts_Combo_Selector;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem removeAdapterSequencesToolStripMenuItem;
@@ -603,7 +606,7 @@ namespace FastqAnalyzerCleaner
         private System.Windows.Forms.ToolStripMenuItem belowMeanThresholdToolStripMenuItem;
         private System.Windows.Forms.RichTextBox FastqGUI_Display;
         private ZedGraph.ZedGraphControl zedGraphControl1;
-        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.TrackBar graphicsTrackBar;
     }
 }
 

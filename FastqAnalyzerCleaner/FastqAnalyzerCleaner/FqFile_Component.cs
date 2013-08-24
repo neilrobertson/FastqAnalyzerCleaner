@@ -92,9 +92,9 @@ namespace FastqAnalyzerCleaner
 
         [ProtoMember(22, IsRequired = true, OverwriteList = true)]
         public List<int> sequenceLengthDistribution;
-        
+
         [ProtoMember(23, IsRequired = true)]
-        public readonly int FREE_PROCESSOR_CORE = 1;
+        public int componentNumber;
         
         [ProtoMember(24, IsRequired = true, OverwriteList = true)]
         public FqSequence[] fastqSeq;
@@ -187,7 +187,7 @@ namespace FastqAnalyzerCleaner
             Adapters.getInstance();
             removedAdapters = new Dictionary<int, string>();
 
-            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Environment.ProcessorCount - FREE_PROCESSOR_CORE) },
+            Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = Preferences.getInstance().getCoresToUse() },
              // Initialize the local states
              () => new FqSequence_InputsOuptuts(sequencerType, "Adapter Removal", this),
              // Accumulate the thread-local computations in the loop body
@@ -543,11 +543,12 @@ namespace FastqAnalyzerCleaner
             }
             );
             int count = 0;
+
             for (int i = (maxSeqSize - 1); i >= 0; i--)
             {
                 int numAtLength = perBaseStatistics[i].GetPerBaseCount();
-                sequenceLengthDistribution[i] = (numAtLength - count);
-                count += numAtLength;
+                sequenceLengthDistribution[i] += (numAtLength - count);
+                count += (numAtLength - count);
                 perBaseStatistics[i].reconcileBaseSatistics();
             }
 
@@ -761,6 +762,16 @@ namespace FastqAnalyzerCleaner
         public override int getSequencesRemoved()
         {
             return sequencesRemoved;
+        }
+
+        public override void setComponentNumber(int number)
+        {
+            this.componentNumber = number;
+        }
+
+        public override int getComponentNumber()
+        {
+            return componentNumber;
         }
 
         public override Dictionary<int, FqNucleotideRead> getMap()

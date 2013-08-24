@@ -34,6 +34,7 @@ namespace FastqAnalyzerCleaner
         private static FastqController fastqController;
         private const String FILE_DIALOGUE_FILTER = "All files (*.*)|*.*|Text Files (*.txt)|*.txt|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
         private BackgroundWorker loadWorker;
+        private FastqGUI_Charts charts;
 
         /// <summary>
         /// Constructor for the main GUI class. Initializes the components that form the GUI, obtains an instance of the controller
@@ -41,9 +42,11 @@ namespace FastqAnalyzerCleaner
         /// </summary>
         public FastqGUI()
         {
+            charts = new FastqGUI_Charts(this);
             InitializeComponent();
             fastqController = FastqController.getInstance();
             fastqController.SetObserver(this);
+
         }
 
         /// <summary>
@@ -74,6 +77,8 @@ namespace FastqAnalyzerCleaner
         public void UpdateGUI(GenericFastqInputs input)
         {
             Console.WriteLine("Total Memory Allocated: {0}", HelperMethods.ConvertBytesToMegabytes(GC.GetTotalMemory(false)));
+            ResetChartsSelectors();
+            drawChart(FastqController.getInstance().GetFqFileMap().GlobalDetails, FastqGUI_Charts.FastqChartTypes.Distribution.ToString());
             //FastqGUI_Display.Update(input);
             //FastqGUI_Charts.DrawCurrentChartSelection(fqFile);
         }
@@ -157,8 +162,9 @@ namespace FastqAnalyzerCleaner
                             if (fqFileComponent.getFastqArraySize() >= 1)
                             {
                                 int threadId;
-                                String componentFileName = FastqController.getInstance().GetFqFileMap().FileGUID + "_" + Path.GetFileNameWithoutExtension(fileName) + "_" + fqFileComponentNumber + ProtocolBuffersSerialization.PROTOBUF_FILE_PREFIX;
+                                String componentFileName = FastqController.getInstance().GetFqFileMap().FileGUID + "_" + Path.GetFileNameWithoutExtension(fileName) + "_" + fqFileComponentNumber + ProtocolBuffersSerialization.PROTOBUF_FILE_EXTENSION;
                                 fqFileComponent.setFastqFileName(componentFileName);
+                                fqFileComponent.setComponentNumber(fqFileComponentNumber);
 
                                 ProtocolBuffersSerialization.ProbufSerializeFqFile_AsyncMethodCaller caller
                                     = new ProtocolBuffersSerialization.ProbufSerializeFqFile_AsyncMethodCaller(protoBuf.ProtobufSerializeFqFile);
@@ -542,10 +548,108 @@ namespace FastqAnalyzerCleaner
         /// <param name="e"></param>
         private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FastqGUI_Charts.FastqChartTypes chartType;
-            Enum.TryParse<FastqGUI_Charts.FastqChartTypes>(Charts_Combo_Selector.SelectedValue.ToString(), out chartType);
-            FastqGUI_Charts.SelectChartType(chartType);
+            FqFileMap map = FastqController.getInstance().GetFqFileMap();
+           
+            if (map != null)
+            {
+                SetGraphicTrackBarDataSourceSize();
+                List<String> componentDetails = map.getFileComponentDirectories();
+                Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
+                if (componentDetails != null && componentMap != null)
+                {
+                    int index = graphicsTrackBar.Value;
+                    FqFile_Component_Details details;
+                    String chartType = Charts_Combo_Selector.SelectedValue.ToString();
+                    
+                    if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
+                    {
+                        details = componentMap[componentDetails[index]];
+                        drawChart(details, chartType);
+                    }
+                    else
+                    {
+                        if (index == 0)
+                        {
+                            details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                            drawChart(details, chartType);
+                        }
+                        else if (index > 0)
+                        {
+                            details = componentMap[componentDetails[index - 1]];
+                            drawChart(details, chartType);
+                        }
+                    }
+               }   
+            }
             
+            
+        }
+
+        private void GraphicSelectionTrackBarMoved(object sender, EventArgs e)
+        {
+            FqFileMap map = FastqController.getInstance().GetFqFileMap();
+           
+            if (map != null)
+            {
+                List<String> componentDetails = map.getFileComponentDirectories();
+                Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
+                if (componentDetails != null && componentMap != null)
+                {
+                    int index = graphicsTrackBar.Value;
+                    FqFile_Component_Details details;
+                    String chartType = Charts_Combo_Selector.SelectedValue.ToString();
+                    
+                    if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
+                    {
+                        details = componentMap[componentDetails[index]];
+                        drawChart(details, chartType);
+                    }
+                    else
+                    {
+                        if (index == 0)
+                        {
+                            details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                            drawChart(details, chartType);
+                        }
+                        else if (index > 0)
+                        {
+                            details = componentMap[componentDetails[index - 1]];
+                            drawChart(details, chartType);
+                        }
+                    }
+                }   
+            }
+        }
+
+        private void ResetChartsSelectors()
+        {
+            Charts_Combo_Selector.SelectedIndex = 0;
+            graphicsTrackBar.TabIndex = 0;
+        }
+
+        private void drawChart(FqFile_Component_Details drawDetails, String chartType)
+        {
+            if (FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
+            {
+                Console.WriteLine("Detail to draw: {0} With {1}", drawDetails.FileName, chartType);
+                charts.DrawCurrentChartSelection(drawDetails, chartType, zedGraphControl1);
+            }
+        }
+
+        private void SetGraphicTrackBarDataSourceSize()
+        {
+            if (Charts_Combo_Selector.SelectedValue.ToString().Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
+            {
+                int maxSize = FastqController.getInstance().GetFqFileMap().getFileComponentDirectories().Count;
+                graphicsTrackBar.Maximum = maxSize - 1;
+                graphicsTrackBar.Minimum = 0;
+            }
+            else
+            {
+                int maxSize = FastqController.getInstance().GetFqFileMap().getFileComponentDirectories().Count;
+                graphicsTrackBar.Maximum = maxSize;
+                graphicsTrackBar.Minimum = 0;
+            }
         }
 
         /// <summary>
@@ -567,6 +671,7 @@ namespace FastqAnalyzerCleaner
         private void flushMemoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FastqController.getInstance().FlushMemoryOfProtobinFiles();
+            UserResponse.InformationResponse("FQProtobin files flushed!");
         }
 
         /// <summary>
@@ -578,6 +683,7 @@ namespace FastqAnalyzerCleaner
         {
             if (Application.AllowQuit == true)
             {
+                FastqController.getInstance().FlushMemoryOfProtobinFiles();
                 Application.Exit();
             }
         }

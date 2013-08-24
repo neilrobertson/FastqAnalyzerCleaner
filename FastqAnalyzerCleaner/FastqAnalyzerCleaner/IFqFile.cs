@@ -71,6 +71,8 @@ namespace FastqAnalyzerCleaner
         abstract public int getMaxSeqSize();
         abstract public int getMinSeqSize();
         abstract public int getSequencesRemoved();
+        abstract public void setComponentNumber(int number);
+        abstract public int getComponentNumber();
         abstract public Dictionary<int, FqNucleotideRead> getMap();
         abstract public void calculateMapQualities();
         abstract public void setHeader();

@@ -349,19 +349,20 @@ namespace FastqAnalyzerCleaner
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Environment.CurrentDirectory);
             FileInfo[] files = directoryInfo.GetFiles(ProtocolBuffersSerialization.PROTOBUF_FILE_WIDCARD)
-                                            .Where(p => p.Extension == ProtocolBuffersSerialization.PROTOBUF_FILE_PREFIX).ToArray();
-            foreach (FileInfo file in files)
+                                            .Where(p => p.Extension == ProtocolBuffersSerialization.PROTOBUF_FILE_EXTENSION).ToArray();
+            
+            try
             {
-                try
+                foreach (FileInfo file in files)
                 {
                     file.Attributes = FileAttributes.Normal;
                     Console.WriteLine("Deleting File: {0}", file.FullName);
                     File.Delete(file.FullName);
                 }
-                catch (IOException exception)
-                {
-                    Console.WriteLine("Fqprotobin file flush failed: {0}", exception.ToString());
-                }
+            }
+            catch (IOException exception)
+            {
+                Console.WriteLine("Fqprotobin file flush failed: {0}", exception.ToString());
             }
         }
 

@@ -178,6 +178,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="FastqAnalyzerCleaner_TemporaryKey.pfx" />
+    <None Include="Properties\DataSources\FastqAnalyzerCleaner.Properties.Resources.datasource" />
+    <None Include="Properties\DataSources\FastqAnalyzerCleaner.Properties.Settings.datasource" />
     <None Include="Properties\DataSources\FastqGUI_Charts.FastqChartTypes.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

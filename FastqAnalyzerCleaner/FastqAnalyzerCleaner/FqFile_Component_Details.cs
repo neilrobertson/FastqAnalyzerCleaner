@@ -10,7 +10,8 @@ namespace FastqAnalyzerCleaner
     {
         public String ComponentName { get; set; } 
         public String sequencerType { get; set; }
-        public String fileName { get; set; }
+        public String FileName { get; set; }
+        public int ComponentNumber { get; set; }
         public int TotalNucs { get; set; }
         public int TotalSequences { get; set; }
         public int NucleotidesCleaned { get; set; }
@@ -27,6 +28,7 @@ namespace FastqAnalyzerCleaner
         public int SequencesRemoved { get; set; }
         public Dictionary<int, string> RemovedAdapters { get; set; }
         public FqPerBaseSatistics[] perBaseStatistics { get; set; }
+        public String GraphName;
    
         public FqFile_Component_Details()
         {
@@ -36,7 +38,9 @@ namespace FastqAnalyzerCleaner
         public void ContructComponentDetails(IFqFile component)
         {
             this.ComponentName = component.getFileName();
+            this.FileName = component.getFileName();
             this.sequencerType = component.getSequencerType();
+            this.ComponentNumber = component.getComponentNumber();
             this.TotalNucs = component.getTotalNucleotides();
             this.TotalSequences = component.getFastqArraySize();
             this.NucleotidesCleaned = component.getNucleotidesCleaned();
@@ -104,7 +108,8 @@ namespace FastqAnalyzerCleaner
 
             for (int i = 0; i < seqLenDistribution.Count; i++)
             {
-                SequenceLengthDistribution[i] += seqLenDistribution[i];
+                int count = seqLenDistribution[i];
+                SequenceLengthDistribution[i] += count;
             }
         }
 
@@ -122,6 +127,14 @@ namespace FastqAnalyzerCleaner
             {
                 Distribution.Add(0);
             }
+        }
+
+        public String getGraphName()
+        {
+            if (ComponentNumber == 0)
+                return string.Format("{0} - Global Details", System.IO.Path.GetFileName(FastqController.getInstance().GetFqFileMap().FileName));
+            else
+                return string.Format("{0} - Component {1}", System.IO.Path.GetFileName(FastqController.getInstance().GetFqFileMap().FileName), ComponentNumber);
         }
 
         public void OutputToConsole()

@@ -13,7 +13,7 @@ namespace FastqAnalyzerCleaner
 {
     public class ProtocolBuffersSerialization
     {
-        public static String PROTOBUF_FILE_PREFIX = ".fqprotobin";
+        public static String PROTOBUF_FILE_EXTENSION = ".fqprotobin";
         public static String PROTOBUF_FILE_WIDCARD = "*.fqprotobin";
 
         public ProtocolBuffersSerialization()
