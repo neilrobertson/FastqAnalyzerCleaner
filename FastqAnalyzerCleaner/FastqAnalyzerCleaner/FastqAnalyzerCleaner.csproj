@@ -23,7 +23,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -97,9 +97,7 @@
     <Compile Include="DirectoryController.cs" />
     <Compile Include="FastqController.cs" />
     <Compile Include="FastqGUI_Charts.cs" />
-    <Compile Include="FastqGUI_Display.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="FastqGUI_Display.cs" />
     <Compile Include="FastqGUI_Output.cs" />
     <Compile Include="FqFileMap.cs" />
     <Compile Include="FqFile_Component_Details.cs" />
@@ -152,8 +150,10 @@
     <Compile Include="Task_FindSequences.cs" />
     <Compile Include="Task_LoadTask.cs" />
     <Compile Include="Task_ReanalyzeTask.cs" />
+    <Compile Include="Task_RemoveAboveGCThreshold.cs" />
     <Compile Include="Task_RemoveBelowMeanThreshold.cs" />
     <Compile Include="Task_RemoveMisSeqeuence.cs" />
+    <Compile Include="Task_RemoveSequencesBelowLength.cs" />
     <Compile Include="Task_RescanSequencerTask.cs" />
     <Compile Include="Task_SaveCSV.cs" />
     <Compile Include="Task_SaveFastq.cs" />

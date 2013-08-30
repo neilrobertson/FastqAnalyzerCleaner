@@ -33,7 +33,7 @@ namespace FastqAnalyzerCleaner
         private static String PROTOBIN_DIRECTORY;
 
         /// <summary>
-        /// Constructor for the DirectoryController class, creates the environment specific directory string.
+        /// Constructor for the DirectoryController class, creates the environment specific directory string, regardless of operating system
         /// </summary>
         private DirectoryController()
         {
@@ -56,7 +56,7 @@ namespace FastqAnalyzerCleaner
 
         /// <summary>
         /// Creates a folder for the desired working environment directory and sets the active environment directory 
-        /// to it
+        /// to this path.
         /// </summary>
         /// <returns>Returns a boolean if resetting the directory was successful</returns>
         public Boolean SetWorkingDirectory()

@@ -31,16 +31,24 @@ namespace FastqAnalyzerCleaner
         private static object acessSync = new object();
         private static FastqController uniqueInstance = null;
 
+        /// <summary>
+        /// Queues provide the basis to allow for the serialization of small objects into the programs memory without specific pointers
+        /// </summary>
         private Queue<String> toDeserialize;
         private Queue<FqFile_Component> toPerform = new Queue<FqFile_Component>();
         private Queue<FqFile_Component> toSerialize = new Queue<FqFile_Component>();
 
+        // The fqfilemap contains all the higher order details and statistics for the loaded file
         public FqFileMap fqFileMap;
 
+        // The controller state is a reference to an enum located within this class that allows for the GUI to only access this class
+        // or perform functions when the controller state is set to STATE_READY
         public static FastqControllerState CONTROLLER_STATE;
 
+        // GUI observer
         private FastqGUI observer;
 
+        // Class for serializing and deserializing fastq components to disk
         private ProtocolBuffersSerialization protobufSerialization;
         private Stopwatch sw;
 
@@ -52,7 +60,6 @@ namespace FastqAnalyzerCleaner
         {
             CONTROLLER_STATE = FastqControllerState.STATE_READY;
             DirectoryController.getInstance().SetWorkingDirectory();
-            FlushMemoryOfProtobinFiles();
         }
 
         /// <summary>
@@ -65,8 +72,9 @@ namespace FastqAnalyzerCleaner
             {
                 if (uniqueInstance == null)
                     uniqueInstance = new FastqController();
+
+                return uniqueInstance;
             }
-            return uniqueInstance;
         }
 
         /// <summary>
@@ -114,11 +122,14 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        
+
         /// <summary>
         /// The key method in the controller class, where fastqFile_components are serialized and deserialized in and out of 
         /// the classes queues for processing.  The tasks are constructed through an interface - ITaskStrategy - which 
-        /// is designated through the task abstract factory class.  After processing, files are deserialized and a details class
-        /// for each component is populated, as are the global scores.
+        /// is designated through the task abstract factory class (TaskDiscriminator.cs).  After processing, files are deserialized and a details class
+        /// for each component is populated, as are the global scores.  The use of Abstract/interface classes here allows multiple components 
+        /// to be processed with multiple task types within this basic code structure.
         /// </summary>
         /// <param name="worker">The backgroundworker thread</param>
         /// <param name="input">Generic inputs, including taskname and any further details necessary to complete a task such as nucleotide scores etc.</param>
@@ -232,13 +243,15 @@ namespace FastqAnalyzerCleaner
         public void PrimeFqFileComponentQueue()
         {
             int threadId;
-            ProtocolBuffersSerialization protoBuf = new ProtocolBuffersSerialization();
-            String componentName = toDeserialize.Dequeue();
-            FqFile_Component component = protoBuf.ProtobufDerializeFqFile(componentName, out threadId);
-            toPerform.Enqueue(component);
-            String secondComponentName = toDeserialize.Dequeue();
-            FqFile_Component secondComponent = protoBuf.ProtobufDerializeFqFile(secondComponentName, out threadId);
-            toPerform.Enqueue(secondComponent);
+            int count = 0;
+            while (toDeserialize.Count != 0 && count < 2)
+            {
+                ProtocolBuffersSerialization protoBuf = new ProtocolBuffersSerialization();
+                String componentName = toDeserialize.Dequeue();
+                FqFile_Component component = protoBuf.ProtobufDerializeFqFile(componentName, out threadId);
+                toPerform.Enqueue(component);
+                count++;
+            }
         }
 
         /// <summary>
@@ -321,7 +334,8 @@ namespace FastqAnalyzerCleaner
         public void PrimeForNewFile()
         {
             fqFileMap = null;
-            FlushMemoryOfProtobinFiles();
+            if (FlushMemoryOfProtobinFiles() == true)
+                UserResponse.InformationResponse("Protobin directory cleaned.");
         }
 
         /// <summary>
@@ -345,7 +359,7 @@ namespace FastqAnalyzerCleaner
         /// <summary>
         /// Flushes the programs environment directory of fqprotobin files
         /// </summary>
-        public void FlushMemoryOfProtobinFiles()
+        public Boolean FlushMemoryOfProtobinFiles()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Environment.CurrentDirectory);
             FileInfo[] files = directoryInfo.GetFiles(ProtocolBuffersSerialization.PROTOBUF_FILE_WIDCARD)
@@ -359,10 +373,12 @@ namespace FastqAnalyzerCleaner
                     Console.WriteLine("Deleting File: {0}", file.FullName);
                     File.Delete(file.FullName);
                 }
+                return true;
             }
             catch (IOException exception)
             {
                 Console.WriteLine("Fqprotobin file flush failed: {0}", exception.ToString());
+                return false;
             }
         }
 

@@ -24,6 +24,8 @@ namespace FastqAnalyzerCleaner
         public int LowerThreshold { get; set; }
         [ProtoMember(7)]
         public int BaseCount { get; set; }
+        [ProtoMember(8)]
+        public double StandardDeviation { get; set; }
         [ProtoIgnore]
         private List<int> baseQualities;
         [ProtoIgnore]
@@ -49,9 +51,10 @@ namespace FastqAnalyzerCleaner
 
         public void reconcileBaseSatistics()
         {
+            Mean = (double)qualitiesTotal / (double)BaseCount;
+            //StandardDeviation = HelperMethods.CalculateStandardDeviation(baseQualities, Mean);
             baseQualities.Sort();
             BaseCount = baseQualities.Count;
-            Mean = (double) qualitiesTotal / (double) BaseCount;
             Median = (int) baseQualities[(BaseCount / 2)];
             ThirdQuartile = (int)baseQualities[((BaseCount / 4) * 3)];
             FirstQuartile = (int)baseQualities[((BaseCount / 4))];

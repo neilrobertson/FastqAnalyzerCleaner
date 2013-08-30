@@ -50,6 +50,8 @@ namespace FastqAnalyzerCleaner
             Task_RemoveMisSeqeuence.register();
             Task_SaveCSV.register();
             Task_SaveFastq.register();
+            Task_RemoveAboveGCThreshold.register();
+            Task_RemoveSequencesBelowLength.register();
         }
     }
 }

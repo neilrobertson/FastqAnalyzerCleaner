@@ -72,6 +72,26 @@ namespace FastqAnalyzerCleaner
             return kilobytes / 1024f;
         }
 
+        public static double CalculateStandardDeviation(List<int> list, double mean)
+        {
+            double standDev;
+            double NDegreesOfFreedom = (double)list.Count - 1;
+            double sum = 0.00;
+            
+            List<double> doubleList = list.Select(i => (double)i).ToList();
+            foreach (double value in doubleList)
+            {
+               
+                sum += Math.Pow(value - mean, 2);
+
+            }
+            Console.WriteLine(sum);
+
+            standDev = Math.Sqrt((sum) / (NDegreesOfFreedom));
+            
+            return standDev;
+        }
+
         public static TResult With<TInput, TResult>(this TInput o,
         Func<TInput, TResult> evaluator)
         where TResult : class

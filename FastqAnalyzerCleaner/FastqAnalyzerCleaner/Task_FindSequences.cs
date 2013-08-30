@@ -21,7 +21,7 @@ namespace FastqAnalyzerCleaner
 
         public override void confirmTaskEnd()
         {
-
+            FastqController.getInstance().GetFqFileMap().SortQueriedSequences();
         }
 
         public override String getStatement()

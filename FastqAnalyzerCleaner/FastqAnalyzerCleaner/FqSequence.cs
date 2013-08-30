@@ -426,5 +426,6 @@ namespace FastqAnalyzerCleaner
         {
             return GCount;
         }
+
     }
 }

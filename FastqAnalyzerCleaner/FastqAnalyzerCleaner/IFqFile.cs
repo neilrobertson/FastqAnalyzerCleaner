@@ -36,6 +36,8 @@ namespace FastqAnalyzerCleaner
         abstract public void cleanAdapters();
         abstract public void removeBelowMeanThreshold(int threshold);
         abstract public void removeSequencesWithMisreads();
+        abstract public void removeSequencesAboveGCThreshold(int threshold);
+        abstract public void removeBelowSequenceLength(int threshold);
         abstract public List<FqSequence> findSequence(String sequence);
         abstract public void removeRegion(int startBlock, int endBlock);
         abstract public String createNucleotideString();

@@ -38,6 +38,7 @@ namespace FastqAnalyzerCleaner
             fastqFile = aFastqFile;
             index = fastqFile.getFastqArraySize();
             map = fastqFile.getMap();
+            Console.WriteLine("Starting to search for sequencer");
             DecisionTree(fastqFile);
         }
 
@@ -93,7 +94,8 @@ namespace FastqAnalyzerCleaner
 	    {
 		    Boolean solexa = false, jointSolexaIllumina = false;
 		    int i = startPosition, j = startPos;
-			
+
+            Console.WriteLine("uppersearch  - upper tree");
 		    for (i = startPosition; i < index; i++)
 		    {
 			    fastqSeq = fastqFile.getFastqSequenceByPosition(i);
@@ -135,7 +137,7 @@ namespace FastqAnalyzerCleaner
 	    {
 		    Boolean solexa = false;
 		    int i, j;
-			
+            Console.WriteLine("uppersearch  - solexa illumina3");
 		    for (i = startPosition; i < index; i++)
 		    {
 			    fastqSeq = fastqFile.getFastqSequenceByPosition(i);
@@ -171,7 +173,7 @@ namespace FastqAnalyzerCleaner
 		    Boolean sangerEight = false, illuminaEightNine = false;
 		    int i = startPosition;
 		    int j = startPos;
-		
+            Console.WriteLine("uppersearch  - lower tree");
 		    for (i = startPosition; i < index; i++)
 		    {
 			    fastqSeq = fastqFile.getFastqSequenceByPosition(i);
@@ -189,6 +191,12 @@ namespace FastqAnalyzerCleaner
 					    illuminaEightNine = true;
 					    goto search;
 				    }
+                    else if (i == ASSUMPTION_POINT + startPosition)
+                    {
+                        sequencerType = "Illumina 1.9";
+                        end(i);
+                        goto search;
+                    }
 			    }
 		    }
         search:	

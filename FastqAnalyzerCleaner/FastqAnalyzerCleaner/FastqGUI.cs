@@ -31,10 +31,10 @@ namespace FastqAnalyzerCleaner
     /// </summary>
     public partial class FastqGUI : Form
     {
-        private static FastqController fastqController;
         private const String FILE_DIALOGUE_FILTER = "All files (*.*)|*.*|Text Files (*.txt)|*.txt|Fastq files (*.fq)|*.fq|Fastq files (*.fastq)|*.fastq";
         private BackgroundWorker loadWorker;
         private FastqGUI_Charts charts;
+        private FastqGUI_Display display;
 
         /// <summary>
         /// Constructor for the main GUI class. Initializes the components that form the GUI, obtains an instance of the controller
@@ -43,9 +43,10 @@ namespace FastqAnalyzerCleaner
         public FastqGUI()
         {
             charts = new FastqGUI_Charts(this);
+            display = new FastqGUI_Display(this);
+
             InitializeComponent();
-            fastqController = FastqController.getInstance();
-            fastqController.SetObserver(this);
+            FastqController.getInstance().SetObserver(this);
 
         }
 
@@ -71,7 +72,7 @@ namespace FastqAnalyzerCleaner
         }
 
         /// <summary>
-        /// Updates the GUI.  Calls the FastqGUI_Display and FastqGUI_Charts classes to update the information contained within them.
+        /// Updates the GUI.  Calls the richText_Display and FastqGUI_Charts classes to update the information contained within them.
         /// </summary>
         /// <param name="newFqFile"></param>
         public void UpdateGUI(GenericFastqInputs input)
@@ -79,8 +80,7 @@ namespace FastqAnalyzerCleaner
             Console.WriteLine("Total Memory Allocated: {0}", HelperMethods.ConvertBytesToMegabytes(GC.GetTotalMemory(false)));
             ResetChartsSelectors();
             drawChart(FastqController.getInstance().GetFqFileMap().GlobalDetails, FastqGUI_Charts.FastqChartTypes.Distribution.ToString());
-            //FastqGUI_Display.Update(input);
-            //FastqGUI_Charts.DrawCurrentChartSelection(fqFile);
+            display.Update(input, richText_Display);
         }
 
         /// <summary>
@@ -149,9 +149,13 @@ namespace FastqAnalyzerCleaner
                         //Create new fqFileMap in controller and prime state for load
                         FastqController.CONTROLLER_STATE = FastqController.FastqControllerState.PARSING;
                         FastqController.getInstance().CreateNewFastqFile(fileName, parseFq.GetFastqFileLength());
+                        FastqController.getInstance().GetFqFileMap().InitializeReadMap();
 
                         int fqFileComponentNumber = 1;
                         ProtocolBuffersSerialization protoBuf = new ProtocolBuffersSerialization();
+                        GenericFastqInputs processInputs = new GenericFastqInputs();
+                        processInputs.TaskAction = Task_LoadTask.statement;
+                        ITaskStrategy task = TaskDiscrimination.getTask(processInputs.TaskAction);
 
                         // Uses IEnummerable yield return to parse components back to this class via this foreach loop
                         foreach (FqFile_Component fqFileComponent in parseFq.ParseComponents())
@@ -165,11 +169,17 @@ namespace FastqAnalyzerCleaner
                                 String componentFileName = FastqController.getInstance().GetFqFileMap().FileGUID + "_" + Path.GetFileNameWithoutExtension(fileName) + "_" + fqFileComponentNumber + ProtocolBuffersSerialization.PROTOBUF_FILE_EXTENSION;
                                 fqFileComponent.setFastqFileName(componentFileName);
                                 fqFileComponent.setComponentNumber(fqFileComponentNumber);
+                                fqFileComponent.setFqHashMap(FastqController.getInstance().GetFqFileMap().FqReadMap);
+
+                                processInputs.FastqFile = fqFileComponent;
+                                processInputs = task.perform(processInputs);
+                                FastqController.getInstance().BuildFqFileMap(processInputs.FastqFile);
+
 
                                 ProtocolBuffersSerialization.ProbufSerializeFqFile_AsyncMethodCaller caller
                                     = new ProtocolBuffersSerialization.ProbufSerializeFqFile_AsyncMethodCaller(protoBuf.ProtobufSerializeFqFile);
 
-                                IAsyncResult result = caller.BeginInvoke(fqFileComponent, componentFileName, out threadId, null, null);
+                                IAsyncResult result = caller.BeginInvoke((processInputs.FastqFile as FqFile_Component), componentFileName, out threadId, null, null);
 
                                 Boolean returnValue = caller.EndInvoke(out threadId, result);
 
@@ -188,11 +198,18 @@ namespace FastqAnalyzerCleaner
                         }
                         parseFq.CloseReader();
 
-                        FastqController.getInstance().GetFqFileMap().InitializeReadMap();
+                        task.confirmTaskEnd();
+                        Console.WriteLine("\n*********\n");
+                        FastqController.getInstance().GetFqFileMap().CalculateGlobalFileScores();
+                        FastqController.getInstance().GetFqFileMap().GlobalDetails.OutputToConsole();
+                        loadWorker.ReportProgress(100, task.getReportStatement());
 
-                        GenericFastqInputs inputs = new GenericFastqInputs();
-                        inputs.TaskAction = Task_LoadTask.statement;
-                        FastqController.getInstance().PerformAction(loadWorker, inputs);
+                        stopwatch.Stop();
+                        Console.WriteLine("Task: {0} Completed in Time: {1}", task.getStatement(), stopwatch.Elapsed);
+
+                        FastqController.getInstance().GetFqFileMap().LastTask = processInputs.TaskAction;
+                        FastqController.getInstance().GetFqFileMap().TimeTaken = stopwatch.Elapsed.ToString();
+                        this.UpdateGUIThread(processInputs);
                     }
                     else
                     {
@@ -202,6 +219,21 @@ namespace FastqAnalyzerCleaner
                     }
                 }
                 catch (IOException exception)
+                {
+                    Console.Write(exception.StackTrace);
+                    UserResponse.ErrorResponse(exception.ToString());
+                }
+                catch (InsufficientMemoryException exception)
+                {
+                    Console.Write(exception.StackTrace);
+                    UserResponse.ErrorResponse(exception.ToString());
+                }
+                catch (OutOfMemoryException exception)
+                {
+                    Console.Write(exception.StackTrace);
+                    UserResponse.ErrorResponse(exception.ToString());
+                }
+                catch (ArithmeticException exception)
                 {
                     Console.Write(exception.StackTrace);
                     UserResponse.ErrorResponse(exception.ToString());
@@ -318,7 +350,7 @@ namespace FastqAnalyzerCleaner
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 3' starts:", "Clean Sequence Starts", "", new InputBoxValidatingHandler(inputBox_Validating));
+                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 3' ends:", "Clean Sequence Starts", "", new InputBoxValidatingHandler(inputBox_Validating));
                 if (result.OK)
                 {
                     if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
@@ -342,7 +374,7 @@ namespace FastqAnalyzerCleaner
         {
             if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 5' ends:", "Clean Sequence Ends", "", new InputBoxValidatingHandler(inputBox_Validating));
+                InputBoxResult result = InputBox.Show("Enter a number of nucleotides to clean from sequence 5' starts:", "Clean Sequence Ends", "", new InputBoxValidatingHandler(inputBox_Validating));
                 if (result.OK)
                 {
                     if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
@@ -501,6 +533,43 @@ namespace FastqAnalyzerCleaner
             }
         }
 
+        private void aboveGCThresholdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
+            {
+                InputBoxResult result = InputBox.Show("Enter the combined GC Percentage Threshold: (<50)", "Remove Sequences", "", new InputBoxValidatingHandler(inputBox_GCThresholdValidating));
+                if (result.OK)
+                {
+                    if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
+                    {
+                        GenericFastqInputs inputs = new GenericFastqInputs();
+                        inputs.GCThreshold = Int32.Parse(result.Text.Trim());
+                        inputs.TaskAction = Task_RemoveAboveGCThreshold.statement;
+                        FastqController.getInstance().InitializeAction(inputs);
+                    }
+                }
+            }
+        }
+
+        private void belowLengthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FastqController.getInstance().fqFileMap != null && FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
+            {
+                InputBoxResult result = InputBox.Show("Remove Sequences Below Threshold: ", "Remove Sequences", "", new InputBoxValidatingHandler(inputBox_SequenceLengthThresholdValidating));
+                if (result.OK)
+                {
+                    if (HelperMethods.safeParseInt(result.Text.Trim()) == true)
+                    {
+                        GenericFastqInputs inputs = new GenericFastqInputs();
+                        inputs.LengthThreshold = Int32.Parse(result.Text.Trim());
+                        inputs.TaskAction = Task_RemoveSequencesBelowLength.statement;
+                        FastqController.getInstance().InitializeAction(inputs);
+                    }
+                }
+            }
+        } 
+       
+
         /// <summary>
         /// Changes the preferences item for the Clean Sweep sequencer determination method
         /// </summary>
@@ -548,76 +617,80 @@ namespace FastqAnalyzerCleaner
         /// <param name="e"></param>
         private void Charts_Combo_Selector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FqFileMap map = FastqController.getInstance().GetFqFileMap();
-           
-            if (map != null)
+            if (FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                SetGraphicTrackBarDataSourceSize();
-                List<String> componentDetails = map.getFileComponentDirectories();
-                Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
-                if (componentDetails != null && componentMap != null)
+                FqFileMap map = FastqController.getInstance().GetFqFileMap();
+
+                if (map != null)
                 {
-                    int index = graphicsTrackBar.Value;
-                    FqFile_Component_Details details;
-                    String chartType = Charts_Combo_Selector.SelectedValue.ToString();
-                    
-                    if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
+                    SetGraphicTrackBarDataSourceSize();
+                    List<String> componentDetails = map.getFileComponentDirectories();
+                    Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
+                    if (componentDetails != null && componentMap != null)
                     {
-                        details = componentMap[componentDetails[index]];
-                        drawChart(details, chartType);
-                    }
-                    else
-                    {
-                        if (index == 0)
+                        int index = graphicsTrackBar.Value;
+                        FqFile_Component_Details details;
+                        String chartType = Charts_Combo_Selector.SelectedValue.ToString();
+
+                        if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
                         {
-                            details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                            details = componentMap[componentDetails[index]];
                             drawChart(details, chartType);
                         }
-                        else if (index > 0)
+                        else
                         {
-                            details = componentMap[componentDetails[index - 1]];
-                            drawChart(details, chartType);
+                            if (index == 0)
+                            {
+                                details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                                drawChart(details, chartType);
+                            }
+                            else if (index > 0)
+                            {
+                                details = componentMap[componentDetails[index - 1]];
+                                drawChart(details, chartType);
+                            }
                         }
                     }
-               }   
+                }
             }
-            
-            
         }
 
         private void GraphicSelectionTrackBarMoved(object sender, EventArgs e)
         {
-            FqFileMap map = FastqController.getInstance().GetFqFileMap();
-           
-            if (map != null)
+            if (FastqController.CONTROLLER_STATE == FastqController.FastqControllerState.STATE_READY)
             {
-                List<String> componentDetails = map.getFileComponentDirectories();
-                Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
-                if (componentDetails != null && componentMap != null)
+                FqFileMap map = FastqController.getInstance().GetFqFileMap();
+
+                if (map != null)
                 {
-                    int index = graphicsTrackBar.Value;
-                    FqFile_Component_Details details;
-                    String chartType = Charts_Combo_Selector.SelectedValue.ToString();
-                    
-                    if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
+                    List<String> componentDetails = map.getFileComponentDirectories();
+                    Dictionary<string, FqFile_Component_Details> componentMap = map.GetFqFileComponentDetailsMap();
+                    if (componentDetails != null && componentMap != null)
                     {
-                        details = componentMap[componentDetails[index]];
-                        drawChart(details, chartType);
-                    }
-                    else
-                    {
-                        if (index == 0)
+                        int index = graphicsTrackBar.Value;
+                        FqFile_Component_Details details;
+                        String chartType = Charts_Combo_Selector.SelectedValue.ToString();
+
+                        if (chartType.Equals(FastqGUI_Charts.FastqChartTypes.PerBaseSequenceStatistics.ToString()))
                         {
-                            details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                            details = componentMap[componentDetails[index]];
                             drawChart(details, chartType);
                         }
-                        else if (index > 0)
+                        else
                         {
-                            details = componentMap[componentDetails[index - 1]];
-                            drawChart(details, chartType);
+                            if (index == 0)
+                            {
+                                details = FastqController.getInstance().GetFqFileMap().GlobalDetails;
+                                drawChart(details, chartType);
+                            }
+                            else if (index > 0)
+                            {
+                                details = componentMap[componentDetails[index - 1]];
+                                drawChart(details, chartType);
+                            }
                         }
                     }
-                }   
+                }
             }
         }
 
@@ -670,8 +743,8 @@ namespace FastqAnalyzerCleaner
         /// <param name="e"></param>
         private void flushMemoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FastqController.getInstance().FlushMemoryOfProtobinFiles();
-            UserResponse.InformationResponse("FQProtobin files flushed!");
+            if (FastqController.getInstance().FlushMemoryOfProtobinFiles() == true)
+                UserResponse.InformationResponse("Protobin directory cleaned.");
         }
 
         /// <summary>
@@ -683,7 +756,9 @@ namespace FastqAnalyzerCleaner
         {
             if (Application.AllowQuit == true)
             {
-                FastqController.getInstance().FlushMemoryOfProtobinFiles();
+                if (FastqController.getInstance().FlushMemoryOfProtobinFiles() == true)
+                    UserResponse.InformationResponse("Protobin directory cleaned.");
+
                 Application.Exit();
             }
         }
@@ -762,6 +837,54 @@ namespace FastqAnalyzerCleaner
                 }
             }
         }
-       
+
+        private void inputBox_GCThresholdValidating(object sender, InputBoxValidatingArgs e)
+        {
+            if (e.Text.Trim().Length == 0)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else if (HelperMethods.safeParseInt(e.Text.Trim()) == false)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else
+            {
+                int i = Int32.Parse(e.Text.Trim());
+                if (i < 1 || i > 99)
+                {
+                    e.Cancel = true;
+                    e.Message = "Required";
+                }
+            }
+        }
+
+        private void inputBox_SequenceLengthThresholdValidating(object sender, InputBoxValidatingArgs e)
+        {
+            if (e.Text.Trim().Length == 0)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else if (HelperMethods.safeParseInt(e.Text.Trim()) == false)
+            {
+                e.Cancel = true;
+                e.Message = "Required";
+            }
+            else
+            {
+                int i = Int32.Parse(e.Text.Trim());
+                FqFileMap map = FastqController.getInstance().GetFqFileMap();
+                if (i < map.GlobalDetails.MinSeqSize || i >= map.GlobalDetails.MaxSeqSize)
+                {
+                    e.Cancel = true;
+                    e.Message = "Required";
+                }
+            }
+        }
+
+        
     }
 }

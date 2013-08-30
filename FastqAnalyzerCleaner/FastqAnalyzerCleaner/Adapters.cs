@@ -86,7 +86,7 @@ namespace FastqAnalyzerCleaner
         }
 
         /// <summary>
-        /// Method calculates the largest adapter sequence
+        /// Method calculates the largest adapter sequence in the list of adapter sequences
         /// </summary>
         /// <returns>An integer that conforms to the size of the largest adapter</returns>
         private int discoverLargestAdapterSequence()
@@ -101,7 +101,7 @@ namespace FastqAnalyzerCleaner
         }
 
         /// <summary>
-        /// Parses the hard coded adapter string so that program comes with in built adapter resource
+        /// Parses the hard coded adapter string so that program comes with in built adapter resource to utilize
         /// </summary>
         /// <returns></returns>
         public static List<Adapter> ParseAdapterResource()
@@ -119,7 +119,7 @@ namespace FastqAnalyzerCleaner
         }
 
         /// <summary>
-        /// Large string of hard coded adapter seqeuences
+        /// Large string of hard coded adapter seqeuences to allow program to come with set of adapters
         /// </summary>
         /// <returns></returns>
         public static String getHardCodedAdapters()
@@ -135,7 +135,7 @@ namespace FastqAnalyzerCleaner
         }
 
         /// <summary>
-        /// Deserializes the adapters resource into memory
+        /// Deserializes the adapters resource into memory within this class
         /// </summary>
         /// <returns></returns>
         public static List<Adapter> DeserializeAdapterResource()

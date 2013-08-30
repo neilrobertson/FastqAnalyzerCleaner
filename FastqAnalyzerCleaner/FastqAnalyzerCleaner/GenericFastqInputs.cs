@@ -14,6 +14,8 @@ namespace FastqAnalyzerCleaner
         public String TaskAction { get; set; }
         public int NucleotidesToClean { get; set; }
         public int MeanThreshold { get; set; }
+        public int GCThreshold { get; set; }
+        public int LengthThreshold { get; set; }
         public String Output { get; set; }
         public int SequenceIndex { get; set; }
         public String AdapterName { get; set; }
@@ -21,6 +23,8 @@ namespace FastqAnalyzerCleaner
         public List<int> SequenceIndexes = new List<int>();
         public String SaveFileName { get; set; }
         public StreamWriter SaveStreamWriter { get; set; }
+        public FileStream FileStream { get; set; }
+        public String FileName { get; set; }
 
         public GenericFastqInputs() { }
 

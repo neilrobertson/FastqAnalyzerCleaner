@@ -14,14 +14,9 @@ namespace FastqAnalyzerCleaner
 
         public override GenericFastqInputs perform(GenericFastqInputs inputs)
         {
-            if (Preferences.getInstance().getSeqDecisionMethod())
-            {
-                SequencerDetermination seqDetermine = new SequencerDetermination(inputs.FastqFile);
-            }
-            else if (!Preferences.getInstance().getSeqDecisionMethod())
-            {
-                SequencerDecisionTree decTree = new SequencerDecisionTree(inputs.FastqFile);
-            }
+            
+            SequencerDecisionTree decTree = new SequencerDecisionTree(inputs.FastqFile);
+            
             inputs.FastqFile.Tests();
             return inputs;
         }

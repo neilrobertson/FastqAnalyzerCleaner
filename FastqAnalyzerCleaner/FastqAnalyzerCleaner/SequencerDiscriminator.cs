@@ -40,10 +40,13 @@ namespace FastqAnalyzerCleaner
                 setUp();
                 isSetUp = true;
             }
+            if (sequencerName == null)
+                return Sequencer_Default.sequencer as Sequencer;
 
 		    Sequencer sequencer = (Sequencer) storage[sequencerName];
-		    if (sequencer == null)
-			    return Sequencer_Default.sequencer as Sequencer;
+            if (sequencer == null)
+                return Sequencer_Default.sequencer as Sequencer;
+
 		    return sequencer;
 	    }
 	
