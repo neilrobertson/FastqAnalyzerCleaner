@@ -173,7 +173,7 @@ namespace FastqAnalyzerCleaner
             try
             {
                 bs = new BufferedStream(fileReader);
-                reader = new StreamReader(bs);
+                reader = new StreamReader(bs, System.Text.Encoding.ASCII);
 
                 if (IsFastqFile == true)
                 {
@@ -200,7 +200,7 @@ namespace FastqAnalyzerCleaner
                         for (int i = 0; i < (seqlist.Length); i++)
                         {
                             fqRead.resetFqNucleotideRead(seqlist[i], qscore[i]);
-                            int hashcode = fqRead.hashcode();
+                            int hashcode = fqRead.getProxyCode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
                         fastqFile.addFastqSequence(fqSeq);
@@ -230,7 +230,7 @@ namespace FastqAnalyzerCleaner
             try
             {
                 bs = new BufferedStream(fileReader);
-                reader = new StreamReader(bs);
+                reader = new StreamReader(bs, System.Text.Encoding.ASCII);
   
                 if (IsFastqFile == true)
                 {
@@ -257,7 +257,7 @@ namespace FastqAnalyzerCleaner
                         for (int i = 0; i < (seqlist.Length); i++)
                         {
                             fqRead.resetFqNucleotideRead(seqlist[i], qscore[i]);
-                            int hashcode = fqRead.hashcode();
+                            int hashcode = fqRead.getProxyCode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
                         fastqFileComponent.addFastqSequence(fqSeq);
@@ -293,7 +293,7 @@ namespace FastqAnalyzerCleaner
             StreamReader reader;
            
             bs = new BufferedStream(fileReader);
-            reader = new StreamReader(bs);
+            reader = new StreamReader(bs, System.Text.Encoding.ASCII);
 
             if (IsFastqFile == true)
             {
@@ -323,7 +323,7 @@ namespace FastqAnalyzerCleaner
                     for (int i = 0; i < (seqlist.Length); i++)
                     {
                         fqRead.resetFqNucleotideRead(seqlist[i], qscore[i]);
-                        int hashcode = fqRead.hashcode();
+                        int hashcode = fqRead.getProxyCode();
                         fqSeq.addNucleotideRead(hashcode);
                     }
 
@@ -332,7 +332,7 @@ namespace FastqAnalyzerCleaner
                         for (int i = 0; i < (seqlist.Length); i++)
                         {
                             fqRead.resetFqNucleotideRead(seqlist2[i], qscore2[i]);
-                            int hashcode = fqRead.hashcode();
+                            int hashcode = fqRead.getProxyCode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
                     }
@@ -359,7 +359,7 @@ namespace FastqAnalyzerCleaner
             try
             {
                 bs = new BufferedStream(fileReader);
-                reader = new StreamReader(bs);
+                reader = new StreamReader(bs, System.Text.Encoding.ASCII);
 
                 if (IsFastqFile == true)
                 {
@@ -388,7 +388,7 @@ namespace FastqAnalyzerCleaner
                         for (int i = 0; i < (seqlist.Length); i++)
                         {
                             fqRead.resetFqNucleotideRead(seqlist[i], qscore[i]);
-                            int hashcode = fqRead.hashcode();
+                            int hashcode = fqRead.getProxyCode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
 
@@ -397,7 +397,7 @@ namespace FastqAnalyzerCleaner
                             for (int i = 0; i < (seqlist.Length); i++)
                             {
                                 fqRead.resetFqNucleotideRead(seqlist2[i], qscore2[i]);
-                                int hashcode = fqRead.hashcode();
+                                int hashcode = fqRead.getProxyCode();
                                 fqSeq.addNucleotideRead(hashcode);
                             }
                         }
@@ -459,7 +459,7 @@ namespace FastqAnalyzerCleaner
                         for (int j = 1; j < (fqBlocks[SEQLINE][0]); j++)
                         {
                             fqRead.resetFqNucleotideRead((char)fqBlocks[SEQLINE][j], (char)fqBlocks[QUAL_LINE][j]);
-                            int hashcode = fqRead.hashcode();
+                            int hashcode = fqRead.getProxyCode();
                             fqSeq.addNucleotideRead(hashcode);
                         }
                         fastqFile.addFastqSequence(fqSeq);

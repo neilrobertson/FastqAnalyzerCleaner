@@ -19,6 +19,11 @@ using System.Text.RegularExpressions;
 
 namespace FastqAnalyzerCleaner
 {
+    /// <summary>
+    /// The FqSequence classs is the main model object for the fastq sequence block.  Containing the data for sequence and its
+    /// corresponing test results.  The model utilizes an array of integers alongside a dictionary which looks up FqNucleotideRead
+    /// objects corresponding to this integer array.  It is annotated for serialization with the protobuf-net.dll.
+    /// </summary>
     [Serializable]
     [ProtoContract]
     public class FqSequence
@@ -64,7 +69,7 @@ namespace FastqAnalyzerCleaner
         [ProtoMember(20, IsRequired = true)]
         public int NucleotidesCleaned;
         [ProtoMember(21, IsRequired = true)]
-        public int MAX_LINE_LENGTH = 105;
+        public int MAX_LINE_LENGTH = 110;
         [ProtoMember(22, IsRequired = true)]
         public Boolean RemoveSequence = false;
         [ProtoMember(23, IsRequired = true, OverwriteList = true)]
@@ -72,8 +77,18 @@ namespace FastqAnalyzerCleaner
         [ProtoMember(24, IsRequired = true)]
         public int MatchKey;
 
+        /// <summary>
+        /// Default constructor for the FqSequence class.
+        /// </summary>
         public FqSequence() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="seqIndex"></param>
+        /// <param name="head"></param>
+        /// <param name="info"></param>
+        /// <param name="seqLen"></param>
         public FqSequence(int seqIndex, String head, String info, int seqLen)   //uint64??
         {
             this.SequenceIndex = seqIndex;
@@ -152,25 +167,28 @@ namespace FastqAnalyzerCleaner
 
         public GenericFastqInputs cleanAdapters(List<Adapters.Adapter> adapters, Dictionary<int, FqNucleotideRead> map)
         {
-            String sequence = buildSelectSequenceString(0, Adapters.getInstance().getLargestAdapterSize(), map);
+            String sequence = createSequenceString(map);
             GenericFastqInputs removedAdapter = null;
             foreach (Adapters.Adapter adapter in adapters)
             {
-                if (sequence.Substring(0, adapter.AdapterSequence.Length).Equals(adapter.AdapterSequence))
+                
+                Match match = Regex.Match(adapter.AdapterSequence, sequence.ToUpper(), RegexOptions.IgnoreCase);
                 {
-                    //adapter found
-                    Console.WriteLine("Adapter found in sequence {0}: {1}", SequenceIndex, adapter.AdapterName);
-                    cleanStarts(adapter.AdapterSequence.Length);
-                    removedAdapter = new GenericFastqInputs();
-                    removedAdapter.AdapterName = adapter.AdapterName;
-                    removedAdapter.SequenceIndex = SequenceIndex;
-                    InfoLine = InfoLine + "||Removed Adapter:" + adapter.AdapterName;
+                    if (match.Success)
+                    {
+                        int key = match.Groups[1].Index;
+                        cleanEnds(index - key);
+                        removedAdapter = new GenericFastqInputs();
+                        removedAdapter.AdapterName = adapter.AdapterName;
+                        removedAdapter.SequenceIndex = SequenceIndex;
+                        InfoLine = InfoLine + "||Removed Adapter:" + adapter.AdapterName;
+                    }
                 }
             }
             return removedAdapter;
         }
 
-        public FqSequence_InputsOuptuts Tests(Dictionary<int, FqNucleotideRead> map, FqSequence_InputsOuptuts inputs)
+        public FqSequence_IO Tests(Dictionary<int, FqNucleotideRead> map, FqSequence_IO inputs)
         {
             int qualitySum = 0;
             List<int> qualities = new List<int>();

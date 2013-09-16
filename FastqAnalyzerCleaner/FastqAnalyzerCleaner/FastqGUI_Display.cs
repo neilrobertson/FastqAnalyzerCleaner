@@ -90,7 +90,7 @@ namespace FastqAnalyzerCleaner
             textBox.AppendText(Math.Round(HelperMethods.ConvertBytesToMegabytes(fqMap.FileLength), 2).ToString()+"MB\n\n");
 
             textBox.SelectionFont = new Font(textBox.Font.ToString(), 8, FontStyle.Regular);
-            textBox.AppendText("\tSequencer Type: ");
+            textBox.AppendText("\tISequencer Type: ");
             textBox.SelectionFont = new Font(textBox.Font.ToString(), 8, FontStyle.Bold);
             textBox.AppendText(fqMap.SequencerType);
 

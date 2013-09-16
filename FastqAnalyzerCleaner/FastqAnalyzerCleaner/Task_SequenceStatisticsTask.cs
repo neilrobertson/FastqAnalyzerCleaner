@@ -8,7 +8,7 @@ namespace FastqAnalyzerCleaner
 {
     public class Task_SequenceStatisticsTask : ITaskStrategy
     {
-        public static String statement = "Sequencer Statistics";
+        public static String statement = "ISequencer Statistics";
         public static ITaskStrategy task = new Task_SequenceStatisticsTask();
         public static String reportStatement = "[PERFORMING SEQUENCE STATISTICS TASKS]";
 

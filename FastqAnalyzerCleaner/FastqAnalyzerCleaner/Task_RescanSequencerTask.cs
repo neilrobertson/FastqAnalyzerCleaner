@@ -8,7 +8,7 @@ namespace FastqAnalyzerCleaner
 {
     public class Task_RescanSequencerTask : ITaskStrategy
     {
-        public static String statement = "Sequencer Type Rescan";
+        public static String statement = "ISequencer Type Rescan";
         public static ITaskStrategy task = new Task_RescanSequencerTask();
         public static String reportStatement = "[DETERMINING SEQUENCER]";
 

@@ -189,7 +189,7 @@ namespace FastqAnalyzerCleaner
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = Preferences.getInstance().getCoresToUse() },
              // Initialize the local states
-             () => new FqSequence_InputsOuptuts(sequencerType, "Adapter Removal", this),
+             () => new FqSequence_IO(sequencerType, "Adapter Removal", this),
              // Accumulate the thread-local computations in the loop body
              (i, loop, adapters) =>
              {
@@ -401,7 +401,7 @@ namespace FastqAnalyzerCleaner
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse())},
                 // Initialize the local states
-            () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
+            () => new FqSequence_IO(sequencerType, "Sequence Tests", this),
                 // Accumulate the thread-local computations in the loop body
             (i, loop, syncLists) =>
             {
@@ -499,7 +499,7 @@ namespace FastqAnalyzerCleaner
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse()) },
             // Initialize the local states
-            () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
+            () => new FqSequence_IO(sequencerType, "Sequence Tests", this),
             // Accumulate the thread-local computations in the loop body
             (i, loop, syncLists) =>
             {
@@ -556,7 +556,7 @@ namespace FastqAnalyzerCleaner
 
             Parallel.For(0, index, new ParallelOptions { MaxDegreeOfParallelism = (Preferences.getInstance().getCoresToUse()) },
                 // Initialize the local states
-            () => new FqSequence_InputsOuptuts(sequencerType, "Sequence Tests", this),
+            () => new FqSequence_IO(sequencerType, "Sequence Tests", this),
                 // Accumulate the thread-local computations in the loop body
             (i, loop, syncLists) =>
             {

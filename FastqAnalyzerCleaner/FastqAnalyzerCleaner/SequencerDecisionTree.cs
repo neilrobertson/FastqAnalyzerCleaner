@@ -83,7 +83,7 @@ namespace FastqAnalyzerCleaner
 		    }
 	    }
 
-        /*--------------Upper ASCII Sequencer Types-------------------*/
+        /*--------------Upper ASCII ISequencer Types-------------------*/
         /**
          * This method is created if the data set shows that the sequencer is likely from the 
          * solexa, illumina 1.3 or 1.5 branches.  startPosition is the starting point to iterate 
@@ -166,14 +166,14 @@ namespace FastqAnalyzerCleaner
 		    }
 	    }
 
-        /*-----------------Lower ASCII Sequencer Regions-------------------*/
+        /*-----------------Lower ASCII ISequencer Regions-------------------*/
 
         private void lowerTree(int startPosition, int startPos)
 	    {
 		    Boolean sangerEight = false, illuminaEightNine = false;
 		    int i = startPosition;
 		    int j = startPos;
-            Console.WriteLine("uppersearch  - lower tree");
+            
 		    for (i = startPosition; i < index; i++)
 		    {
 			    fastqSeq = fastqFile.getFastqSequenceByPosition(i);
@@ -212,7 +212,7 @@ namespace FastqAnalyzerCleaner
 
         private void sangerIlluminaEight(int startPosition, int startPos)
 	    {
-		    Boolean sanger = false;
+		    Boolean illumina8 = false;
 		    int i, j;
 		
 		    for (i = startPosition; i < index; i++)
@@ -224,21 +224,21 @@ namespace FastqAnalyzerCleaner
 			
 				    if (qualityValue > 'I')
 				    {
-					    sanger = true; 
+					    illumina8 = true; 
 					    goto search;
 				    }
 				    else if (i == ASSUMPTION_POINT + startPosition)
 				    {
-					    sequencerType = "Illumina 1.8";
+					    sequencerType = "Sanger";
 					    end(i);
 					    goto search;
 				    }
 			    }
 		    }	
-	      search:	
-		    if (sanger == true)
+	      search:
+            if (illumina8 == true)
 		    {
-			    sequencerType = "Sanger";
+			    sequencerType = "Illumina 1.8";
 			    end(i);
 		    }
 	    }
@@ -290,8 +290,8 @@ namespace FastqAnalyzerCleaner
                 fastqFile.setFqHashMap(FastqController.getInstance().GetFqFileMap().ConstructSequencerSpecificReadMap(sequencerType));
                 Console.WriteLine("Calculating and setting sequencer specific file map to component");
             }
-            Console.WriteLine("Time To Determine Sequencer:  " + stopwatch.Elapsed);
-            Console.WriteLine("Sequencer Name: " + sequencerType);
+            Console.WriteLine("Time To Determine ISequencer:  " + stopwatch.Elapsed);
+            Console.WriteLine("ISequencer Name: " + sequencerType);
             Console.WriteLine("File contains {0} sequences", fastqFile.getFastqArraySize());
 	    }
 

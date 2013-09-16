@@ -24,7 +24,7 @@ namespace FastqAnalyzerCleaner
 	///</summary>
     class SequencerDiscriminator
     {
-	    public static Dictionary<String, Sequencer> storage = new Dictionary<String, Sequencer> ();
+	    public static Dictionary<String, ISequencer> storage = new Dictionary<String, ISequencer> ();
 	    public static HashSet<String> checkExists = new HashSet<String>();
 		
 		private static Boolean isSetUp = false;
@@ -33,7 +33,7 @@ namespace FastqAnalyzerCleaner
 		///</summary>
 		///<param name="sequencerName">The name of the sequencer type to select</param>
 		///<return>An instance of that particular sequencer class type</return>
-	    public static Sequencer getSequencerSpecifier(String sequencerName)
+	    public static ISequencer getSequencerSpecifier(String sequencerName)
 	    {
             if (isSetUp == false)
             {
@@ -41,11 +41,11 @@ namespace FastqAnalyzerCleaner
                 isSetUp = true;
             }
             if (sequencerName == null)
-                return Sequencer_Default.sequencer as Sequencer;
+                return Sequencer_Default.sequencer as ISequencer;
 
-		    Sequencer sequencer = (Sequencer) storage[sequencerName];
+		    ISequencer sequencer = (ISequencer) storage[sequencerName];
             if (sequencer == null)
-                return Sequencer_Default.sequencer as Sequencer;
+                return Sequencer_Default.sequencer as ISequencer;
 
 		    return sequencer;
 	    }
@@ -55,7 +55,7 @@ namespace FastqAnalyzerCleaner
 		///</summary>
 		///<param name="key">The sequencer type name</param>
 		///<param name="value">A reference to a corresponding sequencer type initialized through the abstract class</param>
-	    public static void register (String key, Sequencer value)
+	    public static void register (String key, ISequencer value)
 	    {
             if (checkExists.Contains(key) == false)
             {

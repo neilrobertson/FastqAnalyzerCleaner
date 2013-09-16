@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class Sequencer_Illumina5 : Sequencer
+    class Sequencer_Illumina5 : ISequencer
     {
-        public static  Sequencer sequencer = new Sequencer_Illumina5();
+        public static  ISequencer sequencer = new Sequencer_Illumina5();
 
         private readonly static String sequencerName = "Illumina 1.5";
 
@@ -51,11 +51,12 @@ namespace FastqAnalyzerCleaner
             return qualityScore;
         }
 
-        public override int getPhredProbability(char qualityValue)
-	    {
-		    int phredProbabilityScore = 0;
-		    return phredProbabilityScore;
-	    }
+        public override double getPHREDScore(int qualityScore)
+        {
+            double PHRED;
+            PHRED = 10 * (Math.Log10(Math.Pow(10, (qualityScore / 10)) + 1));
+            return PHRED;
+        }
 
         public override int getDistributionSpread()
 	    {

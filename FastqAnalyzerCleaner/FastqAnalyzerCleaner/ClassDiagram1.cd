@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FastqAnalyzerCleaner.Adapters">
+    <Position X="24.5" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="FastqAnalyzerCleaner.Adapters.Adapter" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Adapters.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAEIAQAAGgEAAAAAAAAAAQQgAAAQAAAAAAQ=</HashCode>
+      <FileName>Adapters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.DirectoryController">
+    <Position X="5.75" Y="12.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAICCAAAAAAAAAAAAAAAAQAAAAQAAAAAAA=</HashCode>
+      <FileName>DirectoryController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FastqController">
+    <Position X="17.75" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="FastqAnalyzerCleaner.FastqController.FastqControllerState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FastqController.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ARAKEEAAACKIFAAgBCAglAAAEAAAAgUAAAAAACAAAAA=</HashCode>
+      <FileName>FastqController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FastqGUI">
+    <Position X="16" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="FastqAnalyzerCleaner.FastqGUI.UpdateFastqGUI" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FastqGUI.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Class Name="FastqAnalyzerCleaner.FastqGUI.InputFq" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FastqGUI.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>zagBML+wjCJiAlMykAjSCAACewkiACgAggBBVSa4AQQ=</HashCode>
+      <FileName>FastqGUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FastqGUI_Charts">
+    <Position X="19.5" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="FastqAnalyzerCleaner.FastqGUI_Charts.FastqChartTypes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FastqGUI_Charts.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAABIAAQAAAIAAAAAAAAACAAAQBGAAAAAAAAAA=</HashCode>
+      <FileName>FastqGUI_Charts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FastqGUI_Display">
+    <Position X="17.75" Y="12.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAAAAAACAgBCAAAAgAAAAAIAAAAAAAAACAA=</HashCode>
+      <FileName>FastqGUI_Display.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FastqGUI_Output">
+    <Position X="17.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAgAEAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>FastqGUI_Output.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqFile_Component" Collapsed="true">
+    <Position X="8.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBAEIbZRgxGDCAbdIGJEqIFqIkwCiSAGAEAwLQZDAAw=</HashCode>
+      <FileName>FqFile_Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqFile_Component_Details">
+    <Position X="13.75" Y="10.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AARAAABACJEgQASCBAAABIRAQAAAAAABBmAABQDAIIA=</HashCode>
+      <FileName>FqFile_Component_Details.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqFileMap">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AABhAAAAAQQIAoAAACQQRAkAAEAAwAAkQAAAAABgJAA=</HashCode>
+      <FileName>FqFileMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqNucleotideRead">
+    <Position X="13.75" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAEQAAIgAgABAQAIAAAAAAAgAAAAAABAAA=</HashCode>
+      <FileName>FqNucleotideRead.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqPerBaseSatistics">
+    <Position X="13.75" Y="14.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAgABAQAAAAEEAQAAAAAAIABIIAAAAEAAAAAAAgAAQ=</HashCode>
+      <FileName>FqPerBaseSatistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqSequence">
+    <Position X="12" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>NAAAUBURBwQiAIAEAQyAqNIi0AIACbAkEgBADBEJgpw=</HashCode>
+      <FileName>FqSequence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqSequence_InputsOuptuts">
+    <Position X="19.5" Y="13.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAQCBAAAAABAAAEAQAgAAAAAACAAAEAIAAABAAAAA=</HashCode>
+      <FileName>FqSequence_InputsOuptuts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.GenericFastqInputs">
+    <Position X="26.5" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQACAAAAAAAAgAAARICAgAJAASAAAAIgABAGBAAAA=</HashCode>
+      <FileName>GenericFastqInputs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.HashFastq">
+    <Position X="2.25" Y="3" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAQAAAEAAAAAQACAAAAgAAgSAAAAAgAAAAAAAA=</HashCode>
+      <FileName>HashFastq.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.HelperMethods">
+    <Position X="0.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEACAAAAAAAAAAAAAAAAAACAAAASgAAABAEKAAAgA=</HashCode>
+      <FileName>HelperMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.IFqFile">
+    <Position X="10.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBAEIRZRgxGDCAJNAAJACIFqAkwgiCAAAAAwLABCABA=</HashCode>
+      <FileName>IFqFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.InputBox">
+    <Position X="7.75" Y="10.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAADAAAAAAAACABAACEAAEAAAIgAACAAGAKAA=</HashCode>
+      <FileName>InputBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.InputBoxResult">
+    <Position X="2.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCAAAAAA=</HashCode>
+      <FileName>InputBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.InputBoxValidatingArgs">
+    <Position X="4.25" Y="10.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAA=</HashCode>
+      <FileName>InputBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.ITaskStrategy">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAg=</HashCode>
+      <FileName>ITaskStrategy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Nucleotide">
+    <Position X="24.5" Y="7.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQIAAAAAAAAAAAQgAAgAAAAAAAAAQAgAAABAAg=</HashCode>
+      <FileName>Nucleotide.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.ParseFastq">
+    <Position X="22.5" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQgAAaAIBQEAIgK0BYAAACAZTAMAEMgQEAAAABAAgE=</HashCode>
+      <FileName>ParseFastq.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Preferences">
+    <Position X="2.25" Y="12.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>EAAYQSAAAAAIQAAAAAIkAAlBEABgQowAEAARAAAAABA=</HashCode>
+      <FileName>Preferences.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.PreferencesGUI">
+    <Position X="4" Y="12.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACABAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PreferencesGUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Program">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.ProtocolBuffersSerialization">
+    <Position X="22.5" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="FastqAnalyzerCleaner.ProtocolBuffersSerialization.ProbufDeserializeFqFile_AsyncMethodCaller" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ProtocolBuffersSerialization.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="FastqAnalyzerCleaner.ProtocolBuffersSerialization.ProbufSerializeFqFile_AsyncMethodCaller" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ProtocolBuffersSerialization.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAgAAAIAAAAAAAAAAAIAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>ProtocolBuffersSerialization.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer">
+    <Position X="6" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAICCAAAAAAAABAAEAAAAAAAAYACAAAAAQAg=</HashCode>
+      <FileName>Sequencer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Default" Collapsed="true">
+    <Position X="10.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Default.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Illumina3" Collapsed="true">
+    <Position X="12.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Illumina3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Illumina5" Collapsed="true">
+    <Position X="15" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Illumina5.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Illumina8" Collapsed="true">
+    <Position X="17.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Illumina8.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Illumina9" Collapsed="true">
+    <Position X="19.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Illumina9.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Sanger" Collapsed="true">
+    <Position X="6" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAICCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Sanger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Sequencer_Solexa" Collapsed="true">
+    <Position X="8.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAQAAIKCBACAIAAABAAkAAAEQIIAYQDAAAAAQQg=</HashCode>
+      <FileName>Sequencer_Solexa.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.SequencerDecisionTree">
+    <Position X="0.75" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAKGAQCAAAAAARIAAACAACAIAAAAAAQEAAAAAABAAQ=</HashCode>
+      <FileName>SequencerDecisionTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.SequencerDetermination">
+    <Position X="2.5" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAEAQAAQAAAAQAAAAAAAAAAAAAAAAAAUAAAAAAAAA=</HashCode>
+      <FileName>SequencerDetermination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.SequencerDiscriminator">
+    <Position X="4.25" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAACAACAAAIQACAAAAAAA=</HashCode>
+      <FileName>SequencerDiscriminator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_AdapterTask" Collapsed="true">
+    <Position X="13.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_AdapterTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_DefaultTask" Collapsed="true">
+    <Position X="18.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_DefaultTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_EndCleanTask" Collapsed="true">
+    <Position X="13.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_EndCleanTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_FindSequences" Collapsed="true">
+    <Position X="18.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_FindSequences.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_LoadTask" Collapsed="true">
+    <Position X="4.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_LoadTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_ReanalyzeTask" Collapsed="true">
+    <Position X="9.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_ReanalyzeTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_RemoveAboveGCThreshold" Collapsed="true">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_RemoveAboveGCThreshold.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_RemoveBelowMeanThreshold" Collapsed="true">
+    <Position X="9.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_RemoveBelowMeanThreshold.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_RemoveMisSeqeuence" Collapsed="true">
+    <Position X="11.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_RemoveMisSeqeuence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_RemoveSequencesBelowLength" Collapsed="true">
+    <Position X="16" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_RemoveSequencesBelowLength.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_RescanSequencerTask" Collapsed="true">
+    <Position X="20.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_RescanSequencerTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_SaveCSV" Collapsed="true">
+    <Position X="16" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_SaveCSV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_SaveFastq" Collapsed="true">
+    <Position X="20.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_SaveFastq.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_SequenceStatisticsTask" Collapsed="true">
+    <Position X="7" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_SequenceStatisticsTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_StartCleanTask" Collapsed="true">
+    <Position X="11.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_StartCleanTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.Task_TailCleanTask" Collapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAIAAAAAAAgAAAABAQAAAABAAAg=</HashCode>
+      <FileName>Task_TailCleanTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.TaskDiscrimination">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAACAACAAAAQACAAAAAEA=</HashCode>
+      <FileName>TaskDiscriminator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.UserResponse">
+    <Position X="19.5" Y="10.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAgABAAAAAQAAAEAAAAAAAA=</HashCode>
+      <FileName>UserResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Delegate Name="FastqAnalyzerCleaner.InputBoxValidatingHandler">
+    <Position X="6" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InputBox.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FastqAnalyzerCleaner.FqNucleotideRead" Collapsed="true">
+    <Position X="5" Y="4.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAEQAAIgAAABAQAIAAAAAEAgAAAAAABAAA=</HashCode>
+      <FileName>FqNucleotideRead.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqSequence">
+    <Position X="5" Y="2.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>NAAAUBURBwQiAIAEAQyAqNIi0AIACbAkEgBADBEJgpw=</HashCode>
+      <FileName>FqSequence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.HashFastq" Collapsed="true">
+    <Position X="8" Y="0.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAQAAAEAAAAAQACAAAAgAAgSAAAAAgAAAAAAAA=</HashCode>
+      <FileName>HashFastq.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.ParseFastq">
+    <Position X="2" Y="0.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQgAAaAIBQEAIgK0BYAAACAZTAMAEMgQEAAAABAAgE=</HashCode>
+      <FileName>ParseFastq.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastqAnalyzerCleaner.FqFile_Component">
+    <Position X="5" Y="0.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>EBAEIbZRgxGDCAbdIGJEqIFqIkwCiSAGAEAwLQZDAAw=</HashCode>
+      <FileName>FqFile_Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

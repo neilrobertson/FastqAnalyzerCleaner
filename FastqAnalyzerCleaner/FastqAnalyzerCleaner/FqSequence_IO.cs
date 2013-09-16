@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    public class FqSequence_InputsOuptuts
+    public class FqSequence_IO
     {
         public static readonly String ADAPTER_TASK = "Adapter Removal";
         public static readonly String SEQUENCE_TESTS_TASK = "Sequence Tests";
@@ -21,7 +21,7 @@ namespace FastqAnalyzerCleaner
             public int sequenceLength { get; set; }
             public int subZeroOffset { get; set; }
 
-            public FqSequence_InputsOuptuts(String sequencerType, String taskType, FqFile_Component fqFile)
+            public FqSequence_IO(String sequencerType, String taskType, FqFile_Component fqFile)
             {
                 if (taskType == SEQUENCE_TESTS_TASK)
                 {

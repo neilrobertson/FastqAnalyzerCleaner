@@ -1,4 +1,4 @@
-﻿/// <copyright file="Sequencer.cs" author="Neil Robertson">
+﻿/// <copyright file="ISequencer.cs" author="Neil Robertson">
 /// Copyright (c) 2013 All Right Reserved, Neil Alistair Robertson - neil.alistair.robertson@hotmail.co.uk
 ///
 /// This code is the property of Neil Robertson.  Permission must be sought before reuse.
@@ -22,11 +22,11 @@ namespace FastqAnalyzerCleaner
 	///SequencerSpecifier is an abstract class that is an interface and is inherited by each sequencer type class.
 	///This class contains the methods that are used by each sequencer type.
 	///</summary>
-    public abstract class Sequencer
+    public abstract class ISequencer
     {
         abstract public string getStatement();
-        abstract public int getPhredProbability(char qualityValue);
         abstract public int getQualityScore(char qualityValue);
+        abstract public double getPHREDScore(int qualityScore);
         abstract public string getMachineName(string header);
         abstract public string getMultiplexIndex(string header);
         abstract public int getPairMember(string header);

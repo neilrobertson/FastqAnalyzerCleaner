@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class Sequencer_Solexa : Sequencer
+    class Sequencer_Solexa : ISequencer
     {
-        public static Sequencer sequencer = new Sequencer_Solexa();
+        public static ISequencer sequencer = new Sequencer_Solexa();
 
         private readonly static String sequencerName = "Solexa";
 
@@ -43,10 +43,6 @@ namespace FastqAnalyzerCleaner
             //SequencerSpecifier value = sequencer as SequencerSpecifier;
   		    SequencerDiscriminator.register(sequencerName, sequencer);
  	    }
-  	
-	    /*
-	     * method returns subtracts sequencer specific ASCII values to return specific numerical quality score
-	     */
 
         public override int getQualityScore(char qualityValue)
         {
@@ -100,13 +96,11 @@ namespace FastqAnalyzerCleaner
             return qualityScore;
         }
 
-	    /*
-	     * TODO: incomplete method converts quality score to phred probabity scores
-	     */
-        public override int getPhredProbability(char qualityValue)
+        public override double getPHREDScore(int qualityScore)
         {
-            int phredProbabilityScore = 0;
-            return phredProbabilityScore;
+            double PHRED;
+            PHRED = (-10) * (Math.Log10(Math.Pow(10, (qualityScore / 10)) + 1));
+            return PHRED;
         }
 
         public override int getDistributionSpread()

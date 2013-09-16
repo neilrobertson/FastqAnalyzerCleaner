@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace FastqAnalyzerCleaner
 {
-    class Sequencer_Illumina8 : Sequencer
+    class Sequencer_Illumina8 : ISequencer
     {
-        public static Sequencer sequencer = new Sequencer_Illumina8();
+        public static ISequencer sequencer = new Sequencer_Illumina8();
 
         private readonly static String sequencerName = "Illumina 1.8";
 
@@ -57,13 +57,11 @@ namespace FastqAnalyzerCleaner
             return qualityScore;
         }
 
-	    /*
-	     * TODO: incomplete method converts quality score to phred probabity scores
-	     */
-        public override int getPhredProbability(char qualityValue)
+        public override double getPHREDScore(int qualityScore)
         {
-            int phredProbabilityScore = 0;
-            return phredProbabilityScore;
+            double PHRED;
+            PHRED = 10 * (Math.Log10(Math.Pow(10, (qualityScore / 10)) + 1));
+            return PHRED;
         }
 
         public override int getDistributionSpread()

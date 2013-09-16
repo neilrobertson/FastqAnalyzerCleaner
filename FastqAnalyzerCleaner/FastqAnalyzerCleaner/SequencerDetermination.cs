@@ -128,8 +128,8 @@ namespace FastqAnalyzerCleaner
         }
 
 		stopwatch.Stop();
-		Console.WriteLine("Time To Determine Sequencer:  " + stopwatch.Elapsed);
-        Console.WriteLine("Sequencer Name: " + sequencer);
+		Console.WriteLine("Time To Determine ISequencer:  " + stopwatch.Elapsed);
+        Console.WriteLine("ISequencer Name: " + sequencer);
         Console.WriteLine("File contains {0} sequences", fastqFile.getFastqArraySize());
 	}
 

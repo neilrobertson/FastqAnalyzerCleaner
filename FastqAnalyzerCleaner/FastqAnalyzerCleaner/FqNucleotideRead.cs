@@ -28,7 +28,10 @@ namespace FastqAnalyzerCleaner
         [ProtoMember(2)]
         private char qualityRead;
         [ProtoMember(3)]
-        private int phredQuality;
+        private int qualityScore;
+        [ProtoMember(4)]
+        private double PHREDScore;
+
 
         public FqNucleotideRead() { }
 
@@ -56,12 +59,18 @@ namespace FastqAnalyzerCleaner
 
         public int getQualityScore()
         {
-            return phredQuality;
+            return qualityScore;
+        }
+
+        public double getPHREDScore()
+        {
+            return PHREDScore;
         }
 
         public void calculateQualityScore(string sequencerType)
         {
-            phredQuality = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getQualityScore(qualityRead);
+            qualityScore = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getQualityScore(qualityRead);
+            PHREDScore = SequencerDiscriminator.getSequencerSpecifier(sequencerType).getPHREDScore(qualityScore);
         }
 
         public void setNucleotide(char nuc)
@@ -76,10 +85,10 @@ namespace FastqAnalyzerCleaner
 
         public String toString()
         {
-            return ("Nuc: " + nucleotide + " Score: " + qualityRead + "Hashcode:  " + hashcode());
+            return ("Nuc: " + nucleotide + " Score: " + qualityRead + "Hashcode:  " + getProxyCode());
         }
 
-        public int hashcode()
+        public int getProxyCode()
         {
             return (nucleotide * 1000) + qualityRead;
         }

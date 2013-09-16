@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Neil Robertson\Desktop\First Publishing\</PublishUrl>
+    <PublishUrl>C:\Users\Neil Robertson\Desktop\BIOINF_PROJECT\FastqAnalyzerCleaner_SETUP_x64\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,8 +22,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -102,7 +101,7 @@
     <Compile Include="FqFileMap.cs" />
     <Compile Include="FqFile_Component_Details.cs" />
     <Compile Include="FqPerBaseSatistics.cs" />
-    <Compile Include="FqSequence_InputsOuptuts.cs" />
+    <Compile Include="FqSequence_IO.cs" />
     <Compile Include="GenericFastqInputs.cs" />
     <Compile Include="HelperMethods.cs" />
     <Compile Include="FqFile_Component.cs" />
@@ -131,7 +130,7 @@
     <Compile Include="Sequencer_Illumina9.cs" />
     <Compile Include="Sequencer_Sanger.cs" />
     <Compile Include="Sequencer_Solexa.cs" />
-    <Compile Include="Sequencer.cs" />
+    <Compile Include="ISequencer.cs" />
     <Compile Include="HashFastq.cs" />
     <Compile Include="FastqGUI.cs">
       <SubType>Form</SubType>
@@ -177,6 +176,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="FastqAnalyzerCleaner_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\FastqAnalyzerCleaner.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\FastqAnalyzerCleaner.Properties.Settings.datasource" />

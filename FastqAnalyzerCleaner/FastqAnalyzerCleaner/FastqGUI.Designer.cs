@@ -302,36 +302,7 @@ namespace FastqAnalyzerCleaner
             this.reanalyzeToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.reanalyzeToolStripMenuItem.Text = "Reanalyze";
             this.reanalyzeToolStripMenuItem.Click += new System.EventHandler(this.reanalyzeToolStripMenuItem_Click);
-            // 
-            // preferencesToolStripMenuItem
-            // 
-            this.preferencesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changePreferencesToolStripMenuItem});
-            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
-            this.preferencesToolStripMenuItem.Text = "PREFERENCES";
-            // 
-            // changePreferencesToolStripMenuItem
-            // 
-            this.changePreferencesToolStripMenuItem.Name = "changePreferencesToolStripMenuItem";
-            this.changePreferencesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.changePreferencesToolStripMenuItem.Text = "Change Preferences...";
-            this.changePreferencesToolStripMenuItem.Click += new System.EventHandler(this.changePreferencesToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem1});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "HELP";
-            // 
-            // helpToolStripMenuItem1
-            // 
-            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(99, 22);
-            this.helpToolStripMenuItem1.Text = "Help";
-            // 
+            
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
